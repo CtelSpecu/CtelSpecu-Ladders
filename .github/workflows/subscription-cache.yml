@@ -3,7 +3,7 @@ name: Cache Subscription Info  # 工作流名称
 on:
   push: # 推送事件
     branches:
-      - master  # 当 main 分支有代码推送时触发
+      - main  # 当 main 分支有代码推送时触发
   schedule:
     - cron: '0 * * * *' # 定时触发器，这里设置为每小时的第 0 分钟运行 (您可以根据需要调整 cron 表达式)
   workflow_dispatch: # 手动触发器，允许您手动运行工作流
@@ -34,19 +34,21 @@ jobs:
         id: parse-sub-1
         run: |
           DECODED_CONTENT="${{ steps.decode-sub-1.outputs.DECODED_CONTENT_SUB_1 }}"
+          echo "DECODED_CONTENT_SUB_1:"
+          echo "$DECODED_CONTENT"
           USAGE=""
           EXPIRE=""
           RESET_DAY=""
 
           if echo "$DECODED_CONTENT" | grep -q 'mixed-port:'; then
-            # Clash YAML 格式解析 (示例，根据您的 YAML 结构调整)
+            # Clash YAML 格式解析 (示例, 根据您的 YAML 结构调整)
             USAGE=$(echo "$DECODED_CONTENT" | grep "剩余流量" | awk -F '：' '{print $2}' | awk '{print $1, $2}')
             EXPIRE=$(echo "$DECODED_CONTENT" | grep "套餐到期" | awk -F '：' '{print $2}' | awk '{print $1}')
           elif echo "$DECODED_CONTENT" | grep -q 'trojan://'; then
-            # Trojan 链接列表格式解析 (示例，根据您的链接格式调整)
+            # Trojan 链接列表格式解析 (示例, 根据您的链接格式调整)
             USAGE_LINE=$(echo "$DECODED_CONTENT" | grep "剩余流量")
             if [[ -n "$USAGE_LINE" ]]; then
-              USAGE=$(echo "$USAGE_LINE" | sed 's/.*剩余流量：\([0-9.]* GB\).*/\1 GB/')
+              USAGE=$(echo "$USAGE_LINE" | sed 's/.*剩余流量：\([0-9.]* *GB\).*/\1/')
             fi
             RESET_DAY_LINE=$(echo "$DECODED_CONTENT" | grep "距离下次重置剩余")
             if [[ -n "$RESET_DAY_LINE" ]]; then
@@ -77,19 +79,21 @@ jobs:
         id: parse-sub-2
         run: |
           DECODED_CONTENT="${{ steps.decode-sub-2.outputs.DECODED_CONTENT_SUB_2 }}"
+          echo "DECODED_CONTENT_SUB_2:"
+          echo "$DECODED_CONTENT"
           USAGE=""
           EXPIRE=""
           RESET_DAY=""
 
           if echo "$DECODED_CONTENT" | grep -q 'mixed-port:'; then
-            # Clash YAML 格式解析 (示例，根据您的 YAML 结构调整)
+            # Clash YAML 格式解析 (示例, 根据您的 YAML 结构调整)
             USAGE=$(echo "$DECODED_CONTENT" | grep "剩余流量" | awk -F '：' '{print $2}' | awk '{print $1, $2}')
             EXPIRE=$(echo "$DECODED_CONTENT" | grep "套餐到期" | awk -F '：' '{print $2}' | awk '{print $1}')
           elif echo "$DECODED_CONTENT" | grep -q 'trojan://'; then
-            # Trojan 链接列表格式解析 (示例，根据您的链接格式调整)
+            # Trojan 链接列表格式解析 (示例, 根据您的链接格式调整)
             USAGE_LINE=$(echo "$DECODED_CONTENT" | grep "剩余流量")
             if [[ -n "$USAGE_LINE" ]]; then
-              USAGE=$(echo "$USAGE_LINE" | sed 's/.*剩余流量：\([0-9.]* GB\).*/\1 GB/')
+              USAGE=$(echo "$USAGE_LINE" | sed 's/.*剩余流量：\([0-9.]* *GB\).*/\1/')
             fi
              RESET_DAY_LINE=$(echo "$DECODED_CONTENT" | grep "距离下次重置剩余")
             if [[ -n "$RESET_DAY_LINE" ]]; then
