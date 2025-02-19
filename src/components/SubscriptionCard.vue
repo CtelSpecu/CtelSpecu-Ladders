@@ -37,38 +37,23 @@ import axios from 'axios';
 
 const props = defineProps({
   subscriptionName: String,
-  subscriptionLink: String,
+  subscriptionDataFile: String, // 新增 props 接收数据文件名
 });
 
-const subscriptionLinkTextarea = ref(null);
 const subscriptionData = ref(null);
 const error = ref(false);
 
 onMounted(async () => {
-  await fetchSubscriptionInfo();
+  await fetchCachedSubscriptionInfo();
 });
 
-async function fetchSubscriptionInfo() {
+async function fetchCachedSubscriptionInfo() {
   try {
-    const response = await axios.get(props.subscriptionLink, { responseType: 'text' }); // 获取文本响应
-    const base64String = response.data;
-    const decodedString = atob(base64String); // Base64 解码
-    console.log("Decoded Subscription Data:", decodedString); // 打印解码后的数据
-
-    if (decodedString.startsWith('mixed-port')) {
-      // Clash YAML 格式
-      parseClashYamlInfo(decodedString);
-    } else if (decodedString.startsWith('trojan://') || decodedString.startsWith('vmess://') || decodedString.startsWith('vless://') || decodedString.startsWith('ss://')) {
-      // Trojan/VMess/VLESS/Shadowsocks 链接列表格式 (这里只处理 Trojan 示例，你可以扩展到其他类型)
-      parseTrojanListInfo(decodedString);
-    } else {
-      error.value = true;
-      console.error("未知订阅格式");
-      alert("未知订阅格式，请检查订阅链接或联系管理员。");
-    }
-
+    const response = await axios.get(props.subscriptionDataFile); // 请求仓库中的 JSON 文件
+    subscriptionData.value = response.data; // 直接使用 JSON 数据
+    console.log("Cached Subscription Data:", subscriptionData.value);
   } catch (e) {
-    console.error("获取订阅信息失败:", e);
+    console.error("获取缓存订阅信息失败:", e);
     error.value = true;
   }
 }
