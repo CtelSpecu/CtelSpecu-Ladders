@@ -31,6 +31,7 @@
 
     <div v-if="notificationVisible" class="notification-box">
       <p class="notification-message">{{ notificationMessage }}</p>
+      <div class="notification-progress-bar"> <div class="notification-progress-bar-inner"></div> </div>
       <button class="notification-close-button" @click="closeNotification">
         <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M17.5 17.5L6.5 6.5M17.5 6.5L6.5 17.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
       </button>
@@ -95,9 +96,31 @@ async function fetchCachedSubscriptionInfo() {
   }
 }
 
-function showNotification(message) {
+function showNotification(message, type = 'error') { // 新增 type 参数，默认为 'error'
   notificationMessage.value = message;
   notificationVisible.value = true;
+
+  // 根据 type 参数动态设置提示框 class
+  let notificationBoxElement = document.querySelector('.notification-box'); // 先尝试获取已有的 .notification-box 元素
+
+  if (!notificationBoxElement) { // 如果 .notification-box 不存在，尝试获取 .success-notification-box
+    notificationBoxElement = document.querySelector('.success-notification-box');
+  }
+
+  if (notificationBoxElement) { // 确保找到 notificationBoxElement 才进行操作
+    if (type === 'success') {
+      notificationBoxElement.classList.remove('notification-box'); // 移除 error 样式，如果存在
+      notificationBoxElement.classList.add('success-notification-box'); // 添加 success 样式
+    } else { // 默认为 'error' 类型，保持原有的 .notification-box 样式
+      notificationBoxElement.classList.remove('success-notification-box'); // 移除 success 样式，如果存在
+      notificationBoxElement.classList.add('notification-box'); // 确保添加 notification-box 样式
+    }
+  } else {
+    console.warn("找不到 notification-box 元素，无法应用样式"); // 打印警告信息，方便调试
+    // 在找不到元素的情况下，你可能需要考虑如何处理，例如创建并插入一个新的提示框元素
+  }
+
+
   setTimeout(() => {
     notificationVisible.value = false; // 3秒后自动隐藏
   }, 3000);
@@ -192,7 +215,7 @@ function copySubscriptionLink() {
     subscriptionLinkTextarea.value.select();
     document.execCommand('copy');
     // alert('订阅链接已复制到剪贴板！'); //  原先的弹窗提示
-    showNotification('订阅链接已复制到剪贴板！'); // 修改为调用 notification
+    showNotification('订阅链接已复制到剪贴板！', 'success'); // 指定使用 'success' 类型的绿色提示框
   }
 }
 
@@ -382,5 +405,34 @@ function importToClient(clientName) {
   display: block;
 }
 
+/* 进度条样式 */
+.notification-progress-bar {
+  position: absolute; /* 绝对定位，相对于 notification-box */
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 5px; /* 进度条高度 */
+  background-color: rgba(0, 0, 0, 0.1); /* 浅灰色背景，可以根据提示框颜色调整 */
+  border-radius: 0 0 4px 4px; /* 与提示框底部圆角一致 */
+  overflow: hidden; /* 裁剪超出容器的内容，保证进度条动画效果 */
+}
+
+.notification-progress-bar-inner {
+  height: 100%;
+  width: 100%; /* 初始宽度 100% */
+  background-color: currentColor; /* 使用 notification-box 的文字颜色作为进度条颜色，保持一致性 */
+  border-radius: 0 0 4px 4px; /* 与容器底部圆角一致 */
+  transform-origin: right center; /* 动画基点设置为右侧中心 */
+  animation: progress-bar-countdown 3s linear forwards; /* 应用动画 */
+}
+
+@keyframes progress-bar-countdown {
+  0% {
+    transform: scaleX(1); /* 初始宽度 100% */
+  }
+  100% {
+    transform: scaleX(0); /* 最终宽度 0% */
+  }
+}
 
 </style>
