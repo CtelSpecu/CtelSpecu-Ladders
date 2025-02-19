@@ -2,8 +2,8 @@ name: Update Subscription Info
 
 on:
   schedule:
-    - cron: '0 0 * * *' # 每天UTC时间0点运行
-  workflow_dispatch: # 允许手动触发
+    - cron: '0 0 * * *'
+  workflow_dispatch:
 
 jobs:
   update-subscription:
@@ -29,38 +29,38 @@ jobs:
           const exec = promisify(require('child_process').exec);
           const fs = require('fs');
           
+          async function fetchSubscription(url) {
+            try {
+              // 添加重试机制和超时设置
+              const { stdout } = await exec(`curl -sL --retry 3 --max-time 30 '${url}'`, { timeout: 60000 });
+              return stdout.trim();
+            } catch (error) {
+              console.error('获取订阅失败:', error.message);
+              return null;
+            }
+          }
+          
           async function processSubscription(url, outputFile) {
             try {
-              // 获取订阅内容
-              const { stdout: encodedData } = await exec(`curl -sL '${url}' | base64 -w 0`);
+              console.log('正在处理订阅:', url);
           
-              // 解析订阅内容
-              const decodedData = Buffer.from(encodedData.trim(), 'base64').toString();
-              let usage, expire, resetDay;
-          
-              if (decodedData.includes('proxies:')) { // Clash YAML格式
-                const usageMatch = decodedData.match(/剩余流量：([\d.]+)\s*GB/);
-                const expireMatch = decodedData.match(/套餐到期：([\d-]+)/);
-                usage = usageMatch?.[1] + ' GB';
-                expire = expireMatch?.[1];
-              } else { // Trojan/Vmess URI列表
-                const usageMatch = decodedData.match(/剩余流量：([\d.]+)\s*GB/);
-                const resetMatch = decodedData.match(/距离下次重置剩余：(\d+)\s*天/);
-                usage = usageMatch?.[1] + ' GB';
-                resetDay = resetMatch?.[1] + ' 天';
+              // 获取原始订阅内容
+              const rawData = await fetchSubscription(url);
+              if (!rawData) {
+                console.log('跳过无效订阅');
+                return;
               }
           
-              // 生成JSON文件
-              const output = {
-                subscriptionContentBase64: encodedData.trim(),
-                ...(usage && { usage }),
-                ...(expire && { expire }),
-                ...(resetDay && { resetDay }),
-                updatedAt: new Date().toISOString()
-              };
+              // 验证Base64格式
+              if (!/^([A-Za-z0-9+/]{4})*([A-Za-z0-9+/]{3}=|[A-Za-z0-9+/]{2}==)?$/.test(rawData)) {
+                console.log('检测到非Base64内容，尝试直接解析');
+                const decodedData = rawData;
+                return parseAndSave(decodedData, outputFile);
+              }
           
-              fs.writeFileSync(outputFile, JSON.stringify(output, null, 2));
-              console.log('成功更新:', outputFile);
+              // Base64解码
+              const decodedData = Buffer.from(rawData, 'base64').toString();
+              return parseAndSave(decodedData, outputFile);
           
             } catch (error) {
               console.error('处理订阅时出错:', error);
@@ -68,7 +68,46 @@ jobs:
             }
           }
           
-          // 处理两个订阅
+          function parseAndSave(data, outputFile) {
+            try {
+              console.log('解析内容:', data.substring(0, 200) + '...'); // 打印部分内容用于调试
+          
+              let result = {};
+              // 增强型正则表达式
+              const usageMatch = data.match(/(剩余流量|traffic|usage)[：:]?\s*([\d.]+)\s*(GB|GiB)/i);
+              const expireMatch = data.match(/(到期时间|expire)[：:]?\s*(\d{4}-\d{2}-\d{2})/i);
+              const resetMatch = data.match(/(重置剩余|reset)[：:]?\s*(\d+)\s*天/i);
+          
+              if (usageMatch) result.usage = `${usageMatch[2]} ${usageMatch[3] || 'GB'}`;
+              if (expireMatch) result.expire = expireMatch[2];
+              if (resetMatch) result.resetDay = `${resetMatch[2]} 天`;
+          
+              // 保留完整数据并添加校验
+              result = {
+                subscriptionContentBase64: Buffer.from(data).toString('base64'),
+                ...result,
+                updatedAt: new Date().toISOString(),
+                checksum: createChecksum(data)
+              };
+          
+              fs.writeFileSync(outputFile, JSON.stringify(result, null, 2));
+              console.log('成功更新:', outputFile);
+          
+            } catch (error) {
+              console.error('解析失败:', error);
+              throw error;
+            }
+          }
+          
+          function createChecksum(str) {
+            return require('crypto')
+              .createHash('sha256')
+              .update(str)
+              .digest('hex')
+              .substring(0, 16);
+          }
+          
+          // 处理订阅
           await Promise.all([
             processSubscription(process.env.SUB1_URL, 'data/subscription_info_1.json'),
             processSubscription(process.env.SUB2_URL, 'data/subscription_info_2.json')
