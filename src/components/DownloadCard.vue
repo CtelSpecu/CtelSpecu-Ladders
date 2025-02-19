@@ -51,7 +51,7 @@
       </li>
     </ul>
     <p style="font-size: 0.9em; color: gray;">
-      * 请注意，部分客户端可能需要科学上网环境才能访问下载链接。
+      * 请根据网络情况自行选择客户端。
     </p>
   </div>
 </template>

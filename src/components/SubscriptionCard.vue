@@ -5,7 +5,7 @@
       <textarea
           ref="subscriptionLinkTextarea"
           readonly
-          :value="subscriptionLink"
+          :value="props.subscriptionLink"
       ></textarea>
       <button @click="copySubscriptionLink">复制链接</button>
     </div>
@@ -37,9 +37,11 @@ import axios from 'axios';
 
 const props = defineProps({
   subscriptionName: String,
-  subscriptionDataFile: String, // 新增 props 接收数据文件名
+  subscriptionLink: String, // 恢复 subscriptionLink prop
+  subscriptionDataFile: String,
 });
 
+const subscriptionLinkTextarea = ref(null);
 const subscriptionData = ref(null);
 const error = ref(false);
 
@@ -50,13 +52,36 @@ onMounted(async () => {
 async function fetchCachedSubscriptionInfo() {
   try {
     const response = await axios.get(props.subscriptionDataFile); // 请求仓库中的 JSON 文件
-    subscriptionData.value = response.data; // 直接使用 JSON 数据
-    console.log("Cached Subscription Data:", subscriptionData.value);
+    const cachedData = response.data; // 获取 JSON 数据
+
+    if (cachedData && cachedData.subscriptionContentBase64) { // 假设 Actions 缓存的 JSON 包含 base64 编码的订阅内容
+      const decodedString = atob(cachedData.subscriptionContentBase64);
+      console.log("Decoded Subscription Data from Cache:", decodedString);
+
+      if (decodedString.startsWith('mixed-port')) {
+        // Clash YAML 格式
+        parseClashYamlInfo(decodedString);
+      } else if (decodedString.startsWith('trojan://') || decodedString.startsWith('vmess://') || decodedString.startsWith('vless://') || decodedString.startsWith('ss://')) {
+        // Trojan/VMess/VLESS/Shadowsocks 链接列表格式
+        parseTrojanListInfo(decodedString);
+      } else {
+        error.value = true;
+        console.error("未知订阅格式 (缓存数据)");
+        alert("未知订阅格式 (缓存数据)，请检查缓存数据或联系管理员。");
+      }
+    } else {
+      error.value = true;
+      console.error("缓存数据格式错误或缺少订阅内容");
+      alert("缓存数据格式错误或缺少订阅内容，请检查缓存数据或稍后重试。");
+    }
+
+
   } catch (e) {
     console.error("获取缓存订阅信息失败:", e);
     error.value = true;
   }
 }
+
 
 function parseTrojanListInfo(decodedString) {
   const lines = decodedString.split('\n');
@@ -94,8 +119,8 @@ function parseTrojanListInfo(decodedString) {
       //  你可能还需要提取和显示 "套餐到期" 信息，如果 Trojan 链接中有提供
     };
   } else {
-    error.value = true; // 如果没有解析到流量或到期时间，也显示错误
-    console.error("未在 Trojan 链接中解析到流量或到期时间信息");
+    error.value = true;
+    console.error("未在 Trojan 链接中解析到流量或到期时间信息 (缓存数据)");
   }
 }
 
@@ -115,7 +140,7 @@ function parseClashYamlInfo(decodedString) {
           usageInfo = usageMatch[1] + ' GB';
         }
       } else if (nameValue.includes('套餐到期')) {
-        const expireMatch = nameValue.match(/套餐到期：([\d-]+)/); // 假设日期格式为 YYYY-MM-DD 或 YYYY-MM-DD HH:mm:ss
+        const expireMatch = nameValue.match(/套餐到期：([\d-]+)/); // 假设日期格式为📜-MM-DD 或📜-MM-DD HH:mm:ss
         if (expireMatch) {
           expireTimeInfo = expireMatch[1];
         }
@@ -129,8 +154,8 @@ function parseClashYamlInfo(decodedString) {
       expire: expireTimeInfo,
     };
   } else {
-    error.value = true; // 如果没有解析到流量或到期时间，也显示错误
-    console.error("未在 Clash YAML 中解析到流量或到期时间信息");
+    error.value = true;
+    console.error("未在 Clash YAML 中解析到流量或到期时间信息 (缓存数据)");
   }
 }
 

@@ -3,12 +3,14 @@
     <div class="card-container">
       <DownloadCard />
       <SubscriptionCard
-          subscriptionName="订阅链接一"
-          subscriptionLink="http://106.75.143.245:3390/api/v1/client/subscribe"
+          subscriptionName="可用订阅1"
+          subscriptionLink="http://106.75.143.245:3390/api/v1/client/subscribe?token=11c5c3e1ad18a246f761687490a80820"
+          subscriptionDataFile="./data/subscription_info_1.json"
       />
       <SubscriptionCard
-          subscriptionName="订阅链接二"
-          subscriptionLink="https://sub1.qingze-quick.top/api/v1/client/subscribe"
+          subscriptionName="可用订阅2"
+          subscriptionLink="https://sub1.qingze-quick.top/api/v1/client/subscribe?token=e39a8fb7c6ecc53aeb180ad3674d389f"
+          subscriptionDataFile="./data/subscription_info_2.json"
       />
     </div>
   </div>
