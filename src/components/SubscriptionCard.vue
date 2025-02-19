@@ -85,7 +85,7 @@ async function fetchCachedSubscriptionInfo() {
       error.value = true;
       console.error("缓存数据格式错误或缺少订阅内容");
       // 修改：不再使用 alert，显示自定义提示框
-      showNotification("缓存数据格式错误或缺少订阅内容，请检查缓存数据或稍后重试。");
+      showNotification("缓存数据格式错误或缺少订阅内容，请检查缓存数据或稍后重试。(不代表订阅不可用)");
     }
   } catch (e) {
     console.error("获取缓存订阅信息失败:", e);
