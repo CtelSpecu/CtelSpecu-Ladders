@@ -191,7 +191,8 @@ function copySubscriptionLink() {
   if (subscriptionLinkTextarea.value) {
     subscriptionLinkTextarea.value.select();
     document.execCommand('copy');
-    alert('订阅链接已复制到剪贴板！'); //  复制成功提示仍然保留 alert，因为这个是操作成功的反馈，可以考虑也替换为 notification
+    // alert('订阅链接已复制到剪贴板！'); //  原先的弹窗提示
+    showNotification('订阅链接已复制到剪贴板！'); // 修改为调用 notification
   }
 }
 
@@ -290,31 +291,31 @@ function importToClient(clientName) {
 }
 
 
-/* 新增：自定义提示框样式 */
+/* 默认提示框样式 (例如，用于错误或警告) - 保持红色系 */
 .notification-box {
-  position: absolute; /* 使用 absolute 定位，使其覆盖在卡片内容上方 */
+  position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   padding: 15px;
-  background-color: #f8d7da; /*  淡红色背景 */
+  background-color: #f8d7da; /* 淡红色背景 */
   border: 1px solid #f5c6cb; /* 边框 */
-  color: #721c24; /*  深红色文字 */
+  color: #721c24; /* 深红色文字 */
   border-radius: 4px;
   margin-bottom: 10px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-sizing: border-box; /*  确保 padding 和 border 不会撑大盒子 */
-  z-index: 10; /*  确保提示框在其他内容上方 */
+  box-sizing: border-box;
+  z-index: 10;
 }
 
-.notification-message {
+.notification-box .notification-message {
   margin: 0;
   font-size: 0.95em;
 }
 
-.notification-close-button {
+.notification-box .notification-close-button {
   background: transparent;
   border: none;
   color: #721c24;
@@ -325,13 +326,61 @@ function importToClient(clientName) {
   transition: opacity 0.2s ease-in-out;
 }
 
-.notification-close-button:hover {
+.notification-box .notification-close-button:hover {
   opacity: 1;
 }
 
-.notification-close-button svg {
+.notification-box .notification-close-button svg {
   width: 16px;
   height: 16px;
-  display: block; /*  确保 svg 元素占据按钮的完整区域 */
+  display: block;
 }
+
+
+/* 新增：成功提示框样式 - 绿色系 */
+.success-notification-box {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 15px;
+  background-color: #d4edda; /* 淡绿色背景 -  与之前的代码一致，如果你需要更深的绿色，可以调整这里，例如 #e6f7ec */
+  border: 1px solid #c3e6cb; /* 绿色边框 -  与之前的代码一致，如果你需要更深的绿色，可以调整这里，例如 #9ae1b3 */
+  color: #155724; /* 深绿色文字 -  与之前的代码一致，如果你需要更深的绿色，可以调整这里，例如 #004d1a */
+  border-radius: 4px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-sizing: border-box;
+  z-index: 10;
+}
+
+.success-notification-box .notification-message { /* 确保信息文字样式也应用到新的类 */
+  margin: 0;
+  font-size: 0.95em;
+}
+
+.success-notification-box .notification-close-button { /* 确保关闭按钮样式也应用到新的类 */
+  background: transparent;
+  border: none;
+  color: #155724; /* 深绿色关闭按钮颜色 -  与之前的代码一致，如果你需要更深的绿色，可以调整这里 */
+  cursor: pointer;
+  padding: 0;
+  margin-left: 10px;
+  opacity: 0.7;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.success-notification-box .notification-close-button:hover {
+  opacity: 1;
+}
+
+.success-notification-box .notification-close-button svg { /* 确保 SVG 样式也应用到新的类 */
+  width: 16px;
+  height: 16px;
+  display: block;
+}
+
+
 </style>
