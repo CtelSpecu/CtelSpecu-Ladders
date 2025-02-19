@@ -1,0 +1,113 @@
+name: Cache Subscription Info  # 工作流名称
+
+on:
+  schedule:
+    - cron: '0 * * * *' # 定时触发器，这里设置为每小时的第 0 分钟运行 (您可以根据需要调整 cron 表达式)
+  workflow_dispatch: # 手动触发器，允许您手动运行工作流
+
+jobs:
+  cache-subscription:
+    runs-on: ubuntu-latest  # 运行在 Ubuntu 最新版本虚拟机
+
+    steps:
+      - name: Checkout code  # 检出代码
+        uses: actions/checkout@v3
+
+      - name: Get Subscription Data  # 获取订阅数据 (第一个订阅链接)
+        id: get-sub-1
+        run: |
+          SUB_CONTENT=$(curl -s "${{ secrets.SUB_LINK_1 }}") # 使用 secret 存储订阅链接，更安全
+          echo "SUB_CONTENT_BASE64=$SUB_CONTENT" >> $GITHUB_OUTPUT
+
+      - name: Decode Base64 - Subscription 1 # 解码 Base64 数据 (第一个订阅链接)
+        id: decode-sub-1
+        run: |
+          DECODED_CONTENT=$(echo "${{ steps.get-sub-1.outputs.SUB_CONTENT_BASE64 }}" | base64 -d)
+          echo "DECODED_CONTENT_SUB_1<<EOF" >> $GITHUB_OUTPUT
+          echo "$DECODED_CONTENT" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Parse Subscription Info - Subscription 1 # 解析订阅信息 (第一个订阅链接)
+        id: parse-sub-1
+        run: |
+          DECODED_CONTENT="${{ steps.decode-sub-1.outputs.DECODED_CONTENT_SUB_1 }}"
+          USAGE=""
+          EXPIRE=""
+          RESET_DAY=""
+
+          if echo "$DECODED_CONTENT" | grep -q 'mixed-port:'; then
+            # Clash YAML 格式解析 (示例，根据您的 YAML 结构调整)
+            USAGE=$(echo "$DECODED_CONTENT" | grep "剩余流量" | awk -F '：' '{print $2}' | awk '{print $1, $2}')
+            EXPIRE=$(echo "$DECODED_CONTENT" | grep "套餐到期" | awk -F '：' '{print $2}' | awk '{print $1}')
+          elif echo "$DECODED_CONTENT" | grep -q 'trojan://'; then
+            # Trojan 链接列表格式解析 (示例，根据您的链接格式调整)
+            USAGE_LINE=$(echo "$DECODED_CONTENT" | grep "剩余流量")
+            if [[ -n "$USAGE_LINE" ]]; then
+              USAGE=$(echo "$USAGE_LINE" | sed 's/.*剩余流量：\([0-9.]* GB\).*/\1 GB/')
+            fi
+            RESET_DAY_LINE=$(echo "$DECODED_CONTENT" | grep "距离下次重置剩余")
+            if [[ -n "$RESET_DAY_LINE" ]]; then
+              RESET_DAY=$(echo "$RESET_DAY_LINE" | sed 's/.*距离下次重置剩余：\([0-9]* 天\).*/\1 天/')
+            fi
+          else
+            echo "Unknown subscription format for Subscription 1"
+          fi
+
+          echo "SUBSCRIPTION_INFO_SUB_1={\"usage\": \"$USAGE\", \"expire\": \"$EXPIRE\", \"resetDay\": \"$RESET_DAY\"}" >> $GITHUB_OUTPUT
+
+
+      - name: Get Subscription Data  # 获取订阅数据 (第二个订阅链接)
+        id: get-sub-2
+        run: |
+          SUB_CONTENT=$(curl -s "${{ secrets.SUB_LINK_2 }}") # 使用 secret 存储订阅链接，更安全
+          echo "SUB_CONTENT_BASE64=$SUB_CONTENT" >> $GITHUB_OUTPUT
+
+      - name: Decode Base64 - Subscription 2 # 解码 Base64 数据 (第二个订阅链接)
+        id: decode-sub-2
+        run: |
+          DECODED_CONTENT=$(echo "${{ steps.get-sub-2.outputs.SUB_CONTENT_BASE64 }}" | base64 -d)
+          echo "DECODED_CONTENT_SUB_2<<EOF" >> $GITHUB_OUTPUT
+          echo "$DECODED_CONTENT" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Parse Subscription Info - Subscription 2 # 解析订阅信息 (第二个订阅链接)
+        id: parse-sub-2
+        run: |
+          DECODED_CONTENT="${{ steps.decode-sub-2.outputs.DECODED_CONTENT_SUB_2 }}"
+          USAGE=""
+          EXPIRE=""
+          RESET_DAY=""
+
+          if echo "$DECODED_CONTENT" | grep -q 'mixed-port:'; then
+            # Clash YAML 格式解析 (示例，根据您的 YAML 结构调整)
+            USAGE=$(echo "$DECODED_CONTENT" | grep "剩余流量" | awk -F '：' '{print $2}' | awk '{print $1, $2}')
+            EXPIRE=$(echo "$DECODED_CONTENT" | grep "套餐到期" | awk -F '：' '{print $2}' | awk '{print $1}')
+          elif echo "$DECODED_CONTENT" | grep -q 'trojan://'; then
+            # Trojan 链接列表格式解析 (示例，根据您的链接格式调整)
+            USAGE_LINE=$(echo "$DECODED_CONTENT" | grep "剩余流量")
+            if [[ -n "$USAGE_LINE" ]]; then
+              USAGE=$(echo "$USAGE_LINE" | sed 's/.*剩余流量：\([0-9.]* GB\).*/\1 GB/')
+            fi
+             RESET_DAY_LINE=$(echo "$DECODED_CONTENT" | grep "距离下次重置剩余")
+            if [[ -n "$RESET_DAY_LINE" ]]; then
+              RESET_DAY=$(echo "$RESET_DAY_LINE" | sed 's/.*距离下次重置剩余：\([0-9]* 天\).*/\1 天/')
+            fi
+          else
+            echo "Unknown subscription format for Subscription 2"
+          fi
+          echo "SUBSCRIPTION_INFO_SUB_2={\"usage\": \"$USAGE\", \"expire\": \"$EXPIRE\", \"resetDay\": \"$RESET_DAY\"}" >> $GITHUB_OUTPUT
+
+
+      - name: Update Subscription Data File # 更新订阅数据文件
+        run: |
+          # 创建或更新 JSON 文件 (例如 data/subscription_info.json)
+          mkdir -p data
+          echo '${{ steps.parse-sub-1.outputs.SUBSCRIPTION_INFO_SUB_1 }}' > data/subscription_info_1.json
+          echo '${{ steps.parse-sub-2.outputs.SUBSCRIPTION_INFO_SUB_2 }}' > data/subscription_info_2.json
+
+          git config --global user.name 'CtelSpecu' # 配置 Git 用户名
+          git config --global user.email 'churnie@protonmail.com' # 配置 Git 邮箱
+
+          git add data/subscription_info_1.json data/subscription_info_2.json # 添加文件到 Git 暂存区
+          git commit -m "Update subscription data cache" || echo "No changes to commit" # 提交更改，如果文件没有变化则忽略 commit
+          git push origin main # 推送更改到主分支
