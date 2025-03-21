@@ -2,15 +2,28 @@
   <div class="app-container">
     <div class="card-container">
       <DownloadCard />
+      <RecommendCard />
       <SubscriptionCard
-          subscriptionName="可用订阅1"
-          subscriptionLink="http://106.75.143.245:3390/api/v1/client/subscribe?token=11c5c3e1ad18a246f761687490a80820"  trafficUsage="200GB"  expireDate="2025-03-04"     maximumRate="5000Mbps"        />
+          subscriptionName="可用订阅1（高速）"
+          subscriptionLink="http://106.75.141.168:3389/api/v1/client/subscribe?token=b248fd5a74963c377a8fa88eac51cefa"
+          trafficUsage="168GB"
+          expireDate="2025-06-21(每月重置)"
+          maximumRate="500Mbps"
+      />
       <SubscriptionCard
-          subscriptionName="可用订阅2"
-          subscriptionLink="https://sub1.qingze-quick.top/api/v1/client/subscribe?token=e39a8fb7c6ecc53aeb180ad3674d389f"  trafficUsage="100GB"   expireDate="2025-05-02(每月重置)"     maximumRate="500Mbps"        />
+          subscriptionName="可用订阅2（大流量）"
+          subscriptionLink="https://sub1.qingze-quick.top/api/v1/client/subscribe?token=e39a8fb7c6ecc53aeb180ad3674d389f"
+          trafficUsage="488GB"
+          expireDate="2025-05-02(每月重置)"
+          maximumRate="500Mbps"
+      />
       <SubscriptionCard
           subscriptionName="可用订阅3"
-          subscriptionLink="https://sublink.cute-cloud.de/link?token=002744517d3a4dfea3310dd42ebcd80a"  trafficUsage="300GB"   expireDate="2025-09-25"     maximumRate="500Mbps"        />
+          subscriptionLink="https://sublink.cute-cloud.de/link?token=4f8a0a2715bda1511d190c896cea00f2"
+          trafficUsage="300GB"
+          expireDate="2026-03-21"
+          maximumRate="500Mbps"
+      />
     </div>
   </div>
 </template>
@@ -18,6 +31,7 @@
 <script setup>
 import DownloadCard from './components/DownloadCard.vue';
 import SubscriptionCard from './components/SubscriptionCard.vue';
+import RecommendCard from './components/RecommendCard.vue';
 </script>
 
 <style scoped>
