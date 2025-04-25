@@ -1,6 +1,6 @@
 <template>
   <div class="card recommend-card">
-    <h2>梯子推荐</h2>
+    <h2>梯子购买推荐</h2>
     <h3>高速、稳定、IP纯净</h3>
     <div class="button-group">
       <a href="https://a.mikasass.pro/signup?referralCode=A9ti5mtf" target="_blank" class="recommend-button">Mikasa</a>
