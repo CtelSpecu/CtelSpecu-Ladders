@@ -5,9 +5,9 @@
       <RecommendCard />
       <SubscriptionCard
           subscriptionName="可用订阅1（高速）"
-          subscriptionLink="http://106.75.141.168:3389/api/v1/client/subscribe?token=b248fd5a74963c377a8fa88eac51cefa"
-          trafficUsage="168GB"
-          expireDate="2025-06-21(每月重置)"
+          subscriptionLink="https://119.29.196.186/5b780ba09d5a66c7950914244600b801"
+          trafficUsage="220GB"
+          expireDate="2025-07-02(每月重置)"
           maximumRate="500Mbps"
       />
       <SubscriptionCard
