@@ -8,13 +8,12 @@
           :value="props.subscriptionLink"
       ></textarea>
       <button @click="copySubscriptionLink">复制链接</button>
-    </div>
+      </div>
 
     <div class="import-buttons">
       <button @click="importToClient('Clash')">导入Clash</button>&nbsp;&nbsp;
       <button @click="importToClient('sing-box')">导入sing-box</button>&nbsp;&nbsp;
-      <button @click="importToClient('Shadowrocket')">导入Shadowrocket</button>&nbsp;&nbsp;
-      <button @click="importToClient('Loon')">导入Loon</button>
+
     </div>
 
     <div class="subscription-info">
@@ -146,38 +145,47 @@ function importToClient(clientName) {
   font-size: 0.9em;
 }
 
-.subscription-link-area button {
-  margin-left: 10px;
-  padding: 8px 15px;
+.subscription-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.action-btn {
+  padding: 8px 16px;
   border: none;
   border-radius: 4px;
   background-color: #007bff;
   color: #fff;
   cursor: pointer;
+  font-size: 0.9em;
+  transition: background-color 0.2s;
+  margin-bottom: 10px;
 }
 
-.subscription-link-area button:hover {
+.action-btn:hover {
   background-color: #0056b3;
 }
 
 .import-buttons {
   display: flex;
   justify-content: space-around;
-  margin-bottom: 20px;
 }
 
-.import-buttons button {
-  padding: 8px 15px;
+.import-btn {
+  background-color: #00bcd4;
+  color: #fff;
   border: none;
   border-radius: 4px;
-  background-color: #28a745;
-  color: #fff;
+  padding: 8px 16px;
   cursor: pointer;
   font-size: 0.9em;
+  transition: background-color 0.2s;
+  margin: 0 8px;
 }
 
-.import-buttons button:hover {
-  background-color: #1e7e34;
+.import-btn:hover {
+  background-color: #0097a7;
 }
 
 .subscription-info {
