@@ -40,9 +40,9 @@
         <SubscriptionCard
           subscriptionName="可用订阅2（大流量）"
           subscriptionLink="http://23.145.248.218:3389/api/v1/client/subscribe?token=b248fd5a74963c377a8fa88eac51cefa"
-          trafficUsage="1000GB"
-          expireDate="2025-08-15"
-          maximumRate="1Gbps"
+          trafficUsage="168GB"
+          expireDate="2025-06-21"
+          maximumRate="500Mbps"
         />
         <SubscriptionCard
           subscriptionName="可用订阅3"
