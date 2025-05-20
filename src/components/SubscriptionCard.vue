@@ -11,10 +11,10 @@
     </div>
 
     <div class="import-buttons">
-      <button @click="importToClient('Clash')">导入至Clash</button>&nbsp;&nbsp;
-      <button @click="importToClient('sing-box')">导入至sing-box</button>&nbsp;&nbsp;
-      <button @click="importToClient('Shadowrocket')">导入至Shadowrocket</button>&nbsp;&nbsp;
-      <button @click="importToClient('Loon')">导入至Loon</button>
+      <button @click="importToClient('Clash')">导入Clash</button>&nbsp;&nbsp;
+      <button @click="importToClient('sing-box')">导入sing-box</button>&nbsp;&nbsp;
+      <button @click="importToClient('Shadowrocket')">导入Shadowrocket</button>&nbsp;&nbsp;
+      <button @click="importToClient('Loon')">导入Loon</button>
     </div>
 
     <div class="subscription-info">
