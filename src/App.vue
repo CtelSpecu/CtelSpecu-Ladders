@@ -1,37 +1,59 @@
 <template>
   <div class="app-container">
-    <div class="card-container">
-      <DownloadCard />
-      <RecommendCard />
-      <SubscriptionCard
+    <!-- 顶部导航栏 -->
+    <nav class="main-navbar">
+      <button :class="{active: currentTab === 'sub'}" @click="currentTab = 'sub'">可用订阅</button>
+      <button :class="{active: currentTab === 'soft'}" @click="currentTab = 'soft'">软件下载&教程</button>
+    </nav>
+
+    <!-- 主内容区 -->
+    <div class="page-container">
+      <!-- 可用订阅页面 -->
+      <div v-if="currentTab === 'sub'" class="subscription-layout">
+        <SubscriptionCard
           subscriptionName="可用订阅1（高速）"
           subscriptionLink="https://119.29.196.186/5b780ba09d5a66c7950914244600b801"
           trafficUsage="220GB"
           expireDate="2025-07-02(每月重置)"
           maximumRate="500Mbps"
-      />
-      <SubscriptionCard
+        />
+        <SubscriptionCard
           subscriptionName="可用订阅2（大流量）"
-          subscriptionLink="https://sub1.qingze-quick.top/api/v1/client/subscribe?token=e39a8fb7c6ecc53aeb180ad3674d389f"
-          trafficUsage="488GB"
-          expireDate="2025-05-02(每月重置)"
-          maximumRate="500Mbps"
-      />
-      <SubscriptionCard
+          subscriptionLink="http://23.145.248.218:3389/api/v1/client/subscribe?token=b248fd5a74963c377a8fa88eac51cefa"
+          trafficUsage="1000GB"
+          expireDate="2025-08-15"
+          maximumRate="1Gbps"
+        />
+        <SubscriptionCard
           subscriptionName="可用订阅3"
           subscriptionLink="https://sublink.cute-cloud.de/link?token=4f8a0a2715bda1511d190c896cea00f2"
           trafficUsage="300GB"
           expireDate="2026-03-21"
           maximumRate="500Mbps"
-      />
+        />
+      </div>
+      <!-- 软件下载和教程页面 -->
+      <div v-else class="tutorial-layout">
+        <div class="top-row">
+          <DownloadCard />
+          <TutorialCard />
+        </div>
+        <div class="bottom-row">
+          <ClientListPage />
+        </div>
+      </div>
     </div>
   </div>
 </template>
 
 <script setup>
+import { ref } from 'vue';
 import DownloadCard from './components/DownloadCard.vue';
+import TutorialCard from './components/TutorialCard.vue';
 import SubscriptionCard from './components/SubscriptionCard.vue';
-import RecommendCard from './components/RecommendCard.vue';
+import ClientListPage from './ClientListPage.vue';
+
+const currentTab = ref('sub'); // sub: 可用订阅, soft: 软件下载&教程
 </script>
 
 <style scoped>
@@ -39,36 +61,133 @@ import RecommendCard from './components/RecommendCard.vue';
   font-family: sans-serif;
   padding: 20px;
   background-color: #f0f2f5; /* 简约背景色 */
+  min-height: 100vh;
 }
 
-.card-container {
-  display: flex;          /* 启用 Flexbox 布局 */
-  flex-wrap: wrap;      /* 允许卡片自动换行 */
-  justify-content: flex-start; /*  卡片在主轴方向（水平）左对齐，可以根据需要修改为 center 或 space-around 等 */
-  gap: 20px;             /*  卡片之间的间距，可以根据需要调整 */
+.main-navbar {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto 32px auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 24px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  padding: 16px 0 8px 0;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+.main-navbar button {
+  background: none;
+  border: none;
+  font-size: 1.1em;
+  padding: 8px 28px;
+  border-radius: 6px;
+  color: #333;
+  cursor: pointer;
+  transition: background 0.18s, color 0.18s;
+}
+.main-navbar button.active,
+.main-navbar button:hover {
+  background: #007bff;
+  color: #fff;
 }
 
-.card-container > * {
-  flex: 1 1 300px;      /*  设置卡片的基本宽度为 300px，允许伸缩以适应容器，可以根据需要调整 */
-  min-width: 300px;     /*  卡片的最小宽度，防止内容挤压 */
-  /* max-width: 400px; */ /*  可以设置卡片的最大宽度，如果需要限制卡片过宽 */
-  margin-bottom: 0;      /*  移除底部 margin，因为是水平排列，主要用 gap 控制间距 */
+.page-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
 }
 
-/*  以下样式可以保持不变，或者根据需要进一步调整 DownloadCard 和 SubscriptionCard 的样式 */
+/* 页面容器 */
+.page-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+  padding: 0 16px;
+}
+
+/* 可用订阅页面布局 */
+.subscription-layout {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  width: 100%;
+}
+
+/* 软件下载和教程页面布局 */
+.tutorial-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.tutorial-layout .top-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+
+.tutorial-layout .bottom-row {
+  width: 100%;
+}
+
+/* 响应式布局 */
+@media (max-width: 1199px) {
+  .subscription-layout {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 991px) {
+  .tutorial-layout .top-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 767px) {
+  .subscription-layout {
+    grid-template-columns: 1fr;
+  }
+  
+  .page-container {
+    padding: 0 12px;
+  }
+  
+  .subscription-layout,
+  .tutorial-layout {
+    gap: 16px;
+  }
+}
+
+@media (max-width: 900px) {
+  .main-navbar, .card-container {
+    max-width: 100%;
+    padding-left: 0;
+    padding-right: 0;
+  }
+  .tutorial-layout .row {
+    flex-direction: column;
+    gap: 16px;
+  }
+}
+
 .card {
   background-color: #fff;
   border-radius: 8px;
   padding: 20px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  display: flex;           /*  保持卡片内部内容 Flexbox 布局 */
-  flex-direction: column;  /*  卡片内部内容垂直排列，如果需要水平排列可以修改为 row */
+  display: flex;
+  flex-direction: column;
 }
 
 .card h2 {
   margin-top: 0;
   margin-bottom: 15px;
   color: #333;
-  text-align: center;      /*  标题居中 */
+  text-align: center;
 }
 </style>
