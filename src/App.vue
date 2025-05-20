@@ -15,6 +15,11 @@
         >下载和使用教程</a>
         <a
           href="#"
+          :class="{ active: currentTab === 'freenode' }"
+          @click.prevent="currentTab = 'freenode'"
+        >免费节点收集</a>
+        <a
+          href="#"
           :class="{ active: currentTab === 'recommend' }"
           @click.prevent="currentTab = 'recommend'"
         >梯子购买推荐</a>
@@ -51,6 +56,10 @@
       <div v-else-if="currentTab === 'guide'" class="guide-layout">
         <ClientGuidePage />
       </div>
+      <!-- 免费节点收集页面 -->
+      <div v-else-if="currentTab === 'freenode'" class="freenode-layout">
+        <FreeNodePage />
+      </div>
       <!-- 梯子购买推荐页面 -->
       <div v-else class="recommend-layout">
         <RecommendPage />
@@ -60,15 +69,24 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, provide } from 'vue';
 import DownloadCard from './components/DownloadCard.vue';
 import TutorialCard from './components/TutorialCard.vue';
 import SubscriptionCard from './components/SubscriptionCard.vue';
 import ClientListPage from './ClientListPage.vue';
 import ClientGuidePage from './pages/ClientGuidePage.vue';
+import FreeNodePage from './pages/FreeNodePage.vue';
 import RecommendPage from './pages/RecommendPage.vue';
 
-const currentTab = ref('sub'); // sub: 可用订阅, guide: 下载和使用教程, recommend: 梯子购买推荐
+const currentTab = ref('sub'); // sub: 可用订阅, guide: 下载和使用教程, freenode: 免费节点收集, recommend: 梯子购买推荐
+
+// 提供给子组件的切换页面函数
+const setCurrentTab = (tab) => {
+  currentTab.value = tab;
+};
+
+// 通过provide提供给子组件
+provide('setCurrentTab', setCurrentTab);
 </script>
 
 <style scoped>
@@ -168,7 +186,7 @@ const currentTab = ref('sub'); // sub: 可用订阅, guide: 下载和使用教�
 }
 
 /* 指南页面布局 */
-.guide-layout, .recommend-layout {
+.guide-layout, .recommend-layout, .freenode-layout {
   background-color: #f8f9fa;
   border-radius: 8px;
   padding: 24px;
