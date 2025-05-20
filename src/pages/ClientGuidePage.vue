@@ -209,6 +209,7 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 24px;
+  width: 100%;
 }
 
 .client-card {
@@ -246,8 +247,7 @@
 }
 
 .features li::before {
-  content: "•";
-  color: #007bff;
+  content: "";
   position: absolute;
   left: 0;
 }
@@ -296,10 +296,25 @@
 
   .client-card {
     padding: 20px;
+    width: 100%;
   }
 
   .action-links {
     flex-direction: column;
+  }
+}
+
+@media (max-width: 480px) {
+  .client-card {
+    padding: 15px;
+  }
+  
+  .page-title {
+    font-size: 1.5em;
+  }
+  
+  .guide-section h2 {
+    font-size: 1.3em;
   }
 }
 </style>

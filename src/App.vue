@@ -60,6 +60,9 @@
       <!-- 客户端选择指南页面 -->
       <div v-else class="guide-layout">
         <ClientGuidePage />
+        <div class="client-list-container">
+          <ClientListPage />
+        </div>
       </div>
     </div>
   </div>
@@ -143,6 +146,7 @@ const currentTab = ref('sub'); // sub: 可用订阅, soft: 软件下载&教程, 
   margin: 0 auto;
   display: flex;
   gap: 24px;
+  justify-content: center;
 }
 
 .nav-links a {
@@ -177,6 +181,13 @@ const currentTab = ref('sub'); // sub: 可用订阅, soft: 软件下载&教程, 
   border-radius: 8px;
   padding: 24px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+.client-list-container {
+  margin-top: 10px;
 }
 
 @media (max-width: 768px) {
