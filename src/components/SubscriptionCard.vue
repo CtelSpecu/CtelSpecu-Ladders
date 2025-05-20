@@ -7,13 +7,11 @@
           readonly
           :value="props.subscriptionLink"
       ></textarea>
-      <button @click="copySubscriptionLink">复制链接</button>
-      </div>
+    </div>
 
     <div class="import-buttons">
-      <button @click="importToClient('Clash')">导入Clash</button>&nbsp;&nbsp;
-      <button @click="importToClient('sing-box')">导入sing-box</button>&nbsp;&nbsp;
-
+      <button class="copy-link-btn" @click="copySubscriptionLink">复制链接</button>
+      <button class="import-btn" @click="importToClient('Clash')">导入Clash</button>
     </div>
 
     <div class="subscription-info">
@@ -173,7 +171,7 @@ function importToClient(clientName) {
 }
 
 .import-btn {
-  background-color: #00bcd4;
+  background-color: #53A551;
   color: #fff;
   border: none;
   border-radius: 4px;
@@ -185,7 +183,23 @@ function importToClient(clientName) {
 }
 
 .import-btn:hover {
-  background-color: #0097a7;
+  background-color: #468c44;
+}
+
+.copy-link-btn {
+  background-color: #3579F6;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  cursor: pointer;
+  font-size: 0.9em;
+  transition: background-color 0.2s;
+  margin: 0 8px;
+}
+
+.copy-link-btn:hover {
+  background-color: #2a61c9;
 }
 
 .subscription-info {
