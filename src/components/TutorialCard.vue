@@ -52,21 +52,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #007bff;
+  background-color: #00bcd4;
   color: #fff;
   border: none;
-  border-radius: 6px;
-  padding: 12px 16px;
-  font-size: 0.95em;
-  text-align: center;
-  text-decoration: none;
+  border-radius: 4px;
+  padding: 8px 16px;
   cursor: pointer;
-  transition: all 0.2s ease;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  height: 44px;
+  font-size: 0.9em;
+  transition: background-color 0.2s;
 }
 
 .tutorial-btn:hover {

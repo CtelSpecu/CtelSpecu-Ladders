@@ -1,9 +1,24 @@
 <template>
   <div class="app-container">
     <!-- 顶部导航栏 -->
-    <nav class="main-navbar">
-      <button :class="{active: currentTab === 'sub'}" @click="currentTab = 'sub'">可用订阅</button>
-      <button :class="{active: currentTab === 'soft'}" @click="currentTab = 'soft'">软件下载&教程</button>
+    <nav class="nav-bar">
+      <div class="nav-links">
+        <a
+          href="#"
+          :class="{ active: currentTab === 'sub' }"
+          @click.prevent="currentTab = 'sub'"
+        >可用订阅</a>
+        <a
+          href="#"
+          :class="{ active: currentTab === 'soft' }"
+          @click.prevent="currentTab = 'soft'"
+        >软件下载&教程</a>
+        <a
+          href="#"
+          :class="{ active: currentTab === 'guide' }"
+          @click.prevent="currentTab = 'guide'"
+        >客户端选择指南</a>
+      </div>
     </nav>
 
     <!-- 主内容区 -->
@@ -33,7 +48,7 @@
         />
       </div>
       <!-- 软件下载和教程页面 -->
-      <div v-else class="tutorial-layout">
+      <div v-else-if="currentTab === 'soft'" class="tutorial-layout">
         <div class="top-row">
           <DownloadCard />
           <TutorialCard />
@@ -41,6 +56,10 @@
         <div class="bottom-row">
           <ClientListPage />
         </div>
+      </div>
+      <!-- 客户端选择指南页面 -->
+      <div v-else class="guide-layout">
+        <ClientGuidePage />
       </div>
     </div>
   </div>
@@ -52,8 +71,9 @@ import DownloadCard from './components/DownloadCard.vue';
 import TutorialCard from './components/TutorialCard.vue';
 import SubscriptionCard from './components/SubscriptionCard.vue';
 import ClientListPage from './ClientListPage.vue';
+import ClientGuidePage from './pages/ClientGuidePage.vue';
 
-const currentTab = ref('sub'); // sub: 可用订阅, soft: 软件下载&教程
+const currentTab = ref('sub'); // sub: 可用订阅, soft: 软件下载&教程, guide: 客户端指南
 </script>
 
 <style scoped>
@@ -108,6 +128,74 @@ const currentTab = ref('sub'); // sub: 可用订阅, soft: 软件下载&教程
   margin: 0 auto;
   width: 100%;
   padding: 0 16px;
+}
+
+/* 导航栏样式 */
+.nav-bar {
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 0 24px;
+  margin-bottom: 24px;
+}
+
+.nav-links {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  gap: 24px;
+}
+
+.nav-links a {
+  padding: 16px 0;
+  color: #666;
+  text-decoration: none;
+  font-size: 1.1em;
+  position: relative;
+}
+
+.nav-links a.active {
+  color: #007bff;
+}
+
+.nav-links a.active::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: #007bff;
+}
+
+.nav-links a:hover {
+  color: #007bff;
+}
+
+/* 指南页面布局 */
+.guide-layout {
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  padding: 24px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 768px) {
+  .nav-bar {
+    padding: 0 16px;
+  }
+
+  .nav-links {
+    gap: 16px;
+  }
+
+  .nav-links a {
+    font-size: 1em;
+    padding: 12px 0;
+  }
+
+  .guide-layout {
+    padding: 16px;
+  }
 }
 
 /* 可用订阅页面布局 */
