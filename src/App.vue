@@ -7,17 +7,17 @@
           href="#"
           :class="{ active: currentTab === 'sub' }"
           @click.prevent="currentTab = 'sub'"
-        >可用订阅</a>
-        <a
-          href="#"
-          :class="{ active: currentTab === 'soft' }"
-          @click.prevent="currentTab = 'soft'"
-        >软件下载&教程</a>
+        >可用付费订阅</a>
         <a
           href="#"
           :class="{ active: currentTab === 'guide' }"
           @click.prevent="currentTab = 'guide'"
-        >客户端选择指南</a>
+        >下载和使用教程</a>
+        <a
+          href="#"
+          :class="{ active: currentTab === 'recommend' }"
+          @click.prevent="currentTab = 'recommend'"
+        >梯子购买推荐</a>
       </div>
     </nav>
 
@@ -47,22 +47,13 @@
           maximumRate="500Mbps"
         />
       </div>
-      <!-- 软件下载和教程页面 -->
-      <div v-else-if="currentTab === 'soft'" class="tutorial-layout">
-        <div class="top-row">
-          <DownloadCard />
-          <TutorialCard />
-        </div>
-        <div class="bottom-row">
-          <ClientListPage />
-        </div>
-      </div>
-      <!-- 客户端选择指南页面 -->
-      <div v-else class="guide-layout">
+      <!-- 下载和使用教程页面 -->
+      <div v-else-if="currentTab === 'guide'" class="guide-layout">
         <ClientGuidePage />
-        <div class="client-list-container">
-          <ClientListPage />
-        </div>
+      </div>
+      <!-- 梯子购买推荐页面 -->
+      <div v-else class="recommend-layout">
+        <RecommendPage />
       </div>
     </div>
   </div>
@@ -75,8 +66,9 @@ import TutorialCard from './components/TutorialCard.vue';
 import SubscriptionCard from './components/SubscriptionCard.vue';
 import ClientListPage from './ClientListPage.vue';
 import ClientGuidePage from './pages/ClientGuidePage.vue';
+import RecommendPage from './pages/RecommendPage.vue';
 
-const currentTab = ref('sub'); // sub: 可用订阅, soft: 软件下载&教程, guide: 客户端指南
+const currentTab = ref('sub'); // sub: 可用订阅, guide: 下载和使用教程, recommend: 梯子购买推荐
 </script>
 
 <style scoped>
@@ -176,7 +168,7 @@ const currentTab = ref('sub'); // sub: 可用订阅, soft: 软件下载&教程, 
 }
 
 /* 指南页面布局 */
-.guide-layout {
+.guide-layout, .recommend-layout {
   background-color: #f8f9fa;
   border-radius: 8px;
   padding: 24px;
