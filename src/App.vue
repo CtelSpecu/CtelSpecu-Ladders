@@ -32,7 +32,7 @@
       <div v-if="currentTab === 'sub'" class="subscription-layout">
         <SubscriptionCard
           subscriptionName="可用订阅1（高速）"
-          subscriptionLink="https://119.29.196.186/5b780ba09d5a66c7950914244600b801"
+          subscriptionLink="https://43.100.58.97/5b780ba09d5a66c7950914244600b801"
           trafficUsage="220GB"
           expireDate="2025-07-02(每月重置)"
           maximumRate="500Mbps"
