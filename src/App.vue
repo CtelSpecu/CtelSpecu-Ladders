@@ -31,21 +31,21 @@
       <!-- 可用订阅页面 -->
       <div v-if="currentTab === 'sub'" class="subscription-layout">
         <SubscriptionCard
-          subscriptionName="可用订阅1（高速）"
+          subscriptionName="可用订阅1（IP纯净）"
           subscriptionLink="https://43.100.58.97/5b780ba09d5a66c7950914244600b801"
           trafficUsage="220GB"
           expireDate="2025-07-02(每月重置)"
           maximumRate="500Mbps"
         />
         <SubscriptionCard
-          subscriptionName="可用订阅2（大流量）"
+          subscriptionName="可用订阅2（速度快）"
           subscriptionLink="http://23.145.248.218:3389/api/v1/client/subscribe?token=b248fd5a74963c377a8fa88eac51cefa"
           trafficUsage="168GB"
           expireDate="2025-06-21"
           maximumRate="500Mbps"
         />
         <SubscriptionCard
-          subscriptionName="可用订阅3"
+          subscriptionName="可用订阅3（仅供应急，请勿使用）"
           subscriptionLink="https://sublink.cute-cloud.de/link?token=4f8a0a2715bda1511d190c896cea00f2"
           trafficUsage="300GB"
           expireDate="2026-03-21"
