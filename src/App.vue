@@ -12,7 +12,7 @@
           href="#"
           :class="{ active: currentTab === 'guide' }"
           @click.prevent="currentTab = 'guide'"
-        >客户端下载/教程</a>
+        >客户端下载</a>
         <a
           href="#"
           :class="{ active: currentTab === 'freenode' }"
@@ -23,6 +23,11 @@
           :class="{ active: currentTab === 'recommend' }"
           @click.prevent="currentTab = 'recommend'"
         >机场推荐</a>
+        <a
+          href="#"
+          :class="{ active: currentTab === 'freevpn' }"
+          @click.prevent="currentTab = 'freevpn'"
+        >其他类型</a>
       </div>
     </nav>
 
@@ -66,7 +71,7 @@
           />
         </div>
       </div>
-      <!-- 客户端下载/教程页面 -->
+      <!-- 客户端下载页面 -->
       <div v-else-if="currentTab === 'guide'" class="guide-layout fade-in">
         <ClientGuidePage />
       </div>
@@ -75,6 +80,14 @@
         <FreeNodePage />
       </div>
       <!-- 机场推荐页面 -->
+      <div v-else-if="currentTab === 'recommend'" class="recommend-layout fade-in">
+        <RecommendPage />
+      </div>
+      <!-- 其他类型页面 -->
+      <div v-else-if="currentTab === 'freevpn'" class="freevpn-layout fade-in">
+        <FreeVpnPage />
+      </div>
+      <!-- 默认页面 -->
       <div v-else class="recommend-layout fade-in">
         <RecommendPage />
       </div>
@@ -95,6 +108,7 @@ import ClientListPage from './ClientListPage.vue';
 import ClientGuidePage from './pages/ClientGuidePage.vue';
 import FreeNodePage from './pages/FreeNodePage.vue';
 import RecommendPage from './pages/RecommendPage.vue';
+import FreeVpnPage from './pages/FreeVpnPage.vue';
 import { useSubscriptions } from './composables/useSubscriptions.js';
 
 const currentTab = ref('sub');
