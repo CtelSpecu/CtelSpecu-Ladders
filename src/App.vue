@@ -29,28 +29,42 @@
     <!-- 主内容区 -->
     <div class="page-container">
       <!-- 可用订阅页面 -->
-      <div v-if="currentTab === 'sub'" class="subscription-layout">
-        <SubscriptionCard
-          subscriptionName="可用订阅1（IP纯净）"
-          subscriptionLink="https://43.100.58.97/5b780ba09d5a66c7950914244600b801"
-          trafficUsage="220GB"
-          expireDate="2025-07-02(每月重置)"
-          maximumRate="500Mbps"
-        />
-        <SubscriptionCard
-          subscriptionName="可用订阅2（速度快）"
-          subscriptionLink="http://23.145.248.218:3389/api/v1/client/subscribe?token=b248fd5a74963c377a8fa88eac51cefa"
-          trafficUsage="168GB"
-          expireDate="2025-06-21"
-          maximumRate="500Mbps"
-        />
-        <SubscriptionCard
-          subscriptionName="可用订阅3（仅供应急，请勿使用）"
-          subscriptionLink="https://sublink.cute-cloud.de/link?token=8ce120621aac8c6b7793e63a3bdb759f"
-          trafficUsage="300GB"
-          expireDate="2026-03-21"
-          maximumRate="500Mbps"
-        />
+      <div v-if="currentTab === 'sub'" class="subscription-page">
+        <!-- 页面标题和刷新按钮 -->
+        <div class="page-header">
+          <h1 class="page-title">可用付费订阅</h1>
+          <div class="page-actions">
+            <button 
+              class="refresh-btn" 
+              @click="handleRefresh" 
+              :disabled="isLoading"
+              :class="{ loading: isLoading }"
+            >
+              <span class="refresh-icon">🔄</span>
+              {{ isLoading ? '刷新中...' : '刷新数据' }}
+            </button>
+          </div>
+        </div>
+        
+        <!-- 最后更新时间 -->
+        <div v-if="lastUpdateTime" class="update-info">
+          最后更新: {{ new Date(lastUpdateTime).toLocaleString('zh-CN') }}
+        </div>
+        
+        <!-- 订阅卡片列表 -->
+        <div class="subscription-layout">
+          <SubscriptionCard
+            v-for="subscription in subscriptions"
+            :key="subscription.id"
+            :subscription-name="subscription.name"
+            :subscription-link="subscription.url"
+            :rating="subscription.rating"
+            :traffic="subscription.traffic"
+            :reset="subscription.reset"
+            :expire="subscription.expire"
+            :maximum-rate="subscription.maxRate"
+          />
+        </div>
       </div>
       <!-- 下载和使用教程页面 -->
       <div v-else-if="currentTab === 'guide'" class="guide-layout">
@@ -69,7 +83,7 @@
 </template>
 
 <script setup>
-import { ref, provide } from 'vue';
+import { ref, provide, onMounted } from 'vue';
 import DownloadCard from './components/DownloadCard.vue';
 import TutorialCard from './components/TutorialCard.vue';
 import SubscriptionCard from './components/SubscriptionCard.vue';
@@ -77,8 +91,17 @@ import ClientListPage from './ClientListPage.vue';
 import ClientGuidePage from './pages/ClientGuidePage.vue';
 import FreeNodePage from './pages/FreeNodePage.vue';
 import RecommendPage from './pages/RecommendPage.vue';
+import { useSubscriptions } from './composables/useSubscriptions.js';
 
-const currentTab = ref('sub'); // sub: 可用订阅, guide: 下载和使用教程, freenode: 免费节点收集, recommend: 梯子购买推荐
+const currentTab = ref('sub');
+
+// 使用订阅管理composable
+const { 
+  subscriptions, 
+  isLoading, 
+  lastUpdateTime, 
+  refreshSubscriptions 
+} = useSubscriptions();
 
 // 提供给子组件的切换页面函数
 const setCurrentTab = (tab) => {
@@ -87,6 +110,17 @@ const setCurrentTab = (tab) => {
 
 // 通过provide提供给子组件
 provide('setCurrentTab', setCurrentTab);
+
+// 手动刷新按钮的处理函数
+const handleRefresh = async () => {
+  await refreshSubscriptions();
+};
+
+// 组件挂载时的初始化
+onMounted(() => {
+  console.log('订阅数据已加载:', subscriptions.value);
+  // 可以在这里添加自动刷新逻辑
+});
 </script>
 
 <style scoped>
@@ -217,6 +251,86 @@ provide('setCurrentTab', setCurrentTab);
   .guide-layout {
     padding: 16px;
   }
+}
+
+/* 订阅页面样式 */
+.subscription-page {
+  width: 100%;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid #e9ecef;
+}
+
+.page-title {
+  margin: 0;
+  color: #333;
+  font-size: 2em;
+  font-weight: 600;
+}
+
+.page-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.refresh-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0, 123, 255, 0.3);
+}
+
+.refresh-btn:hover:not(:disabled) {
+  background: linear-gradient(135deg, #0056b3 0%, #004085 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 123, 255, 0.4);
+}
+
+.refresh-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.refresh-btn.loading .refresh-icon {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.refresh-icon {
+  font-size: 16px;
+  transition: transform 0.3s ease;
+}
+
+.update-info {
+  background-color: #f8f9fa;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 0.9em;
+  color: #6c757d;
+  margin-bottom: 20px;
+  text-align: center;
+  border: 1px solid #e9ecef;
 }
 
 /* 可用订阅页面布局 */

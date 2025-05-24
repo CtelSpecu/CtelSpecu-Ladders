@@ -1,11 +1,50 @@
 <template>
   <div class="card subscription-card">
+    <!-- 星级评分 -->
+    <div class="rating-container">
+      <div class="stars">
+        <span v-for="i in 5" :key="i" class="star" :class="{ active: i <= rating }">
+          ★
+        </span>
+      </div>
+      <span class="rating-text">{{ rating }}/5 推荐</span>
+    </div>
+    
     <h2>{{ subscriptionName }}</h2>
+    
+    <!-- 流量使用进度条 -->
+    <div class="traffic-info">
+      <div class="traffic-header">
+        <span class="traffic-label">流量剩余</span>
+        <span class="traffic-amount">{{ trafficFormatted }}</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" :style="{ width: trafficPercentage + '%' }"></div>
+      </div>
+      <div class="progress-text">已使用 {{ trafficPercentage }}%</div>
+    </div>
+
+    <!-- 时间信息 -->
+    <div class="time-info">
+      <div class="time-item">
+        <span class="time-label">📅 套餐到期</span>
+        <span class="time-value">{{ expireFormatted }}</span>
+      </div>
+      <div class="time-item" v-if="resetFormatted">
+        <span class="time-label">🔄 流量重置</span>
+        <span class="time-value">{{ resetFormatted }}</span>
+      </div>
+      <div class="time-item">
+        <span class="time-label">⚡ 最大速率</span>
+        <span class="time-value">{{ maximumRate }}</span>
+      </div>
+    </div>
+    
     <div class="subscription-link-area">
       <textarea
           ref="subscriptionLinkTextarea"
           readonly
-          :value="props.subscriptionLink"
+          :value="subscriptionLink"
       ></textarea>
     </div>
 
@@ -14,333 +53,535 @@
       <button class="import-btn" @click="importToClient('Clash')">导入Clash</button>
     </div>
 
-    <div class="subscription-info">
-      <p>流量使用: {{ props.trafficUsage }}</p>
-      <p>套餐到期: {{ props.expireDate }}</p>
-      <p>最大速率： {{ props.maximumRate }}</p>
-    </div>
-
     <div v-if="notificationVisible" :class="notificationClass" class="notification-box">
       <p class="notification-message">{{ notificationMessage }}</p>
-      <div class="notification-progress-bar"> <div class="notification-progress-bar-inner"></div> </div>
+      <div class="notification-progress-bar"> 
+        <div class="notification-progress-bar-inner"></div> 
+      </div>
       <button class="notification-close-button" @click="closeNotification">
-        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M17.5 17.5L6.5 6.5M17.5 6.5L6.5 17.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+          <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+          <g id="SVGRepo_iconCarrier"> 
+            <path d="M17.5 17.5L6.5 6.5M17.5 6.5L6.5 17.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> 
+          </g>
+        </svg>
       </button>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, computed } from 'vue';
 
 const props = defineProps({
   subscriptionName: String,
   subscriptionLink: String,
-  trafficUsage: String,
-  expireDate: String,
-  maximumRate: String
+  rating: {
+    type: Number,
+    default: 3
+  },
+  traffic: {
+    type: Object,
+    default: () => ({
+      used: 0,
+      total: 100,
+      unit: 'GB'
+    })
+  },
+  expire: [String, Object],
+  reset: [String, Object],
+  maximumRate: {
+    type: String,
+    default: '1 Gbps'
+  }
 });
 
 const subscriptionLinkTextarea = ref(null);
-
-// 新增：控制提示框显示和隐藏的 ref 变量
 const notificationVisible = ref(false);
-// 新增：存储提示信息的 ref 变量
 const notificationMessage = ref('');
-// 新增：控制提示框样式的 ref 变量
 const notificationClass = ref('');
-// 新增：复制链接点击计数器
-const copyLinkCounter = ref(0);
 
-
-function showNotification(message, type = 'default') { // type 参数控制样式
-  notificationMessage.value = message;
-  notificationVisible.value = true;
-
-  if (type === 'success') {
-    notificationClass.value = 'success-notification-box'; // 绿色成功样式
-  } else if (type === 'error_first_copy') {
-    notificationClass.value = 'error-notification-box'; // 红色首次复制成功样式 (根据您的需求定义)
-  } else {
-    notificationClass.value = 'default-notification-box'; // 默认样式，如果您还需要其他类型的通知
+// 流量格式化
+const trafficFormatted = computed(() => {
+  if (!props.traffic) return '0 GB / 100 GB';
+  
+  // 如果有 remaining 字段（剩余流量）
+  if (props.traffic.remaining !== undefined && props.traffic.total !== undefined) {
+    const remaining = props.traffic.remaining;
+    const total = props.traffic.total;
+    const unit = props.traffic.unit || 'GB';
+    return `${remaining.toFixed(2)} ${unit} / ${total} ${unit}`;
   }
+  
+  // 如果有 used 字段（已使用流量）
+  if (props.traffic.used !== undefined && props.traffic.total !== undefined) {
+    const used = props.traffic.used;
+    const total = props.traffic.total;
+    const unit = props.traffic.unit || 'GB';
+    return `${used} ${unit} / ${total} ${unit}`;
+  }
+  
+  return '0 GB / 100 GB';
+});
 
+// 流量使用百分比
+const trafficPercentage = computed(() => {
+  if (!props.traffic) return 0;
+  
+  // 如果有 remaining 字段（剩余流量）
+  if (props.traffic.remaining !== undefined && props.traffic.total !== undefined) {
+    const remaining = props.traffic.remaining;
+    const total = props.traffic.total;
+    if (total === 0) return 0;
+    const used = total - remaining;
+    return Math.round((used / total) * 100);
+  }
+  
+  // 如果有 used 字段（已使用流量）
+  if (props.traffic.used !== undefined && props.traffic.total !== undefined) {
+    const used = props.traffic.used;
+    const total = props.traffic.total;
+    if (total === 0) return 0;
+    return Math.round((used / total) * 100);
+  }
+  
+  return 0;
+});
 
+// 到期时间格式化
+const expireFormatted = computed(() => {
+  if (!props.expire) return '未知';
+  
+  // 如果是对象类型（从解析器返回的数据）
+  if (typeof props.expire === 'object' && props.expire.formatted) {
+    return props.expire.formatted;
+  }
+  
+  // 如果是字符串类型
+  if (typeof props.expire === 'string') {
+    try {
+      const date = new Date(props.expire);
+      return date.toLocaleDateString('zh-CN', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+      });
+    } catch {
+      return props.expire;
+    }
+  }
+  
+  return '未知';
+});
+
+// 重置时间格式化
+const resetFormatted = computed(() => {
+  if (!props.reset) return '';
+  
+  // 如果是对象类型（从解析器返回的数据）
+  if (typeof props.reset === 'object' && props.reset.formatted) {
+    return props.reset.formatted;
+  }
+  
+  // 如果是字符串类型
+  if (typeof props.reset === 'string') {
+    return props.reset;
+  }
+  
+  return '';
+});
+
+const showNotification = (message, type = 'success') => {
+  notificationMessage.value = message;
+  notificationClass.value = `notification-${type}`;
+  notificationVisible.value = true;
   setTimeout(() => {
     notificationVisible.value = false;
   }, 3000);
-}
+};
 
-function closeNotification() {
+const closeNotification = () => {
   notificationVisible.value = false;
-}
+};
 
-
-function copySubscriptionLink() {
-  if (subscriptionLinkTextarea.value) {
-    subscriptionLinkTextarea.value.select();
-    document.execCommand('copy');
-    copyLinkCounter.value++; // 增加计数器
-
-    if (copyLinkCounter.value === 1) {
-      showNotification('订阅链接已复制到剪贴板！', 'error_first_copy'); // 首次复制，红色
-    } else {
-      showNotification('订阅链接已复制到剪贴板！', 'success'); // 后续复制，绿色
-    }
+const copySubscriptionLink = async () => {
+  try {
+    await navigator.clipboard.writeText(props.subscriptionLink);
+    showNotification('链接已复制到剪贴板!');
+  } catch (err) {
+    console.error('复制失败:', err);
+    showNotification('复制失败，请手动复制', 'error');
   }
-}
+};
 
-function importToClient(clientName) {
-  let importUrl = '';
-  if (clientName === 'Clash') {
-    importUrl = `clash://install-config?url=${encodeURIComponent(props.subscriptionLink)}`;
-  } else if (clientName === 'sing-box') {
-    importUrl = `sing-box://import?url=${encodeURIComponent(props.subscriptionLink)}`;
-  } else if (clientName === 'Shadowrocket') {
-    importUrl = `shadowrocket://add/server?url=${encodeURIComponent(props.subscriptionLink)}`;
-  } else if (clientName === 'Loon') {
-    importUrl = `loon://import?url=${encodeURIComponent(props.subscriptionLink)}`;
+const importToClient = (client) => {
+  if (client === 'Clash') {
+    window.open(`clash://install-config?url=${encodeURIComponent(props.subscriptionLink)}`, '_blank');
+    showNotification(`正在导入到 ${client}...`);
   }
-
-  if (importUrl) {
-    window.open(importUrl, '_blank');
-  } else {
-    alert(`暂不支持直接导入到 ${clientName}，请手动复制订阅链接导入。`);
-  }
-}
+};
 </script>
 
 <style scoped>
-/* 样式保持不变 */
 .subscription-card {
-  background-color: #fff;
-  border-radius: 8px;
-  padding: 20px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 20px;
+  padding: 30px;
+  margin: 20px 0;
+  color: white;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.subscription-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transform: rotate(45deg);
+  transition: all 0.6s ease;
+  opacity: 0;
+}
+
+.subscription-card:hover::before {
+  opacity: 1;
+  animation: shine 1.5s ease-in-out;
+}
+
+.subscription-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+}
+
+@keyframes shine {
+  0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+  100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+}
+
+.rating-container {
   display: flex;
-  flex-direction: column;
-  position: relative; /*  设置为 relative，方便 notification-box 定位 */
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 20px;
 }
 
-.subscription-card h2 {
-  margin-top: 0;
-  margin-bottom: 15px;
-  color: #333;
-  text-align: center;
-}
-
-.subscription-link-area {
+.stars {
   display: flex;
-  margin-bottom: 15px;
+  gap: 5px;
 }
 
-.subscription-link-area textarea {
-  flex-grow: 1;
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  resize: none;
-  font-size: 0.9em;
-}
-
-.subscription-actions {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-}
-
-.action-btn {
-  padding: 8px 16px;
-  border: none;
-  border-radius: 4px;
-  background-color: #007bff;
-  color: #fff;
+.star {
+  font-size: 20px;
+  color: rgba(255, 255, 255, 0.3);
+  transition: all 0.3s ease;
   cursor: pointer;
-  font-size: 0.9em;
-  transition: background-color 0.2s;
+}
+
+.star.active {
+  color: #ffd700;
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
+
+.star:hover {
+  transform: scale(1.2);
+}
+
+.rating-text {
+  font-size: 14px;
+  font-weight: 600;
+  opacity: 0.9;
+}
+
+h2 {
+  font-size: 28px;
+  font-weight: 700;
+  margin: 0 0 25px 0;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.traffic-info {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  padding: 20px;
+  margin: 20px 0;
+  backdrop-filter: blur(10px);
+}
+
+.traffic-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.traffic-label {
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.traffic-amount {
+  font-weight: 700;
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+.progress-bar {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  height: 8px;
+  overflow: hidden;
   margin-bottom: 10px;
 }
 
-.action-btn:hover {
-  background-color: #0056b3;
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #00ff88, #00ccff);
+  border-radius: 10px;
+  transition: width 0.8s ease;
+  position: relative;
+}
+
+.progress-fill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  animation: progress-shine 2s infinite;
+}
+
+@keyframes progress-shine {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+.progress-text {
+  font-size: 12px;
+  text-align: center;
+  opacity: 0.8;
+  font-weight: 600;
+}
+
+.time-info {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 15px;
+  margin: 25px 0;
+}
+
+.time-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 15px;
+  border-radius: 12px;
+  backdrop-filter: blur(5px);
+  transition: all 0.3s ease;
+}
+
+.time-item:hover {
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateX(5px);
+}
+
+.time-label {
+  font-weight: 600;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.time-value {
+  font-weight: 700;
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+.subscription-link-area {
+  margin: 25px 0;
+}
+
+.subscription-link-area textarea {
+  width: 100%;
+  min-height: 120px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  padding: 15px;
+  color: white;
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  resize: vertical;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+}
+
+.subscription-link-area textarea:focus {
+  outline: none;
+  border-color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.15);
+}
+
+.subscription-link-area textarea::placeholder {
+  color: rgba(255, 255, 255, 0.6);
 }
 
 .import-buttons {
   display: flex;
-  justify-content: space-around;
+  gap: 15px;
+  flex-wrap: wrap;
 }
 
-.import-btn {
-  background-color: #53A551;
-  color: #fff;
+.copy-link-btn, .import-btn {
+  flex: 1;
+  min-width: 140px;
+  padding: 15px 25px;
   border: none;
-  border-radius: 4px;
-  padding: 8px 16px;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 14px;
   cursor: pointer;
-  font-size: 0.9em;
-  transition: background-color 0.2s;
-  margin: 0 8px;
-}
-
-.import-btn:hover {
-  background-color: #468c44;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .copy-link-btn {
-  background-color: #3579F6;
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  padding: 8px 16px;
-  cursor: pointer;
-  font-size: 0.9em;
-  transition: background-color 0.2s;
-  margin: 0 8px;
+  background: linear-gradient(135deg, #ff6b6b, #ff8e8e);
+  color: white;
 }
 
 .copy-link-btn:hover {
-  background-color: #2a61c9;
+  background: linear-gradient(135deg, #ff5252, #ff7979);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(255, 107, 107, 0.4);
 }
 
-.subscription-info {
-  margin-top: 10px;
-  font-size: 0.95em;
-  color: #555;
-  text-align: center;
+.import-btn {
+  background: linear-gradient(135deg, #4ecdc4, #44a08d);
+  color: white;
 }
 
-
-/* 默认提示框样式 (红色 - 用于首次复制成功) */
-.notification-box.error-notification-box {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  padding: 15px;
-  background-color: #d4edda;
-  border: 1px solid #c3e6cb;
-  color: #721c24; /* 深红色文字 */
-  border-radius: 4px;
-  margin-bottom: 10px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  box-sizing: border-box;
-  z-index: 10;
+.import-btn:hover {
+  background: linear-gradient(135deg, #26d0ce, #2a9d8f);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(78, 205, 196, 0.4);
 }
 
-.notification-box.error-notification-box .notification-message,
-.notification-box.error-notification-box .notification-close-button,
-.notification-box.error-notification-box .notification-close-button svg {
-  color: #721c24;
+.notification-box {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  padding: 20px;
+  border-radius: 12px;
+  color: white;
+  font-weight: 600;
+  z-index: 1000;
+  min-width: 300px;
+  backdrop-filter: blur(10px);
+  animation: slideIn 0.3s ease;
 }
 
-
-/* 成功提示框样式 (绿色 - 用于后续复制成功) */
-.notification-box.success-notification-box {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  padding: 15px;
-  background-color: #d4edda;
-  border: 1px solid #c3e6cb;
-  color: #155724;
-  border-radius: 4px;
-  margin-bottom: 10px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  box-sizing: border-box;
-  z-index: 10;
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
 }
 
-.notification-box.success-notification-box .notification-message,
-.notification-box.success-notification-box .notification-close-button,
-.notification-box.success-notification-box .notification-close-button svg{
-  color: #155724;
+.notification-success {
+  background: linear-gradient(135deg, #00b894, #00cec9);
+  box-shadow: 0 10px 25px rgba(0, 184, 148, 0.3);
 }
 
-
-/*  基础 notification-box 样式，可以用于其他类型的通知，目前未使用，您可以根据需要扩展 */
-.notification-box.default-notification-box {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  padding: 15px;
-  background-color: #d4edda;
-  border: 1px solid ;
-  color: #333;
-  border-radius: 4px;
-  margin-bottom: 10px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  box-sizing: border-box;
-  z-index: 10;
+.notification-error {
+  background: linear-gradient(135deg, #e17055, #d63031);
+  box-shadow: 0 10px 25px rgba(225, 112, 85, 0.3);
 }
 
-.notification-box.default-notification-box .notification-message,
-.notification-box.default-notification-box .notification-close-button,
-.notification-box.default-notification-box .notification-close-button svg {
-  color: #333;
+.notification-message {
+  margin: 0 0 10px 0;
+  font-size: 14px;
 }
 
-
-.notification-box .notification-message {
-  margin: 0;
-  font-size: 0.95em;
-}
-
-.notification-box .notification-close-button {
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-  margin-left: 10px;
-  opacity: 0.7;
-  transition: opacity 0.2s ease-in-out;
-}
-
-.notification-box .notification-close-button:hover {
-  opacity: 1;
-}
-
-.notification-box .notification-close-button svg {
-  width: 16px;
-  height: 16px;
-  display: block;
-}
-
-/* 进度条样式 (所有通知框通用) */
 .notification-progress-bar {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 5px;
-  background-color: rgba(0, 0, 0, 0.1);
-  border-radius: 0 0 4px 4px;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 2px;
   overflow: hidden;
+  margin-bottom: 15px;
 }
 
 .notification-progress-bar-inner {
   height: 100%;
+  background: white;
   width: 100%;
-  background-color: currentColor; /*  继承 notification-box 的文字颜色 */
-  border-radius: 0 0 4px 4px;
-  transform-origin: right center;
-  animation: progress-bar-countdown 3s linear forwards;
+  animation: progressBar 3s linear;
 }
 
-@keyframes progress-bar-countdown {
-  0% {
-    transform: scaleX(1);
-  }
-  100% {
-    transform: scaleX(0);
-  }
+@keyframes progressBar {
+  from { width: 100%; }
+  to { width: 0%; }
 }
 
+.notification-close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  color: white;
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+}
+
+.notification-close-button:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.notification-close-button svg {
+  width: 16px;
+  height: 16px;
+}
+
+@media (max-width: 768px) {
+  .subscription-card {
+    padding: 20px;
+    margin: 15px 0;
+  }
+
+  .import-buttons {
+    flex-direction: column;
+  }
+
+  .copy-link-btn, .import-btn {
+    min-width: auto;
+  }
+
+  .time-info {
+    gap: 10px;
+  }
+
+  .notification-box {
+    right: 10px;
+    left: 10px;
+    min-width: auto;
+  }
+}
 </style>
