@@ -7,22 +7,22 @@
           href="#"
           :class="{ active: currentTab === 'sub' }"
           @click.prevent="currentTab = 'sub'"
-        >可用付费订阅</a>
+        >共享订阅</a>
         <a
           href="#"
           :class="{ active: currentTab === 'guide' }"
           @click.prevent="currentTab = 'guide'"
-        >下载和使用教程</a>
+        >客户端下载/教程</a>
         <a
           href="#"
           :class="{ active: currentTab === 'freenode' }"
           @click.prevent="currentTab = 'freenode'"
-        >免费节点收集</a>
+        >免费节点</a>
         <a
           href="#"
           :class="{ active: currentTab === 'recommend' }"
           @click.prevent="currentTab = 'recommend'"
-        >梯子购买推荐</a>
+        >机场推荐</a>
       </div>
     </nav>
 
@@ -32,7 +32,7 @@
       <div v-if="currentTab === 'sub'" class="subscription-page fade-in">
         <!-- 页面标题和刷新按钮 -->
         <div class="page-header">
-          <h1 class="page-title">可用付费订阅</h1>
+          <h1 class="page-title">共享订阅</h1>
           <div class="page-actions">
             <button 
               class="refresh-btn" 
@@ -66,15 +66,15 @@
           />
         </div>
       </div>
-      <!-- 下载和使用教程页面 -->
+      <!-- 客户端下载/教程页面 -->
       <div v-else-if="currentTab === 'guide'" class="guide-layout fade-in">
         <ClientGuidePage />
       </div>
-      <!-- 免费节点收集页面 -->
+      <!-- 免费节点页面 -->
       <div v-else-if="currentTab === 'freenode'" class="freenode-layout fade-in">
         <FreeNodePage />
       </div>
-      <!-- 梯子购买推荐页面 -->
+      <!-- 机场推荐页面 -->
       <div v-else class="recommend-layout fade-in">
         <RecommendPage />
       </div>

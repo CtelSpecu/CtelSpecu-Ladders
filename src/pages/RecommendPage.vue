@@ -1,6 +1,6 @@
 <template>
   <div class="recommend-page">
-    <h1 class="page-title">梯子购买推荐</h1>
+    <h1 class="page-title">机场推荐</h1>
     <div class="recommend-content">
       <div class="recommend-grid">
         <section class="recommend-section">
