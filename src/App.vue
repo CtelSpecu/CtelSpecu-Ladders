@@ -46,7 +46,7 @@
         />
         <SubscriptionCard
           subscriptionName="可用订阅3（仅供应急，请勿使用）"
-          subscriptionLink="https://sublink.cute-cloud.de/link?token=4f8a0a2715bda1511d190c896cea00f2"
+          subscriptionLink="https://sublink.cute-cloud.de/link?token=8ce120621aac8c6b7793e63a3bdb759f"
           trafficUsage="300GB"
           expireDate="2026-03-21"
           maximumRate="500Mbps"
