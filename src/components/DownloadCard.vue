@@ -23,23 +23,54 @@
 
 <style scoped>
 .card {
-  background-color: #fff;
-  border-radius: 8px;
-  padding: 24px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  height: 100%;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 20px;
+  padding: 30px;
+  color: white;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(45deg, transparent, rgba(255,255,255,0.08), transparent);
+  transform: rotate(45deg);
+  transition: all 0.6s ease;
+  opacity: 0;
+}
+
+.card:hover::before {
+  opacity: 1;
+  animation: shine 1.5s ease-in-out;
+}
+
+.card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 25px 50px rgba(0,0,0,0.2);
+}
+
+@keyframes shine {
+  0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+  100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
 }
 
 .download-section h2 {
   margin-top: 0;
   margin-bottom: 16px;
-  color: #333;
+  color: #fff;
   font-size: 1.5em;
 }
 
 .download-section p {
   margin-bottom: 16px;
-  color: #666;
+  color: #e0e0e0;
 }
 
 .download-btn-group {
@@ -53,24 +84,28 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #00bcd4;
-  color: #fff;
+  background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+  color: white;
   border: none;
-  border-radius: 4px;
-  padding: 8px 16px;
+  border-radius: 12px;
+  padding: 12px 24px;
   cursor: pointer;
-  font-size: 0.9em;
-  transition: background-color 0.2s;
-}
-
-.download-btn:hover {
-  background-color: #0056b3;
+  font-size: 1em;
+  font-weight: 600;
+  transition: all 0.3s;
+  box-shadow: 0 4px 12px rgba(67, 233, 123, 0.08);
   text-decoration: none;
 }
 
+.download-btn:hover {
+  background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(67, 233, 123, 0.18);
+}
+
 .note {
-  font-size: 0.9em;
-  color: #666;
+  font-size: 0.95em;
+  color: #e0e0e0;
   margin-top: 16px;
   margin-bottom: 0;
 }
@@ -85,12 +120,10 @@
   .card {
     padding: 20px;
   }
-
   .download-btn-group {
     grid-template-columns: 1fr;
     gap: 8px;
   }
-
   .download-btn {
     height: 40px;
     padding: 10px 16px;

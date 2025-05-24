@@ -85,25 +85,14 @@ const switchToRecommend = () => {
 </script>
 
 <style scoped>
+/* 页面容器 - 简洁样式，参考可用订阅页面 */
 .free-node-page {
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
 }
 
-.page-title {
-  margin: 0;
-  color: #333;
-  font-size: 2.2em;
-  font-weight: 700;
-  text-shadow: 0 2px 8px rgba(255, 255, 255, 0.8);
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  text-align: center;
-  margin-bottom: 32px;
-}
+/* 使用全局的 page-title 样式 */
 
 .free-node-grid {
   display: grid;
@@ -112,6 +101,7 @@ const switchToRecommend = () => {
   width: 100%;
 }
 
+/* 使用全局的 card 样式 */
 .free-node-section {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   border-radius: 20px;

@@ -3,9 +3,14 @@
     <!-- 星级评分 -->
     <div class="rating-container">
       <div class="stars">
-        <span v-for="i in 5" :key="i" class="star" :class="{ active: i <= rating }">
-          ★
-        </span>
+        <i v-for="i in 5" 
+           :key="i" 
+           class="star" 
+           :class="{ 
+             'fas fa-star active': i <= rating,
+             'far fa-star': i > rating
+           }">
+        </i>
       </div>
       <span class="rating-text">{{ rating }}/5 推荐</span>
     </div>
@@ -27,15 +32,24 @@
     <!-- 时间信息 -->
     <div class="time-info">
       <div class="time-item">
-        <span class="time-label">📅 套餐到期</span>
+        <span class="time-label">
+          <i class="fas fa-calendar-alt"></i>
+          套餐到期
+        </span>
         <span class="time-value">{{ expireFormatted }}</span>
       </div>
       <div class="time-item" v-if="resetFormatted">
-        <span class="time-label">🔄 流量重置</span>
+        <span class="time-label">
+          <i class="fas fa-sync-alt"></i>
+          流量重置
+        </span>
         <span class="time-value">{{ resetFormatted }}</span>
       </div>
       <div class="time-item">
-        <span class="time-label">⚡ 最大速率</span>
+        <span class="time-label">
+          <i class="fas fa-tachometer-alt"></i>
+          最大速率
+        </span>
         <span class="time-value">{{ maximumRate }}</span>
       </div>
     </div>
@@ -49,23 +63,13 @@
     </div>
 
     <div class="import-buttons">
-      <button class="copy-link-btn" @click="copySubscriptionLink">复制链接</button>
-      <button class="import-btn" @click="importToClient('Clash')">导入Clash</button>
-    </div>
-
-    <div v-if="notificationVisible" :class="notificationClass" class="notification-box">
-      <p class="notification-message">{{ notificationMessage }}</p>
-      <div class="notification-progress-bar"> 
-        <div class="notification-progress-bar-inner"></div> 
-      </div>
-      <button class="notification-close-button" @click="closeNotification">
-        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-          <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-          <g id="SVGRepo_iconCarrier"> 
-            <path d="M17.5 17.5L6.5 6.5M17.5 6.5L6.5 17.5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> 
-          </g>
-        </svg>
+      <button class="copy-link-btn" @click="copySubscriptionLink">
+        <i class="fas fa-copy"></i>
+        复制链接
+      </button>
+      <button class="import-btn" @click="importToClient('Clash')">
+        <i class="fas fa-download"></i>
+        导入Clash
       </button>
     </div>
   </div>
@@ -73,6 +77,9 @@
 
 <script setup>
 import { ref, computed } from 'vue';
+import { useNotification } from '../composables/useNotification.js';
+
+const { showSuccess, showError, showInfo } = useNotification();
 
 const props = defineProps({
   subscriptionName: String,
@@ -98,9 +105,6 @@ const props = defineProps({
 });
 
 const subscriptionLinkTextarea = ref(null);
-const notificationVisible = ref(false);
-const notificationMessage = ref('');
-const notificationClass = ref('');
 
 // 流量格式化
 const trafficFormatted = computed(() => {
@@ -192,33 +196,20 @@ const resetFormatted = computed(() => {
   return '';
 });
 
-const showNotification = (message, type = 'success') => {
-  notificationMessage.value = message;
-  notificationClass.value = `notification-${type}`;
-  notificationVisible.value = true;
-  setTimeout(() => {
-    notificationVisible.value = false;
-  }, 3000);
-};
-
-const closeNotification = () => {
-  notificationVisible.value = false;
-};
-
 const copySubscriptionLink = async () => {
   try {
     await navigator.clipboard.writeText(props.subscriptionLink);
-    showNotification('链接已复制到剪贴板!');
+    showSuccess('链接已复制到剪贴板!');
   } catch (err) {
     console.error('复制失败:', err);
-    showNotification('复制失败，请手动复制', 'error');
+    showError('复制失败，请手动复制');
   }
 };
 
 const importToClient = (client) => {
   if (client === 'Clash') {
     window.open(`clash://install-config?url=${encodeURIComponent(props.subscriptionLink)}`, '_blank');
-    showNotification(`正在导入到 ${client}...`);
+    showInfo(`正在导入到 ${client}...`);
   }
 };
 </script>
@@ -277,7 +268,7 @@ const importToClient = (client) => {
 }
 
 .star {
-  font-size: 20px;
+  font-size: 18px;
   color: rgba(255, 255, 255, 0.3);
   transition: all 0.3s ease;
   cursor: pointer;
@@ -401,6 +392,12 @@ h2 {
   gap: 8px;
 }
 
+.time-label i {
+  width: 16px;
+  text-align: center;
+  opacity: 0.9;
+}
+
 .time-value {
   font-weight: 700;
   font-size: 14px;
@@ -414,6 +411,7 @@ h2 {
 .subscription-link-area textarea {
   width: 100%;
   min-height: 120px;
+  max-height: 200px;
   background: rgba(255, 255, 255, 0.1);
   border: 2px solid rgba(255, 255, 255, 0.2);
   border-radius: 12px;
@@ -424,6 +422,12 @@ h2 {
   resize: vertical;
   backdrop-filter: blur(10px);
   transition: all 0.3s ease;
+  word-wrap: break-word;
+  word-break: break-all;
+  overflow-wrap: break-word;
+  white-space: pre-wrap;
+  overflow-y: auto;
+  box-sizing: border-box;
 }
 
 .subscription-link-area textarea:focus {
@@ -454,17 +458,25 @@ h2 {
   transition: all 0.3s ease;
   text-transform: uppercase;
   letter-spacing: 1px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.copy-link-btn i, .import-btn i {
+  font-size: 16px;
 }
 
 .copy-link-btn {
-  background: linear-gradient(135deg, #ff6b6b, #ff8e8e);
+  background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); /* 绿色渐变 */
   color: white;
 }
 
 .copy-link-btn:hover {
-  background: linear-gradient(135deg, #ff5252, #ff7979);
+  background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
   transform: translateY(-2px);
-  box-shadow: 0 10px 20px rgba(255, 107, 107, 0.4);
+  box-shadow: 0 10px 20px rgba(67, 233, 123, 0.3);
 }
 
 .import-btn {
@@ -476,88 +488,6 @@ h2 {
   background: linear-gradient(135deg, #26d0ce, #2a9d8f);
   transform: translateY(-2px);
   box-shadow: 0 10px 20px rgba(78, 205, 196, 0.4);
-}
-
-.notification-box {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  padding: 20px;
-  border-radius: 12px;
-  color: white;
-  font-weight: 600;
-  z-index: 1000;
-  min-width: 300px;
-  backdrop-filter: blur(10px);
-  animation: slideIn 0.3s ease;
-}
-
-@keyframes slideIn {
-  from {
-    transform: translateX(100%);
-    opacity: 0;
-  }
-  to {
-    transform: translateX(0);
-    opacity: 1;
-  }
-}
-
-.notification-success {
-  background: linear-gradient(135deg, #00b894, #00cec9);
-  box-shadow: 0 10px 25px rgba(0, 184, 148, 0.3);
-}
-
-.notification-error {
-  background: linear-gradient(135deg, #e17055, #d63031);
-  box-shadow: 0 10px 25px rgba(225, 112, 85, 0.3);
-}
-
-.notification-message {
-  margin: 0 0 10px 0;
-  font-size: 14px;
-}
-
-.notification-progress-bar {
-  height: 3px;
-  background: rgba(255, 255, 255, 0.3);
-  border-radius: 2px;
-  overflow: hidden;
-  margin-bottom: 15px;
-}
-
-.notification-progress-bar-inner {
-  height: 100%;
-  background: white;
-  width: 100%;
-  animation: progressBar 3s linear;
-}
-
-@keyframes progressBar {
-  from { width: 100%; }
-  to { width: 0%; }
-}
-
-.notification-close-button {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background: none;
-  border: none;
-  color: white;
-  cursor: pointer;
-  padding: 5px;
-  border-radius: 6px;
-  transition: all 0.3s ease;
-}
-
-.notification-close-button:hover {
-  background: rgba(255, 255, 255, 0.2);
-}
-
-.notification-close-button svg {
-  width: 16px;
-  height: 16px;
 }
 
 @media (max-width: 768px) {
@@ -576,12 +506,6 @@ h2 {
 
   .time-info {
     gap: 10px;
-  }
-
-  .notification-box {
-    right: 10px;
-    left: 10px;
-    min-width: auto;
   }
 }
 </style>
