@@ -1,6 +1,6 @@
 <template>
   <div class="free-node-page">
-    <h1 class="page-title">免费节点收集</h1>
+    <h1 class="page-title">免费节点</h1>
     <div class="free-node-content">
       <div class="free-node-grid">
         <section class="free-node-section">
@@ -62,7 +62,7 @@
         <section class="free-node-section note-section">
           <h2>注意事项</h2>
           <p class="section-note">
-            免费节点资源少或者觉得免费节点不稳定的话可以考虑购买收费节点（参见<a href="#" @click.prevent="switchToRecommend" class="inline-link">梯子购买推荐</a>）。
+            免费节点资源少或者觉得免费节点不稳定的话可以考虑购买收费节点（参见<a href="#" @click.prevent="switchToRecommend" class="inline-link">机场推荐</a>）。
           </p>
         </section>
       </div>

@@ -1,6 +1,6 @@
 <template>
   <div class="page-container">
-    <h1 class="page-title">下载和使用教程</h1>
+    <h1 class="page-title">客户端下载/教程</h1>
     <div class="guide-content">
       <section class="guide-section">
         <h2>Windows 系统</h2>
