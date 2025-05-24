@@ -138,18 +138,15 @@
 </template>
 
 <style scoped>
+/* 页面容器 - 简洁样式，参考可用订阅页面 */
 .page-container {
-  padding: 24px;
+  width: 100%;
   max-width: 1200px;
   margin: 0 auto;
+  background: transparent;
 }
 
-.page-title {
-  font-size: 2em;
-  color: #333;
-  margin-bottom: 32px;
-  text-align: center;
-}
+/* 使用全局的 page-title 样式 */
 
 .guide-section {
   margin-bottom: 48px;
@@ -157,10 +154,11 @@
 
 .guide-section h2 {
   font-size: 1.5em;
-  color: #333;
+  color: #222;
   margin-bottom: 24px;
   padding-bottom: 8px;
-  border-bottom: 2px solid #007bff;
+  border-bottom: 2px solid #43e97b;
+  text-shadow: 0 2px 8px rgba(255,255,255,0.15);
 }
 
 .client-cards {
@@ -172,47 +170,55 @@
 }
 
 .client-card {
-  background: #fff;
-  border-radius: 8px;
-  padding: 24px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 20px;
+  padding: 30px;
+  color: white;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.client-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(45deg, transparent, rgba(255,255,255,0.08), transparent);
+  transform: rotate(45deg);
+  transition: all 0.6s ease;
+  opacity: 0;
+}
+
+.client-card:hover::before {
+  opacity: 1;
+  animation: shine 1.5s ease-in-out;
+}
+
+.client-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 25px 50px rgba(0,0,0,0.2);
+}
+
+@keyframes shine {
+  0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+  100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
 }
 
 .client-card h3 {
   font-size: 1.25em;
-  color: #333;
+  color: #ffd700;
   margin-bottom: 16px;
+  text-shadow: 0 2px 8px rgba(0,0,0,0.18);
 }
 
 .description {
-  color: #666;
+  color: #fff;
   margin-bottom: 16px;
-}
-
-.features {
-  margin-bottom: 20px;
-}
-
-.features ul {
-  list-style-type: none;
-  padding-left: 0;
-  margin-top: 8px;
-}
-
-.features li {
-  margin-bottom: 8px;
-  padding-left: 20px;
-  position: relative;
-}
-
-.features li::before {
-  content: "";
-  position: absolute;
-  left: 0;
-}
-
-.client-list-section {
-  margin-top: 40px;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.18);
 }
 
 .action-links {
@@ -222,34 +228,54 @@
 
 .action-links a {
   flex: 1;
-  padding: 10px 16px;
-  border-radius: 6px;
+  padding: 12px 20px;
+  border-radius: 12px;
   text-align: center;
   text-decoration: none;
-  transition: all 0.2s ease;
+  transition: all 0.3s;
   margin-bottom: 8px;
   display: flex;
   align-items: center;
   justify-content: center;
+  font-weight: 600;
+  font-size: 1em;
+  border: none;
 }
 
 .download-link {
-  background-color: #007bff;
-  color: #fff;
+  background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+  color: white;
+  box-shadow: 0 4px 12px rgba(67, 233, 123, 0.08);
 }
 
 .download-link:hover {
-  background-color: #0056b3;
+  background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(67, 233, 123, 0.18);
 }
 
 .tutorial-link {
-  background-color: #f8f9fa;
-  color: #007bff;
-  border: 1px solid #007bff;
+  background: linear-gradient(135deg, #4ecdc4, #44a08d);
+  color: white;
+  border: none;
+  font-weight: 700;
+  font-size: 1em;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 140px;
+  padding: 15px 25px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(78, 205, 196, 0.08);
 }
 
 .tutorial-link:hover {
-  background-color: #e9ecef;
+  background: linear-gradient(135deg, #26d0ce, #2a9d8f);
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow: 0 10px 20px rgba(78, 205, 196, 0.18);
 }
 
 @media (max-width: 992px) {
@@ -259,10 +285,6 @@
 }
 
 @media (max-width: 768px) {
-  .page-container {
-    padding: 16px;
-  }
-
   .client-card {
     padding: 20px;
     width: 100%;
@@ -290,4 +312,4 @@
 
 <script setup>
 import ClientListPage from '../ClientListPage.vue';
-</script>]]>
+</script>
