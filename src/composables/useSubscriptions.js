@@ -84,17 +84,25 @@ const parseRemainingTrafficFromYaml = (yamlContent) => {
 const yamlCache = new Map();
 const CACHE_DURATION = 10 * 60 * 1000; // 10分钟缓存
 
-// 生成缓存键（去除文件扩展名）
+// 生成缓存键（确保唯一性）
 const generateCacheKey = (url) => {
   try {
     const urlObj = new URL(url);
-    const pathname = urlObj.pathname;
-    // 移除文件扩展名
-    const baseName = pathname.split('/').pop().replace(/\.[^/.]+$/, '');
-    return `${urlObj.hostname}_${baseName}`;
+    // 使用完整的URL路径和查询参数来确保唯一性
+    const fullPath = urlObj.pathname + urlObj.search;
+    // 对完整路径进行hash以确保缓存键的唯一性
+    const hash = fullPath.split('').reduce((a, b) => {
+      a = ((a << 5) - a) + b.charCodeAt(0);
+      return a & a;
+    }, 0);
+    return `${urlObj.hostname}_${Math.abs(hash).toString(36)}`;
   } catch {
-    // 如果URL解析失败，使用简化方法
-    return url.replace(/[^a-zA-Z0-9]/g, '_').substring(0, 50);
+    // 如果URL解析失败，使用URL的hash值
+    const hash = url.split('').reduce((a, b) => {
+      a = ((a << 5) - a) + b.charCodeAt(0);
+      return a & a;
+    }, 0);
+    return `url_${Math.abs(hash).toString(36)}`;
   }
 };
 
@@ -171,11 +179,11 @@ const getSubscriptionRemainingTraffic = async (subscriptionUrl, fallbackTotal = 
       const yamlContent = await fetchAndCacheYaml(subscriptionUrl);
       
       if (yamlContent) {
-        const remainingTraffic = parseRemainingTrafficFromYaml(yamlContent);
-        if (remainingTraffic !== null && remainingTraffic > 0) {          console.log(`从YAML获取到剩余流量: ${remainingTraffic} GB`);
+        const remainingTraffic = parseRemainingTrafficFromYaml(yamlContent);        if (remainingTraffic !== null && remainingTraffic > 0) {          console.log(`从YAML获取到剩余流量: ${remainingTraffic} GB`);
           return {
             remaining: remainingTraffic,
-            hasRealData: true
+            hasRealData: true,
+            hasValidData: true
           };
         }
       }
@@ -193,12 +201,13 @@ const getSubscriptionRemainingTraffic = async (subscriptionUrl, fallbackTotal = 
       }
     }
   }
-    // 如果无法获取YAML数据，只返回总流量作为剩余流量
-  console.log(`无法获取YAML数据，显示总流量: ${fallbackTotal} GB`);
+    // 如果无法获取YAML数据或检测不到剩余流量，返回无效数据标识
+  console.log(`无法获取或检测不到剩余流量，订阅URL: ${subscriptionUrl}`);
   
   return {
-    remaining: fallbackTotal, // 直接显示总流量
-    hasRealData: false
+    remaining: null, // 设为null表示无数据
+    hasRealData: false,
+    hasValidData: false
   };
 };
 
@@ -259,8 +268,8 @@ const calculateResetProgress = (monthlyReset) => {
 };
 
 export function useSubscriptions() {
-  // 初始化订阅数据
-  const initializeSubscriptions = async () => {
+  // 快速初始化订阅数据（仅显示基础信息）
+  const quickInitializeSubscriptions = async () => {
     if (isLoading.value) {
       console.log('初始化已在进行中，跳过重复请求');
       return;
@@ -270,49 +279,35 @@ export function useSubscriptions() {
       isLoading.value = true;
       loadingError.value = null;
       
-      console.log('开始初始化订阅数据...');
+      console.log('开始快速初始化订阅数据...');
       const configData = await loadSubscriptionsFromYaml();
       
-      // 为每个订阅获取剩余流量数据（并行处理，但限制并发数）
-      const batchSize = 2; // 限制并发请求数量
-      const subscriptionsWithTraffic = [];
-      
-      for (let i = 0; i < configData.length; i += batchSize) {
-        const batch = configData.slice(i, i + batchSize);
-        const batchResults = await Promise.all(
-          batch.map(async (sub) => {
-            console.log(`正在处理订阅: ${sub.name}`);
-            const trafficInfo = await getSubscriptionRemainingTraffic(sub.url, sub.traffic.total);
-              return {
-              ...sub,
-              traffic: {
-                ...sub.traffic,
-                remaining: trafficInfo.remaining,
-                used: Math.max(0, sub.traffic.total - trafficInfo.remaining),
-                hasRealData: trafficInfo.hasRealData
-              },
-              reset: calculateResetProgress(sub.monthlyReset),
-              expire: {
-                date: new Date(sub.expireTime),
-                formatted: sub.expireTime
-              }
-            };
-          })
-        );
-        
-        subscriptionsWithTraffic.push(...batchResults);
-        
-        // 如果还有更多批次，稍作等待避免过于频繁的请求
-        if (i + batchSize < configData.length) {
-          await new Promise(resolve => setTimeout(resolve, 500));
+      // 立即显示基础订阅信息，不等待流量数据
+      const quickSubscriptions = configData.map(sub => ({
+        ...sub,
+        traffic: {
+          ...sub.traffic,
+          remaining: null, // 标记为待加载
+          used: 0,
+          hasRealData: false,
+          hasValidData: false,
+          isLoading: true // 添加加载状态
+        },
+        reset: calculateResetProgress(sub.monthlyReset),
+        expire: {
+          date: new Date(sub.expireTime),
+          formatted: sub.expireTime
         }
-      }
+      }));
       
-      subscriptionsData.value = subscriptionsWithTraffic;
-      console.log(`成功初始化 ${subscriptionsWithTraffic.length} 个订阅`);
+      subscriptionsData.value = quickSubscriptions;
+      console.log(`快速显示 ${quickSubscriptions.length} 个订阅卡片`);
+      
+      // 异步更新流量数据
+      updateTrafficDataAsync();
       
     } catch (error) {
-      console.error('初始化订阅数据失败:', error);
+      console.error('快速初始化订阅数据失败:', error);
       loadingError.value = error.message || '初始化失败';
       
       // 使用基础配置作为fallback
@@ -324,8 +319,8 @@ export function useSubscriptions() {
             ...sub.traffic,
             remaining: sub.traffic.total * 0.8, // 假设剩余80%
             used: sub.traffic.total * 0.2,
-            source: 'default',
-            hasRealData: false
+            hasRealData: false,
+            isLoading: false
           },
           reset: calculateResetProgress(sub.monthlyReset),
           expire: {
@@ -340,10 +335,71 @@ export function useSubscriptions() {
       isLoading.value = false;
     }
   };
-  
-  // 如果数据为空，初始化数据
+
+  // 异步更新流量数据
+  const updateTrafficDataAsync = async () => {
+    console.log('开始异步更新流量数据...');
+    
+    // 获取所有需要更新流量数据的订阅
+    const subscriptions = subscriptionsData.value.filter(sub => sub.traffic.isLoading);
+    
+    if (subscriptions.length === 0) {
+      console.log('没有需要更新的流量数据');
+      return;
+    }
+    
+    // 批量处理，但限制并发数
+    const batchSize = 2;
+    
+    for (let i = 0; i < subscriptions.length; i += batchSize) {
+      const batch = subscriptions.slice(i, i + batchSize);
+      
+      await Promise.all(
+        batch.map(async (sub) => {
+          try {
+            console.log(`正在更新订阅流量: ${sub.name}`);
+            const trafficInfo = await getSubscriptionRemainingTraffic(sub.url, sub.traffic.total);
+            
+            // 找到对应的订阅并更新流量数据
+            const index = subscriptionsData.value.findIndex(s => s.id === sub.id);
+            if (index !== -1) {
+              subscriptionsData.value[index].traffic = {
+                ...subscriptionsData.value[index].traffic,
+                remaining: trafficInfo.remaining,
+                used: trafficInfo.remaining !== null ? Math.max(0, sub.traffic.total - trafficInfo.remaining) : 0,
+                hasRealData: trafficInfo.hasRealData,
+                hasValidData: trafficInfo.hasValidData,
+                isLoading: false
+              };
+              console.log(`成功更新订阅 ${sub.name} 的流量数据`);
+            }
+          } catch (error) {
+            console.error(`更新订阅 ${sub.name} 流量数据失败:`, error);
+            // 更新失败时，至少移除加载状态
+            const index = subscriptionsData.value.findIndex(s => s.id === sub.id);
+            if (index !== -1) {
+              subscriptionsData.value[index].traffic.isLoading = false;
+            }
+          }
+        })
+      );
+      
+      // 如果还有更多批次，稍作等待避免过于频繁的请求
+      if (i + batchSize < subscriptions.length) {
+        await new Promise(resolve => setTimeout(resolve, 500));
+      }
+    }
+    
+    console.log('流量数据异步更新完成');
+  };
+
+  // 初始化订阅数据（兼容旧版本调用）
+  const initializeSubscriptions = async () => {
+    return quickInitializeSubscriptions();
+  };  
+  // 如果数据为空，使用快速初始化
   if (subscriptionsData.value.length === 0) {
-    initializeSubscriptions();
+    quickInitializeSubscriptions();
   }
   
   // 获取订阅推荐等级颜色
@@ -369,9 +425,11 @@ export function useSubscriptions() {
     getSubscriptionRemainingTraffic,
     fetchAndCacheYaml,
     initializeSubscriptions,
+    quickInitializeSubscriptions,
+    updateTrafficDataAsync,
     refreshSubscriptions: () => {
       subscriptionsData.value = [];
-      return initializeSubscriptions();
+      return quickInitializeSubscriptions();
     }
   };
 }
