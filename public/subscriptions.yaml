@@ -1,0 +1,27 @@
+subscriptions:
+  - id: 1
+    name: "可用订阅1（IP纯净）"
+    url: "https://43.100.58.97/5b780ba09d5a66c7950914244600b801"
+    rating: 5
+    traffic: 220  # 总流量 GB
+    maxRate: "500Mbps"
+    expireTime: "2025-07-02"  # 流量到期时间
+    monthlyReset: 2  # 每月重置时间（日期）
+    
+  - id: 2
+    name: "可用订阅2（速度快）"
+    url: "http://23.145.248.218:3389/api/v1/client/subscribe?token=b248fd5a74963c377a8fa88eac51cefa"
+    rating: 4
+    traffic: 168  # 总流量 GB
+    maxRate: "500Mbps"
+    expireTime: "2025-06-21"
+    monthlyReset: 21  # 每月8号重置
+    
+  - id: 3
+    name: "可用订阅3（仅供应急，请勿使用）"
+    url: "https://sublink.cute-cloud.de/link?token=8ce120621aac8c6b7793e63a3bdb759f"
+    rating: 3
+    traffic: 300  # 总流量 GB
+    maxRate: "500Mbps"
+    expireTime: "2026-03-21"
+    monthlyReset: null  # 长期有效，不重置
