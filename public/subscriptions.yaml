@@ -1,7 +1,7 @@
 subscriptions:
   - id: 1
     name: "可用订阅1（IP纯净）"
-    url: "https://43.100.58.97/5b780ba09d5a66c7950914244600b801"
+    url: "https://wkqey5.mikasacds.com/5b780ba09d5a66c7950914244600b801"
     rating: 5
     traffic: 220  # 总流量 GB
     maxRate: "500Mbps"
