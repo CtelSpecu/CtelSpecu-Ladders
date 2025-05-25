@@ -4,29 +4,52 @@
     <div class="free-vpn-content">
       <div class="free-vpn-grid">        <section class="free-vpn-section">
           <h2>全平台可用</h2>
-          <div class="free-vpn-btn-group">
-            <div class="vpn-item">
+          <div class="free-vpn-btn-group">            <div class="vpn-item">
               <a href="https://china-letsvpn.com/" target="_blank" class="free-vpn-btn">
                 LetsVPN
-                <span class="rating">★★★★★</span>
+                <span class="rating">
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                </span>
               </a>
             </div>
             <div class="vpn-item">
               <a href="https://cn.bing.com/search?q=turbo+vpn&qs=ds&form=QBRE" target="_blank" class="free-vpn-btn">
                 Turbo VPN
-                <span class="rating">★★★★☆</span>
+                <span class="rating">
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="far fa-star"></i>
+                </span>
               </a>
             </div>
             <div class="vpn-item">
               <a href="https://pandavpnpro.com/" target="_blank" class="free-vpn-btn">
                 PandaVPN Pro
-                <span class="rating">★★★★☆</span>
+                <span class="rating">
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="far fa-star"></i>
+                </span>
               </a>
             </div>
             <div class="vpn-item">
               <a href="https://join.protonvpn.com/downloads" target="_blank" class="free-vpn-btn">
                 ProtonVPN
-                <span class="rating">★★★☆☆</span>
+                <span class="rating">
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="far fa-star"></i>
+                  <i class="far fa-star"></i>
+                </span>
               </a>
             </div>
           </div>
@@ -34,17 +57,28 @@
 
         <section class="free-vpn-section">
           <h2>移动端应用</h2>
-          <div class="free-vpn-btn-group">
-            <div class="vpn-item">
+          <div class="free-vpn-btn-group">            <div class="vpn-item">
               <a href="https://apps.apple.com/us/app/pandavpn-lite-最好最快無限流量的-vpn/id1466932207?l=zh" target="_blank" class="free-vpn-btn">
                 PandaVPN Lite (iOS)
-                <span class="rating">★★★★☆</span>
+                <span class="rating">
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="far fa-star"></i>
+                </span>
               </a>
             </div>
             <div class="vpn-item">
               <a href="https://orbot.app/en/download/" target="_blank" class="free-vpn-btn">
                 Orbot
-                <span class="rating">★★★☆☆</span>
+                <span class="rating">
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="far fa-star"></i>
+                  <i class="far fa-star"></i>
+                </span>
               </a>
             </div>
           </div>
@@ -167,10 +201,21 @@
 }
 
 .rating {
+  display: flex;
+  gap: 2px;
   font-size: 0.9em;
   color: #ffd700;
   font-weight: normal;
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.rating i {
+  font-size: 1em;
+  transition: transform 0.2s ease;
+}
+
+.rating i:hover {
+  transform: scale(1.1);
 }
 
 @media (max-width: 1200px) {

@@ -18,20 +18,23 @@
     <h2>{{ subscriptionName }}</h2>    <!-- 流量显示 -->
     <div class="traffic-info">
       <div class="traffic-header">
-        <span class="traffic-label">{{ trafficLabel }}</span>
-        <div class="traffic-amount-container">
-          <span class="traffic-amount-large" v-if="!remainingTrafficData.loading">{{ trafficDisplay }}</span>
-          <div class="loading-indicator" v-else>
-            <span class="loading-spinner">⏳</span>
+        <span class="traffic-label">{{ trafficLabel }}</span>        <div class="traffic-amount-container">
+          <div class="traffic-amount-large" v-if="!isTrafficLoading">
+            <span class="remaining-traffic">{{ remainingTrafficValue }}</span>
+            <span class="total-traffic">{{ totalTrafficWithUnit }}</span>
+          </div>          <div class="loading-indicator" v-else>
+            <i class="fas fa-spinner fa-spin loading-spinner"></i>
             <span class="loading-text">获取中...</span>
           </div>
         </div>
       </div>
-      <div class="traffic-footer">
-        <div class="traffic-unit">{{ traffic.unit || 'GB' }}</div>
-        <div class="traffic-source" :style="{ color: trafficSourceInfo.color }">
-          <span class="source-icon">{{ trafficSourceInfo.icon }}</span>
-          <span class="source-text">{{ trafficSourceInfo.text }}</span>
+        <!-- 流量进度条 -->
+      <div class="traffic-progress">
+        <div class="progress-bar-container">
+          <div class="progress-bar-bg">
+            <div class="progress-bar-fill" :style="{ width: trafficProgressPercentage + '%', background: trafficProgressColor }"></div>
+          </div>
+          <div class="progress-text">{{ trafficProgressPercentage }}% 已使用</div>
         </div>
       </div>
     </div>
@@ -124,7 +127,6 @@ const subscriptionLinkTextarea = ref(null);
 const remainingTrafficData = ref({
   remaining: 0,
   hasRealData: false,
-  source: 'default',
   loading: false
 });
 
@@ -144,63 +146,141 @@ const updateTrafficData = async () => {
       props.subscriptionLink, 
       props.traffic?.total || 100
     );
-    
-    remainingTrafficData.value = {
-      remaining: trafficInfo.remaining,
+      remainingTrafficData.value = {
+      remaining: trafficInfo.remaining, // 可能为null
       hasRealData: trafficInfo.hasRealData,
-      source: trafficInfo.source,
+      hasValidData: trafficInfo.hasValidData || false,
       loading: false
     };
   } catch (error) {
     console.error('更新流量数据失败:', error);
     remainingTrafficData.value = {
-      remaining: props.traffic?.total ? props.traffic.total * 0.8 : 80,
+      remaining: null, // 错误时设为null
       hasRealData: false,
-      source: 'error',
+      hasValidData: false,
       loading: false
     };
   }
 };
+
+// 判断是否正在加载流量数据
+const isTrafficLoading = computed(() => {
+  // 如果props中有isLoading标志，优先使用
+  if (props.traffic?.isLoading !== undefined) {
+    return props.traffic.isLoading;
+  }
+  
+  // 否则使用组件内部的加载状态
+  return remainingTrafficData.value.loading;
+});
 
 // 流量标签显示 - 所有订阅都显示统一格式
 const trafficLabel = computed(() => {
   return '剩余流量/总流量';
 });
 
-// 流量显示内容 - 统一显示格式
+// 流量显示内容 - 统一显示格式，单位放在最后
 const trafficDisplay = computed(() => {
   const total = props.traffic?.total || 0;
+  const unit = props.traffic?.unit || 'GB';
   
   // 优先使用从props传来的剩余流量数据
-  if (props.traffic?.remaining !== undefined) {
-    return `${props.traffic.remaining}/${total}`;
+  if (props.traffic?.remaining !== undefined && props.traffic?.remaining !== null) {
+    return `${props.traffic.remaining}/${total} ${unit}`;
   }
   
   // 使用组件内获取的剩余流量数据
-  const remaining = remainingTrafficData.value.remaining || 0;
-  return `${remaining.toFixed(2)}/${total}`;
-});
-
-// 流量数据来源指示器
-const trafficSourceInfo = computed(() => {
-  if (props.traffic?.source) {
-    switch (props.traffic.source) {
-      case 'yaml':
-        return { icon: '🔄', text: '实时数据', color: '#28a745' };
-      case 'fallback':
-        return { icon: '📊', text: '估算数据', color: '#ffc107' };
-      default:
-        return { icon: '⚡', text: '默认数据', color: '#6c757d' };
-    }
+  const remaining = remainingTrafficData.value.remaining;
+  
+  // 如果剩余流量为null，显示"-"
+  if (remaining === null) {
+    return `-/${total} ${unit}`;
   }
   
-  switch (remainingTrafficData.value.source) {
-    case 'yaml':
-      return { icon: '🔄', text: '实时数据', color: '#28a745' };
-    case 'fallback':
-      return { icon: '📊', text: '估算数据', color: '#ffc107' };
-    default:
-      return { icon: '⚡', text: '默认数据', color: '#6c757d' };
+  return `${remaining.toFixed(2)}/${total} ${unit}`;
+});
+
+// 剩余流量值（仅数字部分）
+const remainingTrafficValue = computed(() => {
+  // 优先使用从props传来的剩余流量数据
+  if (props.traffic?.remaining !== undefined && props.traffic?.remaining !== null) {
+    return props.traffic.remaining.toString();
+  }
+  
+  // 使用组件内获取的剩余流量数据
+  const remaining = remainingTrafficData.value.remaining;
+  
+  // 如果剩余流量为null，显示"-"
+  if (remaining === null) {
+    return '-';
+  }
+  
+  return remaining.toFixed(2);
+});
+
+// 总流量部分（包含斜杠、总流量数字和单位）
+const totalTrafficWithUnit = computed(() => {
+  const total = props.traffic?.total || 0;
+  const unit = props.traffic?.unit || 'GB';
+  return `/${total} ${unit}`;
+});
+
+// 流量使用进度百分比
+const trafficProgressPercentage = computed(() => {
+  const total = props.traffic?.total || 0;
+  if (total === 0) return 0; // 无总流量时显示0%
+  
+  let remaining = 0;
+  
+  // 优先使用从props传来的剩余流量数据
+  if (props.traffic?.remaining !== undefined && props.traffic?.remaining !== null) {
+    remaining = props.traffic.remaining;
+  } else {
+    remaining = remainingTrafficData.value.remaining;
+  }
+  
+  // 如果剩余流量为null（无法获取），显示0%已使用
+  if (remaining === null) {
+    return 0;
+  }
+  
+  const used = Math.max(0, total - remaining);
+  const percentage = (used / total) * 100;
+  return Math.min(100, Math.max(0, Math.round(percentage)));
+});
+
+// 根据流量使用百分比动态生成进度条颜色
+const trafficProgressColor = computed(() => {
+  const percentage = trafficProgressPercentage.value;
+  
+  if (percentage <= 25) {
+    // 0-25%: 浅绿到浅蓝（使用量少）
+    const progress = percentage / 25;
+    return `linear-gradient(90deg, 
+      #a8e6cf 0%, 
+      #88d8c0 ${progress * 50}%, 
+      #7fcdcd 100%)`;
+  } else if (percentage <= 50) {
+    // 25-50%: 浅绿到蓝色（使用量中）
+    const progress = (percentage - 25) / 25;
+    return `linear-gradient(90deg, 
+      #7fcdcd 0%, 
+      #6ab7ff ${progress * 50}%, 
+      #4dabf7 100%)`;
+  } else if (percentage <= 75) {
+    // 50-75%: 黄色到橙色（使用量较高）
+    const progress = (percentage - 50) / 25;
+    return `linear-gradient(90deg, 
+      #ffd93d 0%, 
+      #ffb347 ${progress * 60}%, 
+      #ff8c42 100%)`;
+  } else {
+    // 75-100%: 橙色到红色（使用量高）
+    const progress = (percentage - 75) / 25;
+    return `linear-gradient(90deg, 
+      #ff8c42 0%, 
+      #ff6b35 ${progress * 50}%, 
+      #e74c3c 100%)`;
   }
 });
 
@@ -370,12 +450,24 @@ h2 {
 }
 
 .traffic-amount-large {
-  font-size: 48px;
-  font-weight: 900;
-  color:rgb(149, 246, 239);
+  display: flex;
+  align-items: baseline;
+  color: rgb(149, 246, 239);
   text-shadow: 0 0 20px rgba(78, 205, 196, 0.5);
   line-height: 1;
   margin: 10px 0;
+}
+
+.remaining-traffic {
+  font-size: 48px;
+  font-weight: 900;
+}
+
+.total-traffic {
+  font-size: 23px;
+  font-weight: 700;
+  opacity: 0.85;
+  margin-left: 2px;
 }
 
 .traffic-unit {
@@ -671,29 +763,52 @@ h2 {
   }
 }
 
-/* 优化流量源信息显示 */
-.traffic-source {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 11px;
-  font-weight: 500;
-  background: rgba(255, 255, 255, 0.1);
-  padding: 2px 6px;
-  border-radius: 8px;
-  transition: all 0.3s ease;
+/* 流量进度条样式 */
+.traffic-progress {
+  margin: 12px 0 8px;
 }
 
-.traffic-source:hover {
+.progress-bar-container {
+  position: relative;
+}
+
+.progress-bar-bg {
+  height: 8px;
   background: rgba(255, 255, 255, 0.2);
-  transform: translateY(-1px);
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
 }
 
-.source-icon {
-  font-size: 12px;
+.progress-bar-fill {
+  height: 100%;
+  border-radius: 10px;
+  transition: width 0.8s ease-in-out, background 0.8s ease-in-out;
+  position: relative;
+  overflow: hidden;
 }
 
-.source-text {
-  font-size: 10px;
+.progress-bar-fill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  animation: progress-shine 2s infinite;
+}
+
+.progress-text {
+  font-size: 11px;
+  text-align: center;
+  margin-top: 4px;
+  opacity: 0.8;
+  font-weight: 500;
+}
+
+@keyframes progress-shine {
+  0% { left: -100%; }
+  100% { left: 100%; }
 }
 </style>
