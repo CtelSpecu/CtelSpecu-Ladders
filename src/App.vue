@@ -22,12 +22,15 @@
           href="#"
           :class="{ active: currentTab === 'recommend' }"
           @click.prevent="currentTab = 'recommend'"
-        >机场推荐</a>
-        <a
+        >机场推荐</a>        <a
           href="#"
           :class="{ active: currentTab === 'freevpn' }"
           @click.prevent="currentTab = 'freevpn'"
         >其他类型</a>
+        <a
+          href="https://sub.ctelspecu.hxcn.top"
+          target="_blank"
+        >订阅转换</a>
       </div>
     </nav>
 
