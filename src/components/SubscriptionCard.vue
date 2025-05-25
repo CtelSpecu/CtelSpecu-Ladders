@@ -15,17 +15,28 @@
       <span class="rating-text">{{ rating }}/5 推荐</span>
     </div>
     
-    <h2>{{ subscriptionName }}</h2>
-      <!-- 流量显示 -->
+    <h2>{{ subscriptionName }}</h2>    <!-- 流量显示 -->
     <div class="traffic-info">
       <div class="traffic-header">
-        <span class="traffic-label">总流量</span>
-        <span class="traffic-amount-large">{{ trafficTotal }}</span>
+        <span class="traffic-label">{{ trafficLabel }}</span>
+        <div class="traffic-amount-container">
+          <span class="traffic-amount-large" v-if="!remainingTrafficData.loading">{{ trafficDisplay }}</span>
+          <div class="loading-indicator" v-else>
+            <span class="loading-spinner">⏳</span>
+            <span class="loading-text">获取中...</span>
+          </div>
+        </div>
       </div>
-      <div class="traffic-unit">{{ traffic.unit || 'GB' }}</div>
+      <div class="traffic-footer">
+        <div class="traffic-unit">{{ traffic.unit || 'GB' }}</div>
+        <div class="traffic-source" :style="{ color: trafficSourceInfo.color }">
+          <span class="source-icon">{{ trafficSourceInfo.icon }}</span>
+          <span class="source-text">{{ trafficSourceInfo.text }}</span>
+        </div>
+      </div>
     </div>
 
-    <!-- 重置时间进度条 -->
+    <!-- 重置时间进度条 - 为所有订阅显示 -->
     <div class="reset-info" v-if="reset">
       <div class="reset-header">
         <span class="reset-label">流量重置</span>
@@ -37,7 +48,7 @@
       <div class="progress-text" v-if="reset.daysRemaining !== null">
         {{ Math.round(reset.progress) }}% 已过去
       </div>
-    </div>    <!-- 时间信息 -->
+    </div><!-- 时间信息 -->
     <div class="time-info">
       <div class="time-item">
         <span class="time-label">
@@ -77,10 +88,12 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import { useNotification } from '../composables/useNotification.js';
+import { useSubscriptions } from '../composables/useSubscriptions.js';
 
 const { showSuccess, showError, showInfo } = useNotification();
+const { getSubscriptionRemainingTraffic } = useSubscriptions();
 
 const props = defineProps({
   subscriptionName: String,
@@ -107,7 +120,91 @@ const props = defineProps({
 
 const subscriptionLinkTextarea = ref(null);
 
-// 总流量显示（大数字）
+// 剩余流量数据状态
+const remainingTrafficData = ref({
+  remaining: 0,
+  hasRealData: false,
+  source: 'default',
+  loading: false
+});
+
+// 当组件挂载时获取最新的剩余流量数据
+onMounted(async () => {
+  await updateTrafficData();
+});
+
+// 更新流量数据
+const updateTrafficData = async () => {
+  if (!props.subscriptionLink) return;
+  
+  remainingTrafficData.value.loading = true;
+  
+  try {
+    const trafficInfo = await getSubscriptionRemainingTraffic(
+      props.subscriptionLink, 
+      props.traffic?.total || 100
+    );
+    
+    remainingTrafficData.value = {
+      remaining: trafficInfo.remaining,
+      hasRealData: trafficInfo.hasRealData,
+      source: trafficInfo.source,
+      loading: false
+    };
+  } catch (error) {
+    console.error('更新流量数据失败:', error);
+    remainingTrafficData.value = {
+      remaining: props.traffic?.total ? props.traffic.total * 0.8 : 80,
+      hasRealData: false,
+      source: 'error',
+      loading: false
+    };
+  }
+};
+
+// 流量标签显示 - 所有订阅都显示统一格式
+const trafficLabel = computed(() => {
+  return '剩余流量/总流量';
+});
+
+// 流量显示内容 - 统一显示格式
+const trafficDisplay = computed(() => {
+  const total = props.traffic?.total || 0;
+  
+  // 优先使用从props传来的剩余流量数据
+  if (props.traffic?.remaining !== undefined) {
+    return `${props.traffic.remaining}/${total}`;
+  }
+  
+  // 使用组件内获取的剩余流量数据
+  const remaining = remainingTrafficData.value.remaining || 0;
+  return `${remaining.toFixed(2)}/${total}`;
+});
+
+// 流量数据来源指示器
+const trafficSourceInfo = computed(() => {
+  if (props.traffic?.source) {
+    switch (props.traffic.source) {
+      case 'yaml':
+        return { icon: '🔄', text: '实时数据', color: '#28a745' };
+      case 'fallback':
+        return { icon: '📊', text: '估算数据', color: '#ffc107' };
+      default:
+        return { icon: '⚡', text: '默认数据', color: '#6c757d' };
+    }
+  }
+  
+  switch (remainingTrafficData.value.source) {
+    case 'yaml':
+      return { icon: '🔄', text: '实时数据', color: '#28a745' };
+    case 'fallback':
+      return { icon: '📊', text: '估算数据', color: '#ffc107' };
+    default:
+      return { icon: '⚡', text: '默认数据', color: '#6c757d' };
+  }
+});
+
+// 总流量显示（保留原有功能，但现在不直接使用）
 const trafficTotal = computed(() => {
   if (!props.traffic || !props.traffic.total) return '0';
   return props.traffic.total.toString();
@@ -285,7 +382,31 @@ h2 {
   font-size: 18px;
   font-weight: 600;
   opacity: 0.8;
-  margin-top: 5px;
+}
+
+.traffic-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+}
+
+.traffic-source {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  font-weight: 600;
+  opacity: 0.9;
+}
+
+.source-icon {
+  font-size: 14px;
+}
+
+.source-text {
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .reset-info {
@@ -510,5 +631,69 @@ h2 {
   .time-info {
     gap: 10px;
   }
+}
+
+/* 加载指示器样式 */
+.traffic-amount-container {
+  position: relative;
+  min-height: 2.5em;
+  display: flex;
+  align-items: center;
+}
+
+.loading-indicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1.8em;
+  font-weight: 600;
+  color: #ffffff;
+  opacity: 0.8;
+}
+
+.loading-spinner {
+  animation: loading-pulse 1.5s ease-in-out infinite;
+}
+
+.loading-text {
+  font-size: 0.7em;
+  opacity: 0.9;
+}
+
+@keyframes loading-pulse {
+  0%, 100% { 
+    opacity: 0.6; 
+    transform: scale(1);
+  }
+  50% { 
+    opacity: 1; 
+    transform: scale(1.1);
+  }
+}
+
+/* 优化流量源信息显示 */
+.traffic-source {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 500;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 2px 6px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.traffic-source:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-1px);
+}
+
+.source-icon {
+  font-size: 12px;
+}
+
+.source-text {
+  font-size: 10px;
 }
 </style>
