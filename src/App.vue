@@ -34,26 +34,9 @@
     <!-- 主内容区 -->
     <div class="page-container">
       <!-- 可用订阅页面 -->
-      <div v-if="currentTab === 'sub'" class="subscription-page fade-in">
-        <!-- 页面标题和刷新按钮 -->
+      <div v-if="currentTab === 'sub'" class="subscription-page fade-in">        <!-- 页面标题 -->
         <div class="page-header">
           <h1 class="page-title">共享订阅</h1>
-          <div class="page-actions">
-            <button 
-              class="refresh-btn" 
-              @click="handleRefresh" 
-              :disabled="isLoading"
-              :class="{ loading: isLoading }"
-            >
-              <i class="fas fa-sync-alt refresh-icon"></i>
-              {{ isLoading ? '刷新中...' : '刷新数据' }}
-            </button>
-          </div>
-        </div>
-        
-        <!-- 最后更新时间 -->
-        <div v-if="lastUpdateTime" class="update-info">
-          最后更新: {{ new Date(lastUpdateTime).toLocaleString('zh-CN') }}
         </div>
         
         <!-- 订阅卡片列表 -->
@@ -115,10 +98,7 @@ const currentTab = ref('sub');
 
 // 使用订阅管理composable
 const { 
-  subscriptions, 
-  isLoading, 
-  lastUpdateTime, 
-  refreshSubscriptions 
+  subscriptions
 } = useSubscriptions();
 
 // 提供给子组件的切换页面函数
@@ -129,15 +109,9 @@ const setCurrentTab = (tab) => {
 // 通过provide提供给子组件
 provide('setCurrentTab', setCurrentTab);
 
-// 手动刷新按钮的处理函数
-const handleRefresh = async () => {
-  await refreshSubscriptions();
-};
-
 // 组件挂载时的初始化
 onMounted(() => {
   console.log('订阅数据已加载:', subscriptions.value);
-  // 可以在这里添加自动刷新逻辑
 });
 </script>
 
@@ -354,7 +328,7 @@ onMounted(() => {
 
 .page-header {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
   margin-bottom: 20px;
   padding-bottom: 16px;
@@ -371,66 +345,6 @@ onMounted(() => {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-}
-
-.page-actions {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-}
-
-.refresh-btn {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 20px;
-  background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
-  color: white;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: 500;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 4px rgba(0, 123, 255, 0.3);
-}
-
-.refresh-btn:hover:not(:disabled) {
-  background: linear-gradient(135deg, #0056b3 0%, #004085 100%);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 123, 255, 0.4);
-}
-
-.refresh-btn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-  transform: none;
-}
-
-.refresh-btn.loading .refresh-icon {
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-.refresh-icon {
-  font-size: 14px;
-  transition: transform 0.3s ease;
-  margin-right: 8px;
-}
-
-.update-info {
-  background-color: #f8f9fa;
-  padding: 8px 16px;
-  border-radius: 6px;
-  font-size: 0.9em;
-  color: #6c757d;
-  margin-bottom: 20px;
-  text-align: center;
-  border: 1px solid #e9ecef;
 }
 
 /* 可用订阅页面布局 */

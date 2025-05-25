@@ -113,56 +113,6 @@ const trafficTotal = computed(() => {
   return props.traffic.total.toString();
 });
 
-// 流量格式化（保留原有逻辑以备兼容）
-const trafficFormatted = computed(() => {
-  if (!props.traffic) return '0 GB / 100 GB';
-  
-  // 如果有 remaining 字段（剩余流量）
-  if (props.traffic.remaining !== undefined && props.traffic.total !== undefined) {
-    const remaining = props.traffic.remaining;
-    const total = props.traffic.total;
-    const unit = props.traffic.unit || 'GB';
-    return `${remaining.toFixed(2)} ${unit} / ${total} ${unit}`;
-  }
-  
-  // 如果有 used 字段（已使用流量）
-  if (props.traffic.used !== undefined && props.traffic.total !== undefined) {
-    const used = props.traffic.used;
-    const total = props.traffic.total;
-    const unit = props.traffic.unit || 'GB';
-    return `${used} ${unit} / ${total} ${unit}`;
-  }
-  
-  // 只显示总流量
-  const total = props.traffic.total || 100;
-  const unit = props.traffic.unit || 'GB';
-  return `${total} ${unit}`;
-});
-
-// 流量使用百分比
-const trafficPercentage = computed(() => {
-  if (!props.traffic) return 0;
-  
-  // 如果有 remaining 字段（剩余流量）
-  if (props.traffic.remaining !== undefined && props.traffic.total !== undefined) {
-    const remaining = props.traffic.remaining;
-    const total = props.traffic.total;
-    if (total === 0) return 0;
-    const used = total - remaining;
-    return Math.round((used / total) * 100);
-  }
-  
-  // 如果有 used 字段（已使用流量）
-  if (props.traffic.used !== undefined && props.traffic.total !== undefined) {
-    const used = props.traffic.used;
-    const total = props.traffic.total;
-    if (total === 0) return 0;
-    return Math.round((used / total) * 100);
-  }
-  
-  return 0;
-});
-
 // 到期时间格式化
 const expireFormatted = computed(() => {
   if (!props.expire) return '未知';
