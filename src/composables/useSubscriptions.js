@@ -1,12 +1,119 @@
 import { ref, reactive } from 'vue';
-import { SubscriptionParser, defaultSubscriptionData } from '../utils/subscriptionParser.js';
+import { SubscriptionParser } from '../utils/subscriptionParser.js';
+import * as yaml from 'js-yaml';
 
 // 全局订阅数据状态
-const subscriptionsData = ref([...defaultSubscriptionData]);
+const subscriptionsData = ref([]);
 const isLoading = ref(false);
 const lastUpdateTime = ref(null);
 
+// 从YAML文件加载订阅配置
+const loadSubscriptionsFromYaml = async () => {
+  try {
+    const response = await fetch('/subscriptions.yaml');
+    const yamlText = await response.text();
+    const config = yaml.load(yamlText);
+    
+    return config.subscriptions.map(sub => ({
+      id: sub.id,
+      name: sub.name,
+      url: sub.url,
+      rating: sub.rating,
+      traffic: {
+        total: sub.traffic,
+        unit: "GB"
+      },
+      maxRate: sub.maxRate,
+      expireTime: sub.expireTime,
+      monthlyReset: sub.monthlyReset
+    }));
+  } catch (error) {
+    console.error('加载订阅配置失败:', error);
+    // 返回默认配置
+    return [
+      {
+        id: 1,
+        name: "可用订阅1（IP纯净）",
+        url: "https://43.100.58.97/5b780ba09d5a66c7950914244600b801",
+        rating: 5,
+        traffic: { total: 500, unit: "GB" },
+        maxRate: "500Mbps",
+        expireTime: "2025-07-02",
+        monthlyReset: 2
+      }
+    ];
+  }
+};
+
+// 计算重置时间进度
+const calculateResetProgress = (monthlyReset) => {
+  if (monthlyReset === null) {
+    return {
+      daysRemaining: null,
+      progress: 0,
+      formatted: "长期有效"
+    };
+  }
+  
+  const now = new Date();
+  const currentMonth = now.getMonth();
+  const currentYear = now.getFullYear();
+  const currentDay = now.getDate();
+  
+  // 计算下次重置日期
+  let nextResetDate;
+  if (currentDay < monthlyReset) {
+    // 本月还未到重置日
+    nextResetDate = new Date(currentYear, currentMonth, monthlyReset);
+  } else {
+    // 本月已过重置日，下个月重置
+    nextResetDate = new Date(currentYear, currentMonth + 1, monthlyReset);
+  }
+  
+  // 计算剩余天数
+  const diffTime = nextResetDate.getTime() - now.getTime();
+  const daysRemaining = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+  
+  // 计算上次重置日期和本周期总天数
+  let lastResetDate;
+  if (currentDay < monthlyReset) {
+    // 如果本月还未到重置日，上次重置是上个月
+    lastResetDate = new Date(currentYear, currentMonth - 1, monthlyReset);
+  } else {
+    // 如果本月已过重置日，上次重置是本月
+    lastResetDate = new Date(currentYear, currentMonth, monthlyReset);
+  }
+  
+  const totalDays = Math.ceil((nextResetDate.getTime() - lastResetDate.getTime()) / (1000 * 60 * 60 * 24));
+  const passedDays = Math.ceil((now.getTime() - lastResetDate.getTime()) / (1000 * 60 * 60 * 24));
+  const progress = Math.max(0, Math.min(100, (passedDays / totalDays) * 100));
+  
+  return {
+    daysRemaining,
+    progress,
+    formatted: `距离下次重置剩余：${daysRemaining} 天`
+  };
+};
+
 export function useSubscriptions() {
+  
+  // 初始化订阅数据
+  const initializeSubscriptions = async () => {
+    const configData = await loadSubscriptionsFromYaml();
+    subscriptionsData.value = configData.map(sub => ({
+      ...sub,
+      reset: calculateResetProgress(sub.monthlyReset),
+      expire: {
+        date: new Date(sub.expireTime),
+        formatted: sub.expireTime
+      }
+    }));
+  };
+  
+  // 如果数据为空，初始化数据
+  if (subscriptionsData.value.length === 0) {
+    initializeSubscriptions();
+  }
   
   // 更新单个订阅的信息
   const updateSubscriptionInfo = async (subscriptionIndex) => {
@@ -19,30 +126,14 @@ export function useSubscriptions() {
     try {
       isLoading.value = true;
       
-      // 尝试获取订阅信息
-      const info = await SubscriptionParser.fetchSubscriptionInfo(subscription.url);
+      // 重新计算重置时间进度
+      subscription.reset = calculateResetProgress(subscription.monthlyReset);
       
-      if (info) {
-        // 更新订阅信息
-        if (info.traffic) {
-          subscription.traffic = {
-            remaining: info.traffic.remaining,
-            total: subscription.traffic.total, // 保持原有总量设置
-            unit: info.traffic.unit
-          };
-        }
-        
-        if (info.reset) {
-          subscription.reset = info.reset;
-        }
-        
-        if (info.expire) {
-          subscription.expire = info.expire;
-        }
-        
-        lastUpdateTime.value = new Date();
-        return true;
-      }
+      // 尝试获取订阅信息（如果需要的话）
+      // const info = await SubscriptionParser.fetchSubscriptionInfo(subscription.url);
+      
+      lastUpdateTime.value = new Date();
+      return true;
     } catch (error) {
       console.error(`更新订阅${subscriptionIndex + 1}信息失败:`, error);
     } finally {

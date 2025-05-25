@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>订阅配置测试</title>
+    <script src="https://unpkg.com/js-yaml@4.1.0/dist/js-yaml.min.js"></script>
+</head>
+<body>
+    <h1>订阅配置测试</h1>
+    <div id="result"></div>
+
+    <script>
+        async function testYamlLoad() {
+            try {
+                const response = await fetch('/subscriptions.yaml');
+                const yamlText = await response.text();
+                console.log('YAML内容:', yamlText);
+                
+                const config = jsyaml.load(yamlText);
+                console.log('解析后的配置:', config);
+                
+                document.getElementById('result').innerHTML = '<pre>' + JSON.stringify(config, null, 2) + '</pre>';
+            } catch (error) {
+                console.error('加载YAML失败:', error);
+                document.getElementById('result').innerHTML = '<p style="color: red;">加载失败: ' + error.message + '</p>';
+            }
+        }
+        
+        testYamlLoad();
+    </script>
+</body>
+</html>

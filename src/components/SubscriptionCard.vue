@@ -16,20 +16,28 @@
     </div>
     
     <h2>{{ subscriptionName }}</h2>
-    
-    <!-- 流量使用进度条 -->
+      <!-- 流量显示 -->
     <div class="traffic-info">
       <div class="traffic-header">
-        <span class="traffic-label">流量剩余</span>
-        <span class="traffic-amount">{{ trafficFormatted }}</span>
+        <span class="traffic-label">总流量</span>
+        <span class="traffic-amount-large">{{ trafficTotal }}</span>
       </div>
-      <div class="progress-bar">
-        <div class="progress-fill" :style="{ width: trafficPercentage + '%' }"></div>
-      </div>
-      <div class="progress-text">已使用 {{ trafficPercentage }}%</div>
+      <div class="traffic-unit">{{ traffic.unit || 'GB' }}</div>
     </div>
 
-    <!-- 时间信息 -->
+    <!-- 重置时间进度条 -->
+    <div class="reset-info" v-if="reset">
+      <div class="reset-header">
+        <span class="reset-label">流量重置</span>
+        <span class="reset-text">{{ reset.formatted }}</span>
+      </div>
+      <div class="progress-bar" v-if="reset.daysRemaining !== null">
+        <div class="progress-fill" :style="{ width: reset.progress + '%' }"></div>
+      </div>
+      <div class="progress-text" v-if="reset.daysRemaining !== null">
+        {{ Math.round(reset.progress) }}% 已过去
+      </div>
+    </div>    <!-- 时间信息 -->
     <div class="time-info">
       <div class="time-item">
         <span class="time-label">
@@ -37,13 +45,6 @@
           套餐到期
         </span>
         <span class="time-value">{{ expireFormatted }}</span>
-      </div>
-      <div class="time-item" v-if="resetFormatted">
-        <span class="time-label">
-          <i class="fas fa-sync-alt"></i>
-          流量重置
-        </span>
-        <span class="time-value">{{ resetFormatted }}</span>
       </div>
       <div class="time-item">
         <span class="time-label">
@@ -106,7 +107,13 @@ const props = defineProps({
 
 const subscriptionLinkTextarea = ref(null);
 
-// 流量格式化
+// 总流量显示（大数字）
+const trafficTotal = computed(() => {
+  if (!props.traffic || !props.traffic.total) return '0';
+  return props.traffic.total.toString();
+});
+
+// 流量格式化（保留原有逻辑以备兼容）
 const trafficFormatted = computed(() => {
   if (!props.traffic) return '0 GB / 100 GB';
   
@@ -126,7 +133,10 @@ const trafficFormatted = computed(() => {
     return `${used} ${unit} / ${total} ${unit}`;
   }
   
-  return '0 GB / 100 GB';
+  // 只显示总流量
+  const total = props.traffic.total || 100;
+  const unit = props.traffic.unit || 'GB';
+  return `${total} ${unit}`;
 });
 
 // 流量使用百分比
@@ -302,13 +312,56 @@ h2 {
   padding: 20px;
   margin: 20px 0;
   backdrop-filter: blur(10px);
+  text-align: center;
 }
 
 .traffic-header {
   display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.traffic-amount-large {
+  font-size: 48px;
+  font-weight: 900;
+  color:rgb(149, 246, 239);
+  text-shadow: 0 0 20px rgba(78, 205, 196, 0.5);
+  line-height: 1;
+  margin: 10px 0;
+}
+
+.traffic-unit {
+  font-size: 18px;
+  font-weight: 600;
+  opacity: 0.8;
+  margin-top: 5px;
+}
+
+.reset-info {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  padding: 20px;
+  margin: 20px 0;
+  backdrop-filter: blur(10px);
+}
+
+.reset-header {
+  display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 15px;
+}
+
+.reset-label {
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.reset-text {
+  font-weight: 700;
+  font-size: 14px;
+  opacity: 0.9;
 }
 
 .traffic-label {
