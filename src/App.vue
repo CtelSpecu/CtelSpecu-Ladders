@@ -42,13 +42,13 @@
           <h1 class="page-title">共享订阅</h1>
         </div>
         
-        <!-- 订阅卡片列表 -->
-        <div class="subscription-layout">
+        <!-- 订阅卡片列表 -->        <div class="subscription-layout">
           <SubscriptionCard
             v-for="subscription in subscriptions"
             :key="subscription.id"
             :subscription-name="subscription.name"
             :subscription-link="subscription.url"
+            :yaml-link="subscription.yamlUrl"
             :rating="subscription.rating"
             :traffic="subscription.traffic"
             :reset="subscription.reset"

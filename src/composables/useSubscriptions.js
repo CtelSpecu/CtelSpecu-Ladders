@@ -12,11 +12,11 @@ const loadSubscriptionsFromYaml = async () => {
     const response = await fetch('/subscriptions.yaml');
     const yamlText = await response.text();
     const config = yaml.load(yamlText);
-    
-    return config.subscriptions.map(sub => ({
+      return config.subscriptions.map(sub => ({
       id: sub.id,
       name: sub.name,
-      url: sub.url,
+      url: sub.url,           // 用于文本框复制和导入客户端
+      yamlUrl: sub.yamlUrl,   // 用于获取流量信息
       rating: sub.rating,
       traffic: {
         total: sub.traffic,
@@ -25,8 +25,7 @@ const loadSubscriptionsFromYaml = async () => {
       maxRate: sub.maxRate,
       expireTime: sub.expireTime,
       monthlyReset: sub.monthlyReset
-    }));
-  } catch (error) {
+    }));  } catch (error) {
     console.error('加载订阅配置失败:', error);
     // 返回默认配置
     return [
@@ -34,6 +33,7 @@ const loadSubscriptionsFromYaml = async () => {
         id: 1,
         name: "可用订阅1（IP纯净）",
         url: "https://43.100.58.97/5b780ba09d5a66c7950914244600b801",
+        yamlUrl: "https://43.100.58.97/5b780ba09d5a66c7950914244600b801", // 添加yamlUrl字段
         rating: 5,
         traffic: { total: 500, unit: "GB" },
         maxRate: "500Mbps",
@@ -356,9 +356,9 @@ export function useSubscriptions() {
       
       await Promise.all(
         batch.map(async (sub) => {
-          try {
-            console.log(`正在更新订阅流量: ${sub.name}`);
-            const trafficInfo = await getSubscriptionRemainingTraffic(sub.url, sub.traffic.total);
+          try {            console.log(`正在更新订阅流量: ${sub.name}`);
+            // 使用 yamlUrl 来获取流量信息，而不是 url
+            const trafficInfo = await getSubscriptionRemainingTraffic(sub.yamlUrl || sub.url, sub.traffic.total);
             
             // 找到对应的订阅并更新流量数据
             const index = subscriptionsData.value.findIndex(s => s.id === sub.id);

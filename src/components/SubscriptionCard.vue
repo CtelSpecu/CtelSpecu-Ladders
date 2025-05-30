@@ -26,8 +26,7 @@
             <i class="fas fa-spinner fa-spin loading-spinner"></i>
             <span class="loading-text">获取中...</span>
           </div>
-        </div>
-      </div>
+        </div>      </div>
         <!-- 流量进度条 -->
       <div class="traffic-progress">
         <div class="progress-bar-container">
@@ -68,8 +67,11 @@
         <span class="time-value">{{ maximumRate }}</span>
       </div>
     </div>
-    
-    <div class="subscription-link-area">
+      <div class="subscription-link-area">
+      <div class="link-header">
+        <i class="fas fa-link"></i>
+        <span>订阅链接 (用于复制和导入客户端)</span>
+      </div>
       <textarea
           ref="subscriptionLinkTextarea"
           readonly
@@ -100,7 +102,8 @@ const { getSubscriptionRemainingTraffic } = useSubscriptions();
 
 const props = defineProps({
   subscriptionName: String,
-  subscriptionLink: String,
+  subscriptionLink: String,   // 用于文本框复制和导入客户端
+  yamlLink: String,          // 用于获取流量信息
   rating: {
     type: Number,
     default: 3
@@ -137,13 +140,15 @@ onMounted(async () => {
 
 // 更新流量数据
 const updateTrafficData = async () => {
-  if (!props.subscriptionLink) return;
+  // 优先使用 yamlLink，如果没有则回退到 subscriptionLink
+  const linkToUse = props.yamlLink || props.subscriptionLink;
+  if (!linkToUse) return;
   
   remainingTrafficData.value.loading = true;
   
   try {
     const trafficInfo = await getSubscriptionRemainingTraffic(
-      props.subscriptionLink, 
+      linkToUse, 
       props.traffic?.total || 100
     );
       remainingTrafficData.value = {
@@ -622,6 +627,20 @@ h2 {
 
 .subscription-link-area {
   margin: 25px 0;
+}
+
+.link-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  opacity: 0.9;
+}
+
+.link-header i {
+  color: #4ecdc4;
 }
 
 .subscription-link-area textarea {
