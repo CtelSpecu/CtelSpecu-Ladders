@@ -89,7 +89,16 @@
     <h3>Linux 平台客户端</h3>
     <div class="client-btn-group">
       <a class="client-btn" href="https://clashverge.org/" target="_blank">Clsah Verge</a>
-      <a class="client-btn" href="https://clashvergerev.org/" target="_blank">Clash Verge Rev [推荐]</a>
+      <a class="animated-button animated-button-clash" href="https://clashvergerev.org/" target="_blank">
+        <svg class="arr-2" viewBox="0 0 24 24">
+          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+        </svg>
+        <span class="text">Clash Verge Rev [推荐]</span>
+        <span class="circle"></span>
+        <svg class="arr-1" viewBox="0 0 24 24">
+          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+        </svg>
+      </a>
       <a class="client-btn" href="https://clashnyanpasu.org/" target="_blank">Clash Nyanpasu</a>
       <a class="client-btn" href="https://clashforwindows.org/" target="_blank">Clash for Windows</a>
       <a class="client-btn" href="https://nekobox.tools/nekoray/" target="_blank">NekoRay</a>
@@ -100,7 +109,16 @@
     <h2>移动设备</h2>
     <h3>Android 平台客户端</h3>
     <div class="client-btn-group">
-      <a class="client-btn" href="https://v2rayng.org/" target="_blank">v2rayNG [推荐]</a>
+      <a class="animated-button animated-button-v2ray" href="https://v2rayng.org/" target="_blank">
+        <svg class="arr-2" viewBox="0 0 24 24">
+          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+        </svg>
+        <span class="text">v2rayNG [推荐]</span>
+        <span class="circle"></span>
+        <svg class="arr-1" viewBox="0 0 24 24">
+          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+        </svg>
+      </a>
       <a class="client-btn" href="https://clashforandroid.org/" target="_blank">Clash for Android</a>
       <a class="client-btn" href="https://nekobox.tools/nekoboxforandroid/" target="_blank">NekoBox for Android</a>
       <a class="client-btn" href="https://sing-box.org/" target="_blank">sing-box</a>
@@ -109,7 +127,16 @@
 
     <h3>iOS 平台客户端</h3>
     <div class="client-btn-group">
-      <a class="client-btn" href="https://shadowrocketios.org/" target="_blank">Shadowrocket [推荐]</a>
+      <a class="animated-button animated-button-shadowrocket" href="https://shadowrocketios.org/" target="_blank">
+        <svg class="arr-2" viewBox="0 0 24 24">
+          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+        </svg>
+        <span class="text">Shadowrocket [推荐]</span>
+        <span class="circle"></span>
+        <svg class="arr-1" viewBox="0 0 24 24">
+          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+        </svg>
+      </a>
       <a class="client-btn" href="https://quantumult.org/" target="_blank">Quantumult</a>
       <a class="client-btn" href="https://quantumultx.org/" target="_blank">Quantumult X</a>
       <a class="client-btn" href="https://clashstash.org/" target="_blank">Stash</a>

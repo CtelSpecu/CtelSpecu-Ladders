@@ -41,8 +41,7 @@
         <div class="page-header">
           <h1 class="page-title">共享订阅</h1>
         </div>
-        
-        <!-- 订阅卡片列表 -->        <div class="subscription-layout">
+          <!-- 订阅卡片列表 -->        <div class="subscription-layout">
           <SubscriptionCard
             v-for="subscription in subscriptions"
             :key="subscription.id"
@@ -54,8 +53,7 @@
             :reset="subscription.reset"
             :expire="subscription.expire"
             :maximum-rate="subscription.maxRate"
-          />
-        </div>
+          />        </div>
       </div>
       <!-- 客户端下载页面 -->
       <div v-else-if="currentTab === 'guide'" class="guide-layout fade-in">
@@ -68,8 +66,7 @@
       <!-- 机场推荐页面 -->
       <div v-else-if="currentTab === 'recommend'" class="recommend-layout fade-in">
         <RecommendPage />
-      </div>
-      <!-- 其他类型页面 -->
+      </div>      <!-- 其他类型页面 -->
       <div v-else-if="currentTab === 'freevpn'" class="freevpn-layout fade-in">
         <FreeVpnPage />
       </div>

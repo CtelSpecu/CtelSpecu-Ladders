@@ -79,16 +79,26 @@
           readonly
           :value="subscriptionLink"
       ></textarea>
-    </div>
-
-    <div class="import-buttons">
-      <button class="copy-link-btn" @click="copySubscriptionLink">
-        <i class="fas fa-copy"></i>
-        复制链接
+    </div>    <div class="import-buttons">
+      <button class="animated-button animated-button-copy" @click="copySubscriptionLink">
+        <svg class="arr-2" viewBox="0 0 24 24">
+          <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
+        </svg>
+        <span class="text">复制链接</span>
+        <span class="circle"></span>
+        <svg class="arr-1" viewBox="0 0 24 24">
+          <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm5 4H9c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H9V7h11v14z"/>
+        </svg>
       </button>
-      <button class="import-btn" @click="importToClient('Clash')">
-        <i class="fas fa-download"></i>
-        导入Clash
+      <button class="animated-button animated-button-import" @click="importToClient('Clash')">
+        <svg class="arr-2" viewBox="0 0 24 24">
+          <path d="M19 9h-4V3H9v6H5l7 7 7-7z"/>
+        </svg>
+        <span class="text">导入Clash</span>
+        <span class="circle"></span>
+        <svg class="arr-1" viewBox="0 0 24 24">
+          <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
+        </svg>
       </button>
     </div>
   </div>
@@ -681,6 +691,8 @@ h2 {
   display: flex;
   gap: 15px;
   flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
 }
 
 .copy-link-btn, .import-btn {
@@ -705,26 +717,144 @@ h2 {
   font-size: 16px;
 }
 
-.copy-link-btn {
-  background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); /* 绿色渐变 */
+/* 基础动画按钮样式 */
+.animated-button {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 16px 36px;
+  border: 4px solid;
+  border-color: transparent;
+  font-size: 16px;
+  background-color: inherit;
+  border-radius: 100px;
+  font-weight: 600;
+  cursor: pointer;
+  overflow: hidden;
+  transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+  flex: 1;
+  min-width: 140px;
+  max-width: 200px;
+  height: 56px;
+  box-sizing: border-box;
+}
+
+.animated-button svg {
+  position: absolute;
+  width: 24px;
+  z-index: 9;
+  transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.animated-button .arr-1 {
+  right: 16px;
+}
+
+.animated-button .arr-2 {
+  left: -25%;
+}
+
+.animated-button .circle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  opacity: 0;
+  transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+  z-index: 0;
+}
+
+.animated-button .text {
+  position: relative;
+  z-index: 2;
+  transform: translateX(-12px);
+  transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+  text-align: center;
+  white-space: nowrap;
+}
+
+.animated-button:hover {
+  box-shadow: 0 0 0 12px transparent;
+  border-radius: 12px;
+}
+
+.animated-button:hover .arr-1 {
+  right: -25%;
+}
+
+.animated-button:hover .arr-2 {
+  left: 16px;
+}
+
+.animated-button:hover .text {
+  transform: translateX(12px);
+}
+
+.animated-button:active {
+  scale: 0.95;
+}
+
+.animated-button:hover .circle {
+  width: 250px;
+  height: 250px;
+  opacity: 1;
+}
+
+/* 复制链接按钮样式 - 绿色主题 */
+.animated-button-copy {
+  color: greenyellow;
+  box-shadow: 0 0 0 2px greenyellow;
+}
+
+.animated-button-copy svg {
+  fill: greenyellow;
+}
+
+.animated-button-copy .circle {
+  background-color: greenyellow;
+}
+
+.animated-button-copy:hover {
+  color: #212121;
+}
+
+.animated-button-copy:hover svg {
+  fill: #212121;
+}
+
+.animated-button-copy:active {
+  box-shadow: 0 0 0 4px greenyellow;
+}
+
+/* 导入按钮样式 - 蓝色主题 */
+.animated-button-import {
+  color: #4ecdc4;
+  box-shadow: 0 0 0 2px #4ecdc4;
+}
+
+.animated-button-import svg {
+  fill: #4ecdc4;
+}
+
+.animated-button-import .circle {
+  background-color: #4ecdc4;
+}
+
+.animated-button-import:hover {
   color: white;
 }
 
-.copy-link-btn:hover {
-  background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
-  transform: translateY(-2px);
-  box-shadow: 0 10px 20px rgba(67, 233, 123, 0.3);
+.animated-button-import:hover svg {
+  fill: white;
 }
 
-.import-btn {
-  background: linear-gradient(135deg, #4ecdc4, #44a08d);
-  color: white;
-}
-
-.import-btn:hover {
-  background: linear-gradient(135deg, #26d0ce, #2a9d8f);
-  transform: translateY(-2px);
-  box-shadow: 0 10px 20px rgba(78, 205, 196, 0.4);
+.animated-button-import:active {
+  box-shadow: 0 0 0 4px #4ecdc4;
 }
 
 @media (max-width: 768px) {
@@ -735,6 +865,17 @@ h2 {
 
   .import-buttons {
     flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .animated-button {
+    width: 100%;
+    max-width: 280px;
+    min-width: 200px;
+    height: 52px;
+    font-size: 15px;
+    padding: 14px 32px;
   }
 
   .copy-link-btn, .import-btn {
@@ -743,6 +884,30 @@ h2 {
 
   .time-info {
     gap: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .animated-button {
+    width: 100%;
+    max-width: 240px;
+    min-width: 180px;
+    height: 48px;
+    font-size: 14px;
+    padding: 12px 28px;
+  }
+
+  .animated-button .text {
+    font-size: 14px;
+  }
+
+  .animated-button svg {
+    width: 20px;
+  }
+
+  .animated-button:hover .circle {
+    width: 200px;
+    height: 200px;
   }
 }
 
