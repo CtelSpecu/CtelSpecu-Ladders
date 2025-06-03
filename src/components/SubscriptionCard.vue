@@ -23,7 +23,9 @@
             <span class="remaining-traffic">{{ remainingTrafficValue }}</span>
             <span class="total-traffic">{{ totalTrafficWithUnit }}</span>
           </div>          <div class="loading-indicator" v-else>
-            <i class="fas fa-spinner fa-spin loading-spinner"></i>
+            <svg class="windows-loading-spinner" viewBox="0 0 14 14">
+              <circle cx="7" cy="7" r="6"></circle>
+            </svg>
             <span class="loading-text">获取中...</span>
           </div>
         </div>      </div>
@@ -762,24 +764,45 @@ h2 {
   opacity: 0.8;
 }
 
-.loading-spinner {
-  animation: loading-pulse 1.5s ease-in-out infinite;
+/* Windows风格加载动画 */
+.windows-loading-spinner {
+  box-sizing: border-box;
+  width: 3rem;
+  height: 3rem;
+  padding: 2px;
+  overflow: visible;
+}
+
+.windows-loading-spinner > circle {
+  stroke: #fff;
+  fill: none;
+  stroke-width: 2px;
+  stroke-linecap: round;
+  transform-origin: 50% 50%;
+  transition: all 0.2s ease-in-out 0s;
+  animation: 2s linear 0s infinite normal none running loading-spinner;
+}
+
+@keyframes loading-spinner {
+  0% {
+    stroke-dasharray: 0.01px, 43.97px;
+    transform: rotate(0);
+  }
+
+  50% {
+    stroke-dasharray: 21.99px, 21.99px;
+    transform: rotate(450deg);
+  }
+
+  100% {
+    stroke-dasharray: 0.01px, 43.97px;
+    transform: rotate(1080deg);
+  }
 }
 
 .loading-text {
   font-size: 0.7em;
   opacity: 0.9;
-}
-
-@keyframes loading-pulse {
-  0%, 100% { 
-    opacity: 0.6; 
-    transform: scale(1);
-  }
-  50% { 
-    opacity: 1; 
-    transform: scale(1.1);
-  }
 }
 
 /* 流量进度条样式 */
