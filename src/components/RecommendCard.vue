@@ -1,9 +1,17 @@
 <template>
   <div class="card recommend-card">
-    <h2>机场推荐</h2>
-    <h3>高速、稳定、IP纯净</h3>
+    <h2>机场推荐</h2>    <h3>高速、稳定、IP纯净</h3>
     <div class="button-group">
-      <a href="https://a.mikasass.pro/signup?referralCode=A9ti5mtf" target="_blank" class="recommend-button">Mikasa</a>
+      <a href="https://a.mikasass.pro/signup?referralCode=A9ti5mtf" target="_blank" class="animated-button animated-button-mikasa">
+        <svg class="arr-2" viewBox="0 0 24 24">
+          <path d="m3.9,12c0,-0.71 0.29,-1.35 0.76,-1.82l6.54,-6.54c0.95,-0.95 2.49,-0.95 3.44,0c0.95,0.95 0.95,2.49 0,3.44l-4.72,4.72h8.58c1.34,0 2.42,1.08 2.42,2.42s-1.08,2.42 -2.42,2.42h-8.58l4.72,4.72c0.95,0.95 0.95,2.49 0,3.44c-0.95,0.95 -2.49,0.95 -3.44,0l-6.54,-6.54c-0.47,-0.47 -0.76,-1.11 -0.76,-1.82z"/>
+        </svg>
+        <span class="text">Mikasa</span>
+        <span class="circle"></span>
+        <svg class="arr-1" viewBox="0 0 24 24">
+          <path d="m16.67,12c0,0.71 -0.29,1.35 -0.76,1.82l-6.54,6.54c-0.95,0.95 -2.49,0.95 -3.44,0c-0.95,-0.95 -0.95,-2.49 0,-3.44l4.72,-4.72h-8.58c-1.34,0 -2.42,-1.08 -2.42,-2.42s1.08,-2.42 2.42,-2.42h8.58l-4.72,-4.72c-0.95,-0.95 -0.95,-2.49 0,-3.44c0.95,-0.95 2.49,-0.95 3.44,0l6.54,6.54c0.47,0.47 0.76,1.11 0.76,1.82z"/>
+        </svg>
+      </a>
       <a href="https://mojie.kim/register?aff=r3JESYAG" target="_blank" class="recommend-button">魔戒</a>
     </div>
     <h3>高速、大流量</h3>
@@ -103,6 +111,33 @@
   background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
   transform: translateY(-2px);
   box-shadow: 0 10px 20px rgba(67, 233, 123, 0.18);
+}
+
+/* Mikasa 动画按钮的自定义样式 */
+.animated-button-mikasa {
+  color: #ff6b6b !important;
+  box-shadow: 0 0 0 2px #ff6b6b !important;
+  margin-bottom: 12px;
+}
+
+.animated-button-mikasa svg {
+  fill: #ff6b6b !important;
+}
+
+.animated-button-mikasa .circle {
+  background-color: #ff6b6b !important;
+}
+
+.animated-button-mikasa:hover svg {
+  fill: white !important;
+}
+
+.animated-button-mikasa:hover {
+  color: white !important;
+}
+
+.animated-button-mikasa:active {
+  box-shadow: 0 0 0 4px #ff6b6b !important;
 }
 
 @media (max-width: 767px) {
