@@ -209,9 +209,9 @@ const trafficDisplay = computed(() => {
   // 使用组件内获取的剩余流量数据
   const remaining = remainingTrafficData.value.remaining;
   
-  // 如果剩余流量为null，显示"-"
+  // 如果剩余流量为null，显示"获取失败"
   if (remaining === null) {
-    return `-/${total} ${unit}`;
+    return `获取失败`;
   }
   
   return `${remaining.toFixed(2)}/${total} ${unit}`;
@@ -227,9 +227,9 @@ const remainingTrafficValue = computed(() => {
   // 使用组件内获取的剩余流量数据
   const remaining = remainingTrafficData.value.remaining;
   
-  // 如果剩余流量为null，显示"-"
+  // 如果剩余流量为null，显示"获取失败"
   if (remaining === null) {
-    return '-';
+    return '获取失败';
   }
   
   return remaining.toFixed(2);
@@ -237,6 +237,11 @@ const remainingTrafficValue = computed(() => {
 
 // 总流量部分（包含斜杠、总流量数字和单位）
 const totalTrafficWithUnit = computed(() => {
+  // 如果剩余流量为null（获取失败），不显示总流量部分
+  if (props.traffic?.remaining === null || remainingTrafficData.value.remaining === null) {
+    return '';
+  }
+  
   const total = props.traffic?.total || 0;
   const unit = props.traffic?.unit || 'GB';
   return `/${total} ${unit}`;
