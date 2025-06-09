@@ -1,6 +1,5 @@
 <template>
-  <div class="card subscription-card">
-    <!-- 星级评分 -->
+  <div class="card subscription-card">    <!-- 星级评分 -->
     <div class="rating-container">
       <div class="stars">
         <i v-for="i in 5" 
@@ -15,25 +14,30 @@
       <span class="rating-text">{{ rating }}/5 推荐</span>
     </div>
     
-    <h2>{{ subscriptionName }}</h2>    <!-- 流量显示 -->
+    <h2>{{ subscriptionName }}</h2>
+    
+    <!-- 流量显示 - 使用计算属性优化 -->
     <div class="traffic-info">
       <div class="traffic-header">
-        <span class="traffic-label">{{ trafficLabel }}</span>        <div class="traffic-amount-container">
+        <span class="traffic-label">{{ trafficLabel }}</span>
+        <div class="traffic-amount-container">
           <div class="traffic-amount-large" v-if="!isTrafficLoading">
-            <span class="remaining-traffic">{{ remainingTrafficValue }}</span>
-            <span class="total-traffic">{{ totalTrafficWithUnit }}</span>
-          </div>          <div class="loading-indicator" v-else>
+            <span class="remaining-traffic">{{ formattedTraffic.remaining }}</span>
+            <span class="total-traffic">{{ formattedTraffic.total }}</span>
+          </div>
+          <div class="loading-indicator" v-else>
             <svg class="windows-loading-spinner" viewBox="0 0 14 14">
               <circle cx="7" cy="7" r="6"></circle>
             </svg>
             <span class="loading-text">获取中...</span>
           </div>
-        </div>      </div>
-        <!-- 流量进度条 -->
+        </div>
+      </div>
+      <!-- 流量进度条 -->
       <div class="traffic-progress">
         <div class="progress-bar-container">
           <div class="progress-bar-bg">
-            <div class="progress-bar-fill" :style="{ width: trafficProgressPercentage + '%', background: trafficProgressColor }"></div>
+            <div class="progress-bar-fill" :style="progressBarStyle"></div>
           </div>
           <div class="progress-text">{{ trafficProgressPercentage }}% 已使用</div>
         </div>
@@ -271,38 +275,37 @@ const trafficProgressPercentage = computed(() => {
   return Math.min(100, Math.max(0, Math.round(percentage)));
 });
 
-// 根据流量使用百分比动态生成进度条颜色
+// 优化计算属性，使用缓存
+const formattedTraffic = computed(() => {
+  if (!props.traffic) return { remaining: '0', total: '0 GB' };
+  
+  return {
+    remaining: props.traffic.remaining?.toString() || '0',
+    total: props.traffic.total ? `${props.traffic.total} GB` : '0 GB'
+  };
+});
+
+// 优化进度条样式计算
+const progressBarStyle = computed(() => {
+  return {
+    width: `${trafficProgressPercentage.value}%`,
+    background: trafficProgressColor.value
+  };
+});
+
+// 流量进度颜色计算（简化版本）
 const trafficProgressColor = computed(() => {
   const percentage = trafficProgressPercentage.value;
   
-  if (percentage <= 25) {
-    // 0-25%: 浅绿到浅蓝（使用量少）
-    const progress = percentage / 25;
-    return `linear-gradient(90deg, 
-      #a8e6cf 0%, 
-      #88d8c0 ${progress * 50}%, 
-      #7fcdcd 100%)`;
-  } else if (percentage <= 50) {
-    // 25-50%: 浅绿到蓝色（使用量中）
-    const progress = (percentage - 25) / 25;
-    return `linear-gradient(90deg, 
-      #7fcdcd 0%, 
-      #6ab7ff ${progress * 50}%, 
-      #4dabf7 100%)`;
+  if (percentage <= 50) {
+    // 0-50%: 绿色渐变
+    return '#4ade80';
   } else if (percentage <= 75) {
-    // 50-75%: 黄色到橙色（使用量较高）
-    const progress = (percentage - 50) / 25;
-    return `linear-gradient(90deg, 
-      #ffd93d 0%, 
-      #ffb347 ${progress * 60}%, 
-      #ff8c42 100%)`;
+    // 50-75%: 黄绿色到橙色
+    return '#fbbf24';
   } else {
-    // 75-100%: 橙色到红色（使用量高）
-    const progress = (percentage - 75) / 25;
-    return `linear-gradient(90deg, 
-      #ff8c42 0%, 
-      #ff6b35 ${progress * 50}%, 
-      #e74c3c 100%)`;
+    // 75-100%: 红色
+    return '#ef4444';
   }
 });
 

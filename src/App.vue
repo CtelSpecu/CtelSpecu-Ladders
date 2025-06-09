@@ -74,24 +74,22 @@
       <div v-else class="recommend-layout fade-in">
         <RecommendPage />
       </div>
-    </div>
-    
-    <!-- 全局通知容器 -->
+    </div>      <!-- 全局通知容器 -->
     <NotificationContainer />
   </div>
 </template>
 
 <script setup>
-import { ref, provide, onMounted } from 'vue';
+import { ref, provide, onMounted, defineAsyncComponent } from 'vue';
 import DownloadCard from './components/DownloadCard.vue';
 import TutorialCard from './components/TutorialCard.vue';
 import SubscriptionCard from './components/SubscriptionCard.vue';
 import NotificationContainer from './components/NotificationContainer.vue';
-import ClientListPage from './ClientListPage.vue';
-import ClientGuidePage from './pages/ClientGuidePage.vue';
-import FreeNodePage from './pages/FreeNodePage.vue';
-import RecommendPage from './pages/RecommendPage.vue';
-import FreeVpnPage from './pages/FreeVpnPage.vue';
+// 懒加载页面组件以提高初始加载性能
+const ClientGuidePage = defineAsyncComponent(() => import('./pages/ClientGuidePage.vue'));
+const FreeNodePage = defineAsyncComponent(() => import('./pages/FreeNodePage.vue'));
+const RecommendPage = defineAsyncComponent(() => import('./pages/RecommendPage.vue'));
+const FreeVpnPage = defineAsyncComponent(() => import('./pages/FreeVpnPage.vue'));
 import { useSubscriptions } from './composables/useSubscriptions.js';
 
 const currentTab = ref('sub');
