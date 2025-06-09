@@ -80,29 +80,42 @@ const parseRemainingTrafficFromYaml = (yamlContent) => {
   }
 };
 
-// 缓存存储
+// 缓存存储 - 优化内存使用
 const yamlCache = new Map();
-const CACHE_DURATION = 10 * 60 * 1000; // 10分钟缓存
+const CACHE_DURATION = 5 * 60 * 1000; // 减少到5分钟缓存
+const MAX_CACHE_SIZE = 20; // 限制缓存大小
 
-// 生成缓存键（确保唯一性）
+// 清理过期缓存
+const cleanExpiredCache = () => {
+  const now = Date.now();
+  const keysToDelete = [];
+  
+  for (const [key, data] of yamlCache.entries()) {
+    if (now - data.timestamp > CACHE_DURATION) {
+      keysToDelete.push(key);
+    }
+  }
+  
+  keysToDelete.forEach(key => yamlCache.delete(key));
+  
+  // 如果缓存太大，删除最老的条目
+  if (yamlCache.size > MAX_CACHE_SIZE) {
+    const entries = Array.from(yamlCache.entries());
+    entries.sort((a, b) => a[1].timestamp - b[1].timestamp);
+    const toDelete = entries.slice(0, yamlCache.size - MAX_CACHE_SIZE);
+    toDelete.forEach(([key]) => yamlCache.delete(key));
+  }
+};
+
+// 生成缓存键（优化版本）
 const generateCacheKey = (url) => {
   try {
     const urlObj = new URL(url);
-    // 使用完整的URL路径和查询参数来确保唯一性
-    const fullPath = urlObj.pathname + urlObj.search;
-    // 对完整路径进行hash以确保缓存键的唯一性
-    const hash = fullPath.split('').reduce((a, b) => {
-      a = ((a << 5) - a) + b.charCodeAt(0);
-      return a & a;
-    }, 0);
-    return `${urlObj.hostname}_${Math.abs(hash).toString(36)}`;
+    // 使用简化的缓存键生成
+    return `${urlObj.hostname}_${urlObj.pathname.split('/').pop()}`.slice(0, 50);
   } catch {
-    // 如果URL解析失败，使用URL的hash值
-    const hash = url.split('').reduce((a, b) => {
-      a = ((a << 5) - a) + b.charCodeAt(0);
-      return a & a;
-    }, 0);
-    return `url_${Math.abs(hash).toString(36)}`;
+    // URL解析失败时的fallback
+    return url.slice(-50).replace(/[^a-zA-Z0-9]/g, '_');
   }
 };
 
@@ -122,10 +135,9 @@ const fetchAndCacheYaml = async (url) => {
   
   try {
     console.log(`正在获取YAML文件: ${url}`);
-    
-    // 创建AbortController用于超时控制
+      // 创建AbortController用于超时控制
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 10000); // 10秒超时
+    const timeoutId = setTimeout(() => controller.abort(), 5000); // 5秒超时
     
     // 使用代理避免CORS问题
     const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
