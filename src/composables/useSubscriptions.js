@@ -184,37 +184,57 @@ const fetchAndCacheYaml = async (url) => {
 };
 
 // 获取订阅的剩余流量信息（带重试机制）
-const getSubscriptionRemainingTraffic = async (subscriptionUrl, fallbackTotal = 100, retryCount = 2) => {
+const getSubscriptionRemainingTraffic = async (subscriptionUrl, fallbackTotal = 100, retryCount = 3) => {
+  // 清理过期缓存
+  cleanExpiredCache();
+  
   for (let attempt = 0; attempt <= retryCount; attempt++) {
     try {
+      console.log(`获取流量数据尝试 ${attempt + 1}/${retryCount + 1}: ${subscriptionUrl}`);
+      
       // 尝试从URL获取YAML文件
       const yamlContent = await fetchAndCacheYaml(subscriptionUrl);
       
       if (yamlContent) {
-        const remainingTraffic = parseRemainingTrafficFromYaml(yamlContent);        if (remainingTraffic !== null && remainingTraffic > 0) {          console.log(`从YAML获取到剩余流量: ${remainingTraffic} GB`);
+        const remainingTraffic = parseRemainingTrafficFromYaml(yamlContent);
+        
+        if (remainingTraffic !== null && remainingTraffic >= 0) {
+          console.log(`从YAML获取到剩余流量: ${remainingTraffic} GB (尝试 ${attempt + 1})`);
           return {
             remaining: remainingTraffic,
             hasRealData: true,
             hasValidData: true
           };
+        } else {
+          console.warn(`YAML内容解析失败，尝试 ${attempt + 1}: 未找到流量信息`);
         }
+      } else {
+        console.warn(`获取YAML内容失败，尝试 ${attempt + 1}`);
       }
       
-      // 如果没有找到有效数据，但这是第一次尝试，继续到fallback
-      break;
+      // 如果不是最后一次尝试，等待后重试
+      if (attempt < retryCount) {
+        const delay = Math.min(1000 * Math.pow(2, attempt), 5000); // 指数退避，最大5秒
+        console.log(`等待 ${delay}ms 后进行第 ${attempt + 2} 次尝试...`);
+        await new Promise(resolve => setTimeout(resolve, delay));
+        continue;
+      }
       
     } catch (error) {
       console.warn(`获取订阅流量失败，尝试 ${attempt + 1}/${retryCount + 1}:`, error.message);
       
-      // 如果不是最后一次尝试，等待一秒后重试
+      // 如果不是最后一次尝试，等待后重试
       if (attempt < retryCount) {
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        const delay = Math.min(1000 * Math.pow(2, attempt), 5000); // 指数退避
+        console.log(`错误后等待 ${delay}ms 重试...`);
+        await new Promise(resolve => setTimeout(resolve, delay));
         continue;
       }
     }
   }
-    // 如果无法获取YAML数据或检测不到剩余流量，返回无效数据标识
-  console.log(`无法获取或检测不到剩余流量，订阅URL: ${subscriptionUrl}`);
+  
+  // 如果无法获取YAML数据或检测不到剩余流量，返回无效数据标识
+  console.log(`所有重试均失败，无法获取剩余流量，订阅URL: ${subscriptionUrl}`);
   
   return {
     remaining: null, // 设为null表示无数据
@@ -421,13 +441,38 @@ export function useSubscriptions() {
     if (rating >= 3) return '#fd7e14'; // 橙色
     return '#dc3545'; // 红色
   };
-  
-  // 计算到期天数状态
+    // 计算到期天数状态
   const getExpireStatus = (days) => {
     if (days <= 7) return { status: 'danger', color: '#dc3545' };
     if (days <= 30) return { status: 'warning', color: '#ffc107' };
     return { status: 'success', color: '#28a745' };
-  };  return {
+  };
+    // 强制刷新流量数据（清除缓存）
+  const forceRefreshTrafficData = async (subscriptionUrl) => {
+    try {
+      // 清除相关缓存
+      const cacheKey = generateCacheKey(subscriptionUrl);
+      yamlCache.delete(cacheKey);
+      console.log(`已清除缓存: ${cacheKey}`);
+      
+      // 也清除可能的变体缓存（考虑URL参数变化）
+      const baseUrl = subscriptionUrl.split('?')[0];
+      for (const [key] of yamlCache.entries()) {
+        if (key.includes(baseUrl)) {
+          yamlCache.delete(key);
+          console.log(`已清除相关缓存: ${key}`);
+        }
+      }
+      
+      // 重新获取流量数据，使用更多重试次数
+      return await getSubscriptionRemainingTraffic(subscriptionUrl, 100, 5);
+    } catch (error) {
+      console.error('强制刷新流量数据失败:', error);
+      throw error;
+    }
+  };
+  
+  return {
     subscriptions: subscriptionsData,
     isLoading,
     loadingError,
@@ -436,6 +481,7 @@ export function useSubscriptions() {
     getReoKuRemainingTraffic,
     getSubscriptionRemainingTraffic,
     fetchAndCacheYaml,
+    forceRefreshTrafficData,
     initializeSubscriptions,
     quickInitializeSubscriptions,
     updateTrafficDataAsync,
