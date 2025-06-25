@@ -41,10 +41,10 @@
         <div class="page-header">
           <h1 class="page-title">共享订阅</h1>
         </div>
-          <!-- 订阅卡片列表 -->        <div class="subscription-layout">
-          <SubscriptionCard
+          <!-- 订阅卡片列表 -->        <div class="subscription-layout">          <SubscriptionCard
             v-for="subscription in subscriptions"
             :key="subscription.id"
+            :subscription-id="subscription.id"
             :subscription-name="subscription.name"
             :subscription-link="subscription.url"
             :yaml-link="subscription.yamlUrl"
@@ -53,7 +53,7 @@
             :reset="subscription.reset"
             :expire="subscription.expire"
             :maximum-rate="subscription.maxRate"
-          />        </div>
+          /></div>
       </div>
       <!-- 客户端下载页面 -->
       <div v-else-if="currentTab === 'guide'" class="guide-layout fade-in">

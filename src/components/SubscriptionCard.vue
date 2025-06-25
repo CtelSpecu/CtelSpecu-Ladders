@@ -30,13 +30,12 @@
               <i class="fas fa-redo"></i>
               重试
             </button>
-            
-            <!-- 强制刷新按钮 -->
+              <!-- 强制刷新按钮 -->
             <button 
               v-if="remainingTrafficData.remaining !== null && !isTrafficLoading" 
               @click="updateTrafficData(true, true)"
               class="retry-btn force-refresh"
-              title="强制刷新流量数据 (Ctrl+Shift+R)"
+              title="强制刷新流量数据"
             >
               <i class="fas fa-sync-alt"></i>
               刷新
@@ -155,6 +154,10 @@ const props = defineProps({
   subscriptionName: String,
   subscriptionLink: String,   // 用于文本框复制和导入客户端
   yamlLink: String,          // 用于获取流量信息
+  subscriptionId: {          // 添加唯一ID来区分不同订阅
+    type: [String, Number],
+    required: true
+  },
   rating: {
     type: Number,
     default: 3
@@ -177,7 +180,7 @@ const props = defineProps({
 
 const subscriptionLinkTextarea = ref(null);
 
-// 剩余流量数据状态
+// 使用订阅ID创建唯一的本地状态，避免串行
 const remainingTrafficData = ref({
   remaining: null,
   hasRealData: false,
@@ -185,57 +188,42 @@ const remainingTrafficData = ref({
   retryCount: 0,
   lastRetry: null,
   autoRetryCount: 0,
-  maxAutoRetries: 5
+  maxAutoRetries: 5,
+  subscriptionId: props.subscriptionId // 添加ID标识
 });
 
-// 自动重试定时器
+// 自动重试定时器 - 每个组件实例独立的定时器
 let autoRetryTimer = null;
 let visibilityChangeListener = null;
-let keyboardListener = null;
+
+// 组件实例唯一标识，用于调试
+const componentInstanceId = `subscription-${props.subscriptionId}-${Math.random().toString(36).substr(2, 9)}`;
 
 // 当组件挂载时获取最新的剩余流量数据
 onMounted(async () => {
+  console.log(`[${componentInstanceId}] 组件挂载，开始获取流量数据`);
   await updateTrafficData();
   
   // 如果初始获取失败，启动自动重试机制
   if (remainingTrafficData.value.remaining === null && !isSubscriptionExpired.value) {
+    console.log(`[${componentInstanceId}] 初始获取失败，启动自动重试机制`);
     startAutoRetry();
   }
   
   // 添加页面可见性变化监听器
   setupVisibilityListener();
-  
-  // 添加键盘快捷键监听器
-  setupKeyboardListener();
 });
 
 // 组件卸载时清理定时器和监听器
 onUnmounted(() => {
+  console.log(`[${componentInstanceId}] 组件卸载，清理资源`);
   if (autoRetryTimer) {
     clearTimeout(autoRetryTimer);
   }
   if (visibilityChangeListener) {
     document.removeEventListener('visibilitychange', visibilityChangeListener);
   }
-  if (keyboardListener) {
-    document.removeEventListener('keydown', keyboardListener);
-  }
 });
-
-// 设置键盘快捷键监听器
-const setupKeyboardListener = () => {
-  keyboardListener = (event) => {
-    // Ctrl+Shift+R 强制刷新
-    if (event.ctrlKey && event.shiftKey && event.key === 'R') {
-      event.preventDefault();
-      console.log('检测到 Ctrl+Shift+R，强制刷新流量数据');
-      updateTrafficData(true, true);
-      showInfo('正在强制刷新流量数据...');
-    }
-  };
-  
-  document.addEventListener('keydown', keyboardListener);
-};
 
 // 设置页面可见性监听器
 const setupVisibilityListener = () => {
@@ -270,18 +258,18 @@ const startAutoRetry = () => {
   
   // 如果已达到最大自动重试次数，不再重试
   if (remainingTrafficData.value.autoRetryCount >= remainingTrafficData.value.maxAutoRetries) {
-    console.log('已达到最大自动重试次数，停止重试');
+    console.log(`[${componentInstanceId}] 已达到最大自动重试次数，停止重试`);
     return;
   }
   
   // 使用递增延迟：5秒、10秒、20秒、30秒、60秒
   const delaySeconds = Math.min(5 * Math.pow(2, remainingTrafficData.value.autoRetryCount), 60);
   
-  console.log(`将在 ${delaySeconds} 秒后自动重试获取流量数据`);
+  console.log(`[${componentInstanceId}] 将在 ${delaySeconds} 秒后自动重试获取流量数据`);
   
   autoRetryTimer = setTimeout(async () => {
     remainingTrafficData.value.autoRetryCount++;
-    console.log(`自动重试第 ${remainingTrafficData.value.autoRetryCount} 次`);
+    console.log(`[${componentInstanceId}] 自动重试第 ${remainingTrafficData.value.autoRetryCount} 次`);
     
     await updateTrafficData();
     
@@ -295,6 +283,7 @@ const startAutoRetry = () => {
 // 停止自动重试
 const stopAutoRetry = () => {
   if (autoRetryTimer) {
+    console.log(`[${componentInstanceId}] 停止自动重试`);
     clearTimeout(autoRetryTimer);
     autoRetryTimer = null;
   }
@@ -318,8 +307,11 @@ const isSubscriptionExpired = computed(() => {
 
 // 更新流量数据（带重试机制）
 const updateTrafficData = async (forceRetry = false, isManualRetry = false) => {
+  console.log(`[${componentInstanceId}] 开始更新流量数据 - 强制重试:${forceRetry}, 手动重试:${isManualRetry}`);
+  
   // 如果订阅已过期，不需要获取流量数据
   if (isSubscriptionExpired.value && !forceRetry) {
+    console.log(`[${componentInstanceId}] 订阅已过期，跳过流量数据获取`);
     remainingTrafficData.value = {
       remaining: null,
       hasRealData: false,
@@ -327,7 +319,8 @@ const updateTrafficData = async (forceRetry = false, isManualRetry = false) => {
       retryCount: 0,
       lastRetry: null,
       autoRetryCount: 0,
-      maxAutoRetries: 5
+      maxAutoRetries: 5,
+      subscriptionId: props.subscriptionId
     };
     stopAutoRetry();
     return;
@@ -335,7 +328,12 @@ const updateTrafficData = async (forceRetry = false, isManualRetry = false) => {
 
   // 优先使用 yamlLink，如果没有则回退到 subscriptionLink
   const linkToUse = props.yamlLink || props.subscriptionLink;
-  if (!linkToUse) return;
+  if (!linkToUse) {
+    console.log(`[${componentInstanceId}] 没有可用的链接，跳过流量数据获取`);
+    return;
+  }
+  
+  console.log(`[${componentInstanceId}] 使用链接获取流量数据: ${linkToUse}`);
   
   // 如果是手动重试，重置自动重试计数
   if (isManualRetry) {
@@ -361,25 +359,25 @@ const updateTrafficData = async (forceRetry = false, isManualRetry = false) => {
         props.traffic?.total || 100,
         isManualRetry ? 3 : 2 // 手动重试时使用更多内部重试
       );
-      
-      remainingTrafficData.value = {
+        remainingTrafficData.value = {
         remaining: trafficInfo.remaining,
         hasRealData: trafficInfo.hasRealData,
         loading: false,
         retryCount: attempt + 1,
         lastRetry: new Date(),
         autoRetryCount: remainingTrafficData.value.autoRetryCount,
-        maxAutoRetries: remainingTrafficData.value.maxAutoRetries
+        maxAutoRetries: remainingTrafficData.value.maxAutoRetries,
+        subscriptionId: props.subscriptionId
       };
       
       // 如果获取到有效数据，跳出重试循环并停止自动重试
       if (trafficInfo.hasValidData || (trafficInfo.remaining !== null && trafficInfo.remaining >= 0)) {
-        console.log(`成功获取流量数据: ${trafficInfo.remaining} GB，重试次数: ${attempt + 1}`);
+        console.log(`[${componentInstanceId}] 成功获取流量数据: ${trafficInfo.remaining} GB，重试次数: ${attempt + 1}`);
         stopAutoRetry();
         
         // 显示成功通知（仅手动重试时）
         if (isManualRetry) {
-          showSuccess(`流量数据获取成功: ${trafficInfo.remaining} GB`);
+          showSuccess(`${props.subscriptionName}: 流量数据获取成功 ${trafficInfo.remaining} GB`);
         }
         break;
       }
@@ -399,15 +397,15 @@ const updateTrafficData = async (forceRetry = false, isManualRetry = false) => {
         if (isManualRetry) {
           showError(errorMsg);
         }
-        
-        remainingTrafficData.value = {
+          remainingTrafficData.value = {
           remaining: null,
           hasRealData: false,
           loading: false,
           retryCount: maxRetries,
           lastRetry: new Date(),
           autoRetryCount: remainingTrafficData.value.autoRetryCount,
-          maxAutoRetries: remainingTrafficData.value.maxAutoRetries
+          maxAutoRetries: remainingTrafficData.value.maxAutoRetries,
+          subscriptionId: props.subscriptionId
         };
         
         // 启动自动重试（如果不是手动重试且未过期）
@@ -504,36 +502,31 @@ const totalTrafficWithUnit = computed(() => {
   return `/${total} ${unit}`;
 });
 
-// 流量使用进度百分比
+// 流量使用进度百分比，避免数据串行
 const trafficProgressPercentage = computed(() => {
   const total = props.traffic?.total || 0;
   if (total === 0) return 0; // 无总流量时显示0%
   
-  let remaining = 0;
-  
-  // 优先使用从props传来的剩余流量数据
-  if (props.traffic?.remaining !== undefined && props.traffic?.remaining !== null) {
-    remaining = props.traffic.remaining;
-  } else {
-    remaining = remainingTrafficData.value.remaining;
-  }
-  
-  // 如果剩余流量为null（无法获取），显示0%已使用（灰色状态）
-  if (remaining === null) {
-    return 0;
-  }
+  // 优先使用本地组件的剩余流量数据，避免与其他组件串行
+  const remaining = remainingTrafficData.value.remaining;
   
   // 如果订阅过期，显示100%
   if (isSubscriptionExpired.value) {
     return 100;
   }
   
+  // 如果本地状态为null（无法获取），显示0%
+  if (remaining === null) {
+    return 0;
+  }
+  
+  // 使用本地获取的剩余流量计算进度
   const used = Math.max(0, total - remaining);
   const percentage = (used / total) * 100;
   return Math.min(100, Math.max(0, Math.round(percentage)));
 });
 
-// 优化计算属性，使用缓存
+// 优化计算属性，避免数据串行，优先使用本地状态
 const formattedTraffic = computed(() => {
   if (!props.traffic) return { remaining: '0', total: '0 GB' };
   
@@ -545,7 +538,34 @@ const formattedTraffic = computed(() => {
     };
   }
   
-  // 优先使用从props传来的剩余流量数据
+  // 优先使用组件内部获取的剩余流量数据，避免与其他组件串行
+  const remaining = remainingTrafficData.value.remaining;
+  
+  // 如果本地状态正在加载中，显示加载状态
+  if (remainingTrafficData.value.loading) {
+    return {
+      remaining: '获取中...',
+      total: ''
+    };
+  }
+  
+  // 如果本地状态获取失败，显示获取失败状态
+  if (remaining === null) {
+    return {
+      remaining: '获取失败',
+      total: ''
+    };
+  }
+  
+  // 如果有有效的本地数据，使用本地数据
+  if (remaining !== null && remaining >= 0) {
+    return {
+      remaining: remaining.toFixed(2),
+      total: props.traffic.total ? `/${props.traffic.total} GB` : '/0 GB'
+    };
+  }
+  
+  // 最后才考虑使用 props 中的数据（作为后备）
   if (props.traffic?.remaining !== undefined && props.traffic?.remaining !== null) {
     return {
       remaining: props.traffic.remaining.toString(),
@@ -553,27 +573,8 @@ const formattedTraffic = computed(() => {
     };
   }
   
-  // 使用组件内获取的剩余流量数据
-  const remaining = remainingTrafficData.value.remaining;
-  
-  // 如果剩余流量为null且不在加载中，显示"获取失败"
-  if (remaining === null && !isTrafficLoading.value) {
-    return {
-      remaining: '获取失败',
-      total: ''
-    };
-  }
-  
-  // 如果剩余流量为null且在加载中，显示加载状态
-  if (remaining === null && isTrafficLoading.value) {
-    return {
-      remaining: '获取中...',
-      total: ''
-    };
-  }
-  
   return {
-    remaining: remaining.toFixed(2),
+    remaining: '0',
     total: props.traffic.total ? `/${props.traffic.total} GB` : '/0 GB'
   };
 });
@@ -586,16 +587,15 @@ const progressBarStyle = computed(() => {
   };
 });
 
-// 流量进度颜色计算（改进版本）
+// 流量进度颜色计算（避免串行）
 const trafficProgressColor = computed(() => {
   // 如果订阅过期，显示红色
   if (isSubscriptionExpired.value) {
     return '#ef4444';
   }
   
-  // 如果获取失败，显示灰色
-  if (remainingTrafficData.value.remaining === null && 
-      (props.traffic?.remaining === undefined || props.traffic?.remaining === null)) {
+  // 如果本地获取失败，显示灰色
+  if (remainingTrafficData.value.remaining === null) {
     return '#6b7280';
   }
   
