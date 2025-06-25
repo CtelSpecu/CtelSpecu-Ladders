@@ -15,15 +15,50 @@
     </div>
     
     <h2>{{ subscriptionName }}</h2>
-    
-    <!-- 流量显示 - 使用计算属性优化 -->
+      <!-- 流量显示 - 使用计算属性优化 -->
     <div class="traffic-info">
-      <div class="traffic-header">
-        <span class="traffic-label">{{ trafficLabel }}</span>
-        <div class="traffic-amount-container">
+      <div class="traffic-header">        <div class="traffic-label-row">
+          <span class="traffic-label">{{ trafficLabel }}</span>
+          <div class="retry-controls" v-if="!isSubscriptionExpired">
+            <!-- 手动重试按钮 -->
+            <button 
+              v-if="remainingTrafficData.remaining === null && !isTrafficLoading" 
+              @click="updateTrafficData(true, true)"
+              class="retry-btn manual-retry"
+              title="手动重新获取流量数据"
+            >
+              <i class="fas fa-redo"></i>
+              重试
+            </button>
+            
+            <!-- 强制刷新按钮 -->
+            <button 
+              v-if="remainingTrafficData.remaining !== null && !isTrafficLoading" 
+              @click="updateTrafficData(true, true)"
+              class="retry-btn force-refresh"
+              title="强制刷新流量数据 (Ctrl+Shift+R)"
+            >
+              <i class="fas fa-sync-alt"></i>
+              刷新
+            </button>
+            
+            <!-- 自动重试状态指示器 -->
+            <div 
+              v-if="remainingTrafficData.autoRetryCount > 0 && remainingTrafficData.remaining === null"
+              class="auto-retry-indicator"
+              title="正在后台自动重试获取流量数据"
+            >
+              <i class="fas fa-clock"></i>
+              自动重试中
+            </div>
+          </div>
+        </div>        <div class="traffic-amount-container">
           <div class="traffic-amount-large" v-if="!isTrafficLoading">
-            <span class="remaining-traffic">{{ formattedTraffic.remaining }}</span>
-            <span class="total-traffic">{{ formattedTraffic.total }}</span>
+            <span class="remaining-traffic" :class="{ 
+              'expired': isSubscriptionExpired,
+              'failed': remainingTrafficData.remaining === null && !isSubscriptionExpired
+            }">{{ formattedTraffic.remaining }}</span>
+            <span class="total-traffic" v-if="!isSubscriptionExpired && formattedTraffic.total">{{ formattedTraffic.total }}</span>
           </div>
           <div class="loading-indicator" v-else>
             <svg class="windows-loading-spinner" viewBox="0 0 14 14">
@@ -109,12 +144,12 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, onUnmounted } from 'vue';
 import { useNotification } from '../composables/useNotification.js';
 import { useSubscriptions } from '../composables/useSubscriptions.js';
 
 const { showSuccess, showError, showInfo } = useNotification();
-const { getSubscriptionRemainingTraffic } = useSubscriptions();
+const { getSubscriptionRemainingTraffic, forceRefreshTrafficData } = useSubscriptions();
 
 const props = defineProps({
   subscriptionName: String,
@@ -144,43 +179,246 @@ const subscriptionLinkTextarea = ref(null);
 
 // 剩余流量数据状态
 const remainingTrafficData = ref({
-  remaining: 0,
+  remaining: null,
   hasRealData: false,
-  loading: false
+  loading: false,
+  retryCount: 0,
+  lastRetry: null,
+  autoRetryCount: 0,
+  maxAutoRetries: 5
 });
+
+// 自动重试定时器
+let autoRetryTimer = null;
+let visibilityChangeListener = null;
+let keyboardListener = null;
 
 // 当组件挂载时获取最新的剩余流量数据
 onMounted(async () => {
   await updateTrafficData();
+  
+  // 如果初始获取失败，启动自动重试机制
+  if (remainingTrafficData.value.remaining === null && !isSubscriptionExpired.value) {
+    startAutoRetry();
+  }
+  
+  // 添加页面可见性变化监听器
+  setupVisibilityListener();
+  
+  // 添加键盘快捷键监听器
+  setupKeyboardListener();
 });
 
-// 更新流量数据
-const updateTrafficData = async () => {
+// 组件卸载时清理定时器和监听器
+onUnmounted(() => {
+  if (autoRetryTimer) {
+    clearTimeout(autoRetryTimer);
+  }
+  if (visibilityChangeListener) {
+    document.removeEventListener('visibilitychange', visibilityChangeListener);
+  }
+  if (keyboardListener) {
+    document.removeEventListener('keydown', keyboardListener);
+  }
+});
+
+// 设置键盘快捷键监听器
+const setupKeyboardListener = () => {
+  keyboardListener = (event) => {
+    // Ctrl+Shift+R 强制刷新
+    if (event.ctrlKey && event.shiftKey && event.key === 'R') {
+      event.preventDefault();
+      console.log('检测到 Ctrl+Shift+R，强制刷新流量数据');
+      updateTrafficData(true, true);
+      showInfo('正在强制刷新流量数据...');
+    }
+  };
+  
+  document.addEventListener('keydown', keyboardListener);
+};
+
+// 设置页面可见性监听器
+const setupVisibilityListener = () => {
+  visibilityChangeListener = () => {
+    // 当页面从后台回到前台时
+    if (!document.hidden) {
+      const lastRetry = remainingTrafficData.value.lastRetry;
+      const now = new Date();
+      
+      // 如果上次获取时间超过5分钟，自动刷新
+      if (lastRetry && (now - lastRetry) > 5 * 60 * 1000) {
+        console.log('页面重新获得焦点，自动刷新流量数据');
+        updateTrafficData(false, false);
+      }
+      
+      // 如果当前显示获取失败且没有自动重试在进行，重新启动重试
+      if (remainingTrafficData.value.remaining === null && !autoRetryTimer && !isSubscriptionExpired.value) {
+        console.log('页面重新获得焦点，重新启动自动重试');
+        startAutoRetry();
+      }
+    }
+  };
+  
+  document.addEventListener('visibilitychange', visibilityChangeListener);
+};
+
+// 启动自动重试机制
+const startAutoRetry = () => {
+  if (autoRetryTimer) {
+    clearTimeout(autoRetryTimer);
+  }
+  
+  // 如果已达到最大自动重试次数，不再重试
+  if (remainingTrafficData.value.autoRetryCount >= remainingTrafficData.value.maxAutoRetries) {
+    console.log('已达到最大自动重试次数，停止重试');
+    return;
+  }
+  
+  // 使用递增延迟：5秒、10秒、20秒、30秒、60秒
+  const delaySeconds = Math.min(5 * Math.pow(2, remainingTrafficData.value.autoRetryCount), 60);
+  
+  console.log(`将在 ${delaySeconds} 秒后自动重试获取流量数据`);
+  
+  autoRetryTimer = setTimeout(async () => {
+    remainingTrafficData.value.autoRetryCount++;
+    console.log(`自动重试第 ${remainingTrafficData.value.autoRetryCount} 次`);
+    
+    await updateTrafficData();
+    
+    // 如果仍然失败且未过期，继续自动重试
+    if (remainingTrafficData.value.remaining === null && !isSubscriptionExpired.value) {
+      startAutoRetry();
+    }
+  }, delaySeconds * 1000);
+};
+
+// 停止自动重试
+const stopAutoRetry = () => {
+  if (autoRetryTimer) {
+    clearTimeout(autoRetryTimer);
+    autoRetryTimer = null;
+  }
+};
+
+// 检查订阅是否过期
+const isSubscriptionExpired = computed(() => {
+  if (!props.expire) return false;
+  
+  let expireDate;
+  if (typeof props.expire === 'object' && props.expire.date) {
+    expireDate = new Date(props.expire.date);
+  } else if (typeof props.expire === 'string') {
+    expireDate = new Date(props.expire);
+  } else {
+    return false;
+  }
+  
+  return new Date() > expireDate;
+});
+
+// 更新流量数据（带重试机制）
+const updateTrafficData = async (forceRetry = false, isManualRetry = false) => {
+  // 如果订阅已过期，不需要获取流量数据
+  if (isSubscriptionExpired.value && !forceRetry) {
+    remainingTrafficData.value = {
+      remaining: null,
+      hasRealData: false,
+      loading: false,
+      retryCount: 0,
+      lastRetry: null,
+      autoRetryCount: 0,
+      maxAutoRetries: 5
+    };
+    stopAutoRetry();
+    return;
+  }
+
   // 优先使用 yamlLink，如果没有则回退到 subscriptionLink
   const linkToUse = props.yamlLink || props.subscriptionLink;
   if (!linkToUse) return;
   
-  remainingTrafficData.value.loading = true;
+  // 如果是手动重试，重置自动重试计数
+  if (isManualRetry) {
+    remainingTrafficData.value.autoRetryCount = 0;
+    stopAutoRetry();
+  }
   
-  try {
-    const trafficInfo = await getSubscriptionRemainingTraffic(
-      linkToUse, 
-      props.traffic?.total || 100
-    );
+  remainingTrafficData.value.loading = true;
+  const maxRetries = isManualRetry ? 5 : 3; // 手动重试允许更多次数
+  const retryDelay = 2000; // 2秒延迟
+  
+  for (let attempt = 0; attempt < maxRetries; attempt++) {
+    try {
+      console.log(`尝试获取流量数据 - 第 ${attempt + 1}/${maxRetries} 次 ${isManualRetry ? '(手动重试)' : ''}`);
+      
+      // 如果是强制重试，清除缓存
+      if (forceRetry || isManualRetry) {
+        await forceRefreshTrafficData(linkToUse);
+      }
+      
+      const trafficInfo = await getSubscriptionRemainingTraffic(
+        linkToUse,
+        props.traffic?.total || 100,
+        isManualRetry ? 3 : 2 // 手动重试时使用更多内部重试
+      );
+      
       remainingTrafficData.value = {
-      remaining: trafficInfo.remaining, // 可能为null
-      hasRealData: trafficInfo.hasRealData,
-      hasValidData: trafficInfo.hasValidData || false,
-      loading: false
-    };
-  } catch (error) {
-    console.error('更新流量数据失败:', error);
-    remainingTrafficData.value = {
-      remaining: null, // 错误时设为null
-      hasRealData: false,
-      hasValidData: false,
-      loading: false
-    };
+        remaining: trafficInfo.remaining,
+        hasRealData: trafficInfo.hasRealData,
+        loading: false,
+        retryCount: attempt + 1,
+        lastRetry: new Date(),
+        autoRetryCount: remainingTrafficData.value.autoRetryCount,
+        maxAutoRetries: remainingTrafficData.value.maxAutoRetries
+      };
+      
+      // 如果获取到有效数据，跳出重试循环并停止自动重试
+      if (trafficInfo.hasValidData || (trafficInfo.remaining !== null && trafficInfo.remaining >= 0)) {
+        console.log(`成功获取流量数据: ${trafficInfo.remaining} GB，重试次数: ${attempt + 1}`);
+        stopAutoRetry();
+        
+        // 显示成功通知（仅手动重试时）
+        if (isManualRetry) {
+          showSuccess(`流量数据获取成功: ${trafficInfo.remaining} GB`);
+        }
+        break;
+      }
+      
+      // 如果是最后一次尝试，不再延迟
+      if (attempt < maxRetries - 1) {
+        console.log(`第 ${attempt + 1} 次尝试未获取到有效数据，${retryDelay/1000}秒后重试...`);
+        await new Promise(resolve => setTimeout(resolve, retryDelay));
+      }
+      
+    } catch (error) {
+      console.error(`第 ${attempt + 1} 次获取剩余流量失败:`, error);
+      
+      // 如果是最后一次尝试，设置错误状态
+      if (attempt === maxRetries - 1) {
+        const errorMsg = `获取流量信息失败，已重试 ${maxRetries} 次`;
+        if (isManualRetry) {
+          showError(errorMsg);
+        }
+        
+        remainingTrafficData.value = {
+          remaining: null,
+          hasRealData: false,
+          loading: false,
+          retryCount: maxRetries,
+          lastRetry: new Date(),
+          autoRetryCount: remainingTrafficData.value.autoRetryCount,
+          maxAutoRetries: remainingTrafficData.value.maxAutoRetries
+        };
+        
+        // 启动自动重试（如果不是手动重试且未过期）
+        if (!isManualRetry && !isSubscriptionExpired.value) {
+          startAutoRetry();
+        }
+      } else {
+        // 非最后一次尝试，等待后继续
+        await new Promise(resolve => setTimeout(resolve, retryDelay));
+      }
+    }
   }
 };
 
@@ -223,6 +461,11 @@ const trafficDisplay = computed(() => {
 
 // 剩余流量值（仅数字部分）
 const remainingTrafficValue = computed(() => {
+  // 检查订阅是否过期
+  if (isSubscriptionExpired.value) {
+    return '已过期';
+  }
+  
   // 优先使用从props传来的剩余流量数据
   if (props.traffic?.remaining !== undefined && props.traffic?.remaining !== null) {
     return props.traffic.remaining.toString();
@@ -231,9 +474,14 @@ const remainingTrafficValue = computed(() => {
   // 使用组件内获取的剩余流量数据
   const remaining = remainingTrafficData.value.remaining;
   
-  // 如果剩余流量为null，显示"获取失败"
-  if (remaining === null) {
+  // 如果剩余流量为null且不在加载中，显示"获取失败"
+  if (remaining === null && !isTrafficLoading.value) {
     return '获取失败';
+  }
+  
+  // 如果剩余流量为null且在加载中，显示加载状态
+  if (remaining === null && isTrafficLoading.value) {
+    return '获取中...';
   }
   
   return remaining.toFixed(2);
@@ -241,6 +489,11 @@ const remainingTrafficValue = computed(() => {
 
 // 总流量部分（包含斜杠、总流量数字和单位）
 const totalTrafficWithUnit = computed(() => {
+  // 如果订阅过期，不显示总流量部分
+  if (isSubscriptionExpired.value) {
+    return '';
+  }
+  
   // 如果剩余流量为null（获取失败），不显示总流量部分
   if (props.traffic?.remaining === null || remainingTrafficData.value.remaining === null) {
     return '';
@@ -265,9 +518,14 @@ const trafficProgressPercentage = computed(() => {
     remaining = remainingTrafficData.value.remaining;
   }
   
-  // 如果剩余流量为null（无法获取），显示0%已使用
+  // 如果剩余流量为null（无法获取），显示0%已使用（灰色状态）
   if (remaining === null) {
     return 0;
+  }
+  
+  // 如果订阅过期，显示100%
+  if (isSubscriptionExpired.value) {
+    return 100;
   }
   
   const used = Math.max(0, total - remaining);
@@ -279,9 +537,44 @@ const trafficProgressPercentage = computed(() => {
 const formattedTraffic = computed(() => {
   if (!props.traffic) return { remaining: '0', total: '0 GB' };
   
+  // 检查订阅是否过期
+  if (isSubscriptionExpired.value) {
+    return {
+      remaining: '已过期',
+      total: ''
+    };
+  }
+  
+  // 优先使用从props传来的剩余流量数据
+  if (props.traffic?.remaining !== undefined && props.traffic?.remaining !== null) {
+    return {
+      remaining: props.traffic.remaining.toString(),
+      total: props.traffic.total ? `/${props.traffic.total} GB` : '/0 GB'
+    };
+  }
+  
+  // 使用组件内获取的剩余流量数据
+  const remaining = remainingTrafficData.value.remaining;
+  
+  // 如果剩余流量为null且不在加载中，显示"获取失败"
+  if (remaining === null && !isTrafficLoading.value) {
+    return {
+      remaining: '获取失败',
+      total: ''
+    };
+  }
+  
+  // 如果剩余流量为null且在加载中，显示加载状态
+  if (remaining === null && isTrafficLoading.value) {
+    return {
+      remaining: '获取中...',
+      total: ''
+    };
+  }
+  
   return {
-    remaining: props.traffic.remaining?.toString() || '0',
-    total: props.traffic.total ? `${props.traffic.total} GB` : '0 GB'
+    remaining: remaining.toFixed(2),
+    total: props.traffic.total ? `/${props.traffic.total} GB` : '/0 GB'
   };
 });
 
@@ -293,8 +586,19 @@ const progressBarStyle = computed(() => {
   };
 });
 
-// 流量进度颜色计算（简化版本）
+// 流量进度颜色计算（改进版本）
 const trafficProgressColor = computed(() => {
+  // 如果订阅过期，显示红色
+  if (isSubscriptionExpired.value) {
+    return '#ef4444';
+  }
+  
+  // 如果获取失败，显示灰色
+  if (remainingTrafficData.value.remaining === null && 
+      (props.traffic?.remaining === undefined || props.traffic?.remaining === null)) {
+    return '#6b7280';
+  }
+  
   const percentage = trafficProgressPercentage.value;
   
   if (percentage <= 50) {
@@ -481,6 +785,84 @@ h2 {
   margin-bottom: 10px;
 }
 
+.traffic-label-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 5px;
+}
+
+.retry-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.retry-btn {
+  background: rgba(255, 255, 255, 0.2);
+  border: none;
+  border-radius: 12px;
+  padding: 4px 8px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  color: white;
+  font-size: 11px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.retry-btn i {
+  font-size: 10px;
+}
+
+.retry-btn.manual-retry {
+  background: rgba(255, 193, 7, 0.2);
+  border: 1px solid rgba(255, 193, 7, 0.3);
+}
+
+.retry-btn.manual-retry:hover {
+  background: rgba(255, 193, 7, 0.3);
+  transform: scale(1.05);
+}
+
+.retry-btn.force-refresh {
+  background: rgba(40, 167, 69, 0.2);
+  border: 1px solid rgba(40, 167, 69, 0.3);
+}
+
+.retry-btn.force-refresh:hover {
+  background: rgba(40, 167, 69, 0.3);
+  transform: scale(1.05);
+}
+
+.retry-btn:active {
+  transform: scale(0.95);
+}
+
+.auto-retry-indicator {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.7);
+  padding: 2px 6px;
+  background: rgba(108, 117, 125, 0.2);
+  border-radius: 8px;
+  border: 1px solid rgba(108, 117, 125, 0.3);
+}
+
+.auto-retry-indicator i {
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
 .traffic-amount-large {
   display: flex;
   align-items: baseline;
@@ -493,6 +875,16 @@ h2 {
 .remaining-traffic {
   font-size: 48px;
   font-weight: 900;
+}
+
+.remaining-traffic.expired {
+  color: #ff4757 !important;
+  text-shadow: 0 0 20px rgba(255, 71, 87, 0.5) !important;
+}
+
+.remaining-traffic.failed {
+  color: #6b7280 !important;
+  text-shadow: 0 0 20px rgba(107, 114, 128, 0.3) !important;
 }
 
 .total-traffic {
