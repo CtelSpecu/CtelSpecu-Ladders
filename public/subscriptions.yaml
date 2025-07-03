@@ -11,7 +11,7 @@ subscriptions:
     expireTime: "2025-07-06"  # 流量到期时间
     monthlyReset: 6  # 每月重置时间（日期）
   - id: 2
-    name: "订阅02"
+    name: "订阅02（大流量）"
     # URL链接 - 用于文本框复制和导入到客户端（原始订阅链接）
     url: "https://sub3.qingze-quick.top/api/v1/client/subscribe?token=a517edfee7f42705c0d7d98b634a62ad"
     # YAML链接 - 用于获取流量信息和功能展示（api.wcc.best展示URL）
