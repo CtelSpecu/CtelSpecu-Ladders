@@ -669,9 +669,9 @@ const copySubscriptionLink = async () => {
     // 检查是否为应急订阅
     if (props.subscriptionName === '应急订阅') {
       // 使用原生 JS 弹窗
-      alert('复制成功！\n\n⚠️ 该订阅仅用于应急使用！\n⚠️ 请仅在其他订阅无法使用时使用该订阅！\n⚠️ 请勿滥用此应急通道！');
+      alert('复制失败！\n\n⚠️ 该订阅仅用于应急使用！\n⚠️ 请勿滥用此应急通道！');
     } else {
-      showSuccess('链接已复制到剪贴板!');
+      showSuccess('复制成功!');
     }
   } catch (err) {
     console.error('复制失败:', err);
