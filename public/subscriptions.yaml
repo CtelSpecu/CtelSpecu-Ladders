@@ -5,7 +5,7 @@ subscriptions:
     url: "https://sub3.qingze-quick.top/api/v1/client/subscribe?token=a517edfee7f42705c0d7d98b634a62ad"
     # YAML链接 - 用于获取流量信息和功能展示（api.wcc.best展示URL）
     yamlUrl: "https://api.wcc.best/sub?target=clash&url=ss%3A%2F%2FYWVzLTI1Ni1nY206ZGVmYXVsdA%3D%3D%40127.0.0.1%3A1080%23%E6%A2%AF%E5%AD%90%E4%B8%8B%E8%BD%BD%EF%BC%9Aladders.ctelspecu.hxcn.top%7Css%3A%2F%2FYWVzLTI1Ni1nY206ZGVmYXVsdA%3D%3D%40127.0.0.1%3A1081%23%E6%8E%A8%E8%8D%90%E4%BD%BF%E7%94%A8%E6%96%B0%E5%8A%A0%E5%9D%A1%E7%AD%89%E4%BD%8E%E5%BB%B6%E6%97%B6%E8%8A%82%E7%82%B9%7Chttps%3A%2F%2Fsub3.qingze-quick.top%2Fapi%2Fv1%2Fclient%2Fsubscribe%3Ftoken%3Da517edfee7f42705c0d7d98b634a62ad&insert=false&config=.%2Fkeep-traffic-config.ini&exclude=(%3Fi)(%E6%B0%B8%E4%B9%85%7C%E5%8F%91%E5%B8%83%E9%A1%B5%7C%E7%BD%91%E5%9D%80%7C%E7%BD%91%E7%AB%99%7C%E5%8D%B8%E8%BD%BD%7C%E6%B5%8B%E8%AF%95%7Ctest%7C%E5%AE%98%E7%BD%91%7Cwebsite%7CTG%7CTelegram%7C%E7%BE%A4%7CGroup%7C%E5%85%AC%E5%91%8A%7C%E5%B8%AE%E5%8A%A9%7C%E6%95%99%E7%A8%8B%7C%E4%B8%8B%E8%BD%BD%7C%E6%8E%A8%E5%B9%BF%7C%E9%82%80%E8%AF%B7%7C%E5%85%B3%E6%B3%A8%7C%E5%8A%A0%E5%85%A5%7C%E8%81%94%E7%B3%BB%7C%E5%A4%87%E7%94%A8%7C%E9%95%9C%E5%83%8F%7C%E8%AE%BA%E5%9D%9B%7C%E5%8D%9A%E5%AE%A2%7C%E7%A4%BE%E5%8C%BA)&include=.*&emoji=true&list=true&tfo=false&scv=true&fdn=false&expand=true&sort=false&new_name=true"
-    rating: 4
+    rating: 5
     traffic: 488  # 总流量 GB
     maxRate: "300Mbps"    
     expireTime: "2026-07-03"
@@ -16,7 +16,7 @@ subscriptions:
     url: "https://a780j7.mikasacds.com/0bc1c17a450f32a9ce9d25a8e4fa1da7"
     # YAML链接 - 用于获取流量信息和功能展示（api.wcc.best展示URL）
     yamlUrl: "https://api.wcc.best/sub?target=clash&url=ss%3A%2F%2FYWVzLTI1Ni1nY206ZGVmYXVsdA%3D%3D%40127.0.0.1%3A1080%23%E6%A2%AF%E5%AD%90%E4%B8%8B%E8%BD%BD%EF%BC%9Aladders.ctelspecu.hxcn.top%7Css%3A%2F%2FYWVzLTI1Ni1nY206ZGVmYXVsdA%3D%3D%40127.0.0.1%3A1081%23%E6%8E%A8%E8%8D%90%E4%BD%BF%E7%94%A8%E6%96%B0%E5%8A%A0%E5%9D%A1%E7%AD%89%E4%BD%8E%E5%BB%B6%E6%97%B6%E8%8A%82%E7%82%B9%7Chttps%3A%2F%2Fa780j7.mikasacds.com%2F0bc1c17a450f32a9ce9d25a8e4fa1da7&insert=false&config=.%2Fkeep-traffic-config.ini&exclude=(%3Fi)(%E6%B0%B8%E4%B9%85%7C%E5%8F%91%E5%B8%83%E9%A1%B5%7C%E7%BD%91%E5%9D%80%7C%E7%BD%91%E7%AB%99%7C%E5%8D%B8%E8%BD%BD%7C%E6%B5%8B%E8%AF%95%7Ctest%7C%E5%AE%98%E7%BD%91%7Cwebsite%7CTG%7CTelegram%7C%E7%BE%A4%7CGroup%7C%E5%85%AC%E5%91%8A%7C%E5%B8%AE%E5%8A%A9%7C%E6%95%99%E7%A8%8B%7C%E4%B8%8B%E8%BD%BD%7C%E6%8E%A8%E5%B9%BF%7C%E9%82%80%E8%AF%B7%7C%E5%85%B3%E6%B3%A8%7C%E5%8A%A0%E5%85%A5%7C%E8%81%94%E7%B3%BB%7C%E5%A4%87%E7%94%A8%7C%E9%95%9C%E5%83%8F%7C%E8%AE%BA%E5%9D%9B%7C%E5%8D%9A%E5%AE%A2%7C%E7%A4%BE%E5%8C%BA)&include=.*&emoji=true&list=true&tfo=false&scv=true&fdn=false&expand=true&sort=false&new_name=true"
-    rating: 5
+    rating: 3
     traffic: 330  # 总流量 GB
     maxRate: "300Mbps"    
     expireTime: "2026-06-29"  # 流量到期时间
