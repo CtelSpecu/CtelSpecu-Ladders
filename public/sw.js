@@ -5,8 +5,8 @@ const STATIC_CACHE = 'static-v1';
 // Files to cache immediately
 const urlsToCache = [
   '/',
+  '/index.html',
   '/src/main.js',
-  '/src/App.vue',
   '/src/style.css'
 ];
 
@@ -25,12 +25,9 @@ self.addEventListener('install', event => {
   self.skipWaiting();
 });
 
-// Fetch event - serve from cache when possible
+// Fetch event - network-first strategy for latest updates
 self.addEventListener('fetch', event => {
-  // Only cache GET requests
   if (event.request.method !== 'GET') return;
-  
-  // Skip caching for API calls and external resources
   if (event.request.url.includes('api') || 
       event.request.url.includes('github') ||
       event.request.url.includes('jsdelivr') ||
@@ -39,31 +36,16 @@ self.addEventListener('fetch', event => {
   }
 
   event.respondWith(
-    caches.match(event.request)
+    fetch(event.request)
       .then(response => {
-        // Return cached version or fetch from network
-        if (response) {
+        if (!response || response.status !== 200 || response.type !== 'basic') {
           return response;
         }
-        
-        return fetch(event.request)
-          .then(response => {
-            // Don't cache non-successful responses
-            if (!response || response.status !== 200 || response.type !== 'basic') {
-              return response;
-            }
-
-            // Clone the response
-            const responseToCache = response.clone();
-
-            caches.open(CACHE_NAME)
-              .then(cache => {
-                cache.put(event.request, responseToCache);
-              });
-
-            return response;
-          });
+        const responseToCache = response.clone();
+        caches.open(STATIC_CACHE).then(cache => cache.put(event.request, responseToCache));
+        return response;
       })
+      .catch(() => caches.match(event.request))
   );
 });
 
