@@ -4,8 +4,20 @@
     <div class="recommend-content">
       <div class="recommend-grid">
         <section class="recommend-section">
-          <h2>推荐指数5/5</h2>
-          <h3>✔️高速✔️稳定✔️IP纯净（推荐）</h3>
+          <div class="rating-container">
+            <div class="stars">
+              <i v-for="i in 5" 
+                 :key="i" 
+                 class="star" 
+                 :class="{ 
+                   'fas fa-star active': i <= 5,
+                   'far fa-star': i > 5
+                 }">
+              </i>
+            </div>
+            <span class="rating-text">5/5 推荐</span>
+          </div>
+          <h3><i class="fas fa-check"></i>高速<i class="fas fa-check"></i>稳定<i class="fas fa-check"></i>IP纯净（推荐）</h3>
           <div class="recommend-btn-group">
             <a href="https://a.mikasass.pro/signup?referralCode=A9ti5mtf" target="_blank" class="recommend-btn">Mikasa</a>
             <a href="https://mojie.kim/register?aff=r3JESYAG" target="_blank" class="recommend-btn">魔戒</a>
@@ -13,8 +25,20 @@
         </section>
 
         <section class="recommend-section">
-          <h2>推荐指数4/5</h2>
-          <h3>✔️高速✔️大流量✔️性价比</h3>
+          <div class="rating-container">
+            <div class="stars">
+              <i v-for="i in 5" 
+                 :key="i" 
+                 class="star" 
+                 :class="{ 
+                   'fas fa-star active': i <= 4,
+                   'far fa-star': i > 4
+                 }">
+              </i>
+            </div>
+            <span class="rating-text">4/5 推荐</span>
+          </div>
+          <h3><i class="fas fa-check"></i>高速<i class="fas fa-check"></i>大流量<i class="fas fa-check"></i>性价比</h3>
           <div class="recommend-btn-group">
             <a href="https://cokecloud.cyou/#/register?code=wvIsDmnG" target="_blank" class="recommend-btn">CokeCloud</a>
             <a href="https://www.cutecloud.net/register?code=WUHcCLFn" target="_blank" class="recommend-btn">最萌の云CuteCloud</a>
@@ -22,8 +46,20 @@
           </div>
         </section>
         <section class="recommend-section">
-          <h2>推荐指数4/5</h2>
-          <h3>✔️高速✔️优质✔️IP纯净</h3>
+          <div class="rating-container">
+            <div class="stars">
+              <i v-for="i in 5" 
+                 :key="i" 
+                 class="star" 
+                 :class="{ 
+                   'fas fa-star active': i <= 4,
+                   'far fa-star': i > 4
+                 }">
+              </i>
+            </div>
+            <span class="rating-text">4/5 推荐</span>
+          </div>
+          <h3><i class="fas fa-check"></i>高速<i class="fas fa-check"></i>优质<i class="fas fa-check"></i>IP纯净</h3>
           <div class="recommend-btn-group">
             <a href="https://www.优信云.com/#/register?code=UJUm53s7" target="_blank" class="recommend-btn">优信云</a>
             <a href="https://3fan.3f66.net:?code=VaaANnLd" target="_blank" class="recommend-btn">三番云</a>
@@ -32,16 +68,40 @@
         </section>
 
         <section class="recommend-section">
-          <h2>推荐指数3/5</h2>
-          <h3>✔️高速✔️优质</h3>
+          <div class="rating-container">
+            <div class="stars">
+              <i v-for="i in 5" 
+                 :key="i" 
+                 class="star" 
+                 :class="{ 
+                   'fas fa-star active': i <= 3,
+                   'far fa-star': i > 3
+                 }">
+              </i>
+            </div>
+            <span class="rating-text">3/5 推荐</span>
+          </div>
+          <h3><i class="fas fa-check"></i>高速<i class="fas fa-check"></i>优质</h3>
           <div class="recommend-btn-group">
             <a href="https://inv03.lmaff01.cc/register?aff=HlFmJcm7" target="_blank" class="recommend-btn">龙猫云机场</a>
           </div>
         </section>
 
         <section class="recommend-section">
-          <h2>推荐指数2/5</h2>
-          <h3>✔️大流量✔️高性价比</h3>
+          <div class="rating-container">
+            <div class="stars">
+              <i v-for="i in 5" 
+                 :key="i" 
+                 class="star" 
+                 :class="{ 
+                   'fas fa-star active': i <= 2,
+                   'far fa-star': i > 2
+                 }">
+              </i>
+            </div>
+            <span class="rating-text">2/5 推荐</span>
+          </div>
+          <h3><i class="fas fa-check"></i>大流量<i class="fas fa-check"></i>高性价比</h3>
           <div class="recommend-btn-group">
             <a href="https://www.qingzeyy.top/#/register?code=KENq3MAR" target="_blank" class="recommend-btn">快游戏云加速</a>
             <a href="https://1元机场.com/#/" target="_blank" class="recommend-btn">一元机场（性价比极高）</a>
@@ -126,6 +186,62 @@
   padding-bottom: 8px;
   border-bottom: 2px solid #43e97b;
   text-align: center;
+}
+
+.recommend-section h3 {
+  font-size: 1.2em;
+  color: #fff;
+  margin-bottom: 20px;
+  text-align: center;
+  opacity: 0.9;
+}
+
+.recommend-section h3 .fas.fa-check {
+  color: #43e97b;
+  margin-right: 5px;
+  margin-left: 5px;
+}
+
+.rating-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.stars {
+  display: flex;
+  gap: 5px;
+}
+
+.star {
+  font-size: 20px;
+  color: rgba(255, 255, 255, 0.3);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.star.active {
+  color: #ffd700;
+  text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
+
+.star:hover {
+  transform: scale(1.2);
+}
+
+.rating-text {
+  font-size: 16px;
+  font-weight: 600;
+  opacity: 0.9;
+  color: #fff;
+}
+
+.recommend-section h3 .fas.fa-check {
+  color: #43e97b;
+  margin-right: 5px;
+  margin-left: 5px;
 }
 
 .recommend-btn-group {
