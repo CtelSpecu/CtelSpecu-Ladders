@@ -666,7 +666,7 @@ const copySubscriptionLink = async () => {
   try {
     // 检查订阅评分，如果为0则不允许复制
     if (props.rating === 0) {
-      showError('订阅已不可用，请使用免费节点或者到机场推荐自行购买');
+      showError('复制失败！订阅已不可用，请到”机场推荐“自行购买或者使用”免费节点“');
       return;
     }
     
@@ -688,7 +688,7 @@ const copySubscriptionLink = async () => {
 const importToClient = (client) => {
   // 检查订阅评分，如果为0则不允许导入
   if (props.rating === 0) {
-    showError('订阅已不可用，请使用免费节点或者到机场推荐自行购买');
+    showError('复制失败！订阅已不可用，请到”机场推荐“自行购买或者使用”免费节点“');
     return;
   }
   
