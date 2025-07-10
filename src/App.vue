@@ -76,6 +76,9 @@
       </div>
     </div>      <!-- 全局通知容器 -->
     <NotificationContainer />
+    
+    <!-- 客户端更新提醒弹窗 -->
+    <UpdateModal />
   </div>
 </template>
 
@@ -83,6 +86,7 @@
 import { ref, provide, onMounted, defineAsyncComponent } from 'vue';
 import SubscriptionCard from './components/SubscriptionCard.vue';
 import NotificationContainer from './components/NotificationContainer.vue';
+import UpdateModal from './components/UpdateModal.vue';
 // 懒加载页面组件以提高初始加载性能
 const ClientGuidePage = defineAsyncComponent(() => import('./pages/ClientGuidePage.vue'));
 const FreeNodePage = defineAsyncComponent(() => import('./pages/FreeNodePage.vue'));
