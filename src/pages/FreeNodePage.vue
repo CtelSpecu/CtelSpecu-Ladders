@@ -53,9 +53,6 @@
             <a href="https://github.com/mfuu/v2ray" target="_blank" class="free-node-link">
               GitHub - mfuu/v2ray
             </a>
-            <a href="https://github.com/ermaozi/get_subscribe" target="_blank" class="free-node-link">
-              GitHub - ermaozi/get_subscribe
-            </a>
           </div>
         </section>
 
