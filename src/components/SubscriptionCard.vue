@@ -664,6 +664,12 @@ const resetFormatted = computed(() => {
 
 const copySubscriptionLink = async () => {
   try {
+    // 检查订阅评分，如果为0则不允许复制
+    if (props.rating === 0) {
+      showError('订阅已不可用，请使用免费节点或者到机场推荐自行购买');
+      return;
+    }
+    
     await navigator.clipboard.writeText(props.subscriptionLink);
     
     // 检查是否为应急订阅
@@ -680,6 +686,12 @@ const copySubscriptionLink = async () => {
 };
 
 const importToClient = (client) => {
+  // 检查订阅评分，如果为0则不允许导入
+  if (props.rating === 0) {
+    showError('订阅已不可用，请使用免费节点或者到机场推荐自行购买');
+    return;
+  }
+  
   if (client === 'Clash') {
     window.open(`clash://install-config?url=${encodeURIComponent(props.subscriptionLink)}`, '_blank');
     showInfo(`正在导入到 ${client}...`);
