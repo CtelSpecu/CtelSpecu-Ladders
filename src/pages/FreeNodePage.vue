@@ -3,6 +3,12 @@
     <h1 class="page-title">免费节点</h1>
     <div class="free-node-content">
       <div class="free-node-grid">
+        <section class="free-node-section note-section">
+          <h2>注意事项</h2>
+          <p class="section-note">
+            免费节点资源少或者觉得免费节点不稳定的话可以考虑购买收费节点（参见<a href="#" @click.prevent="switchToRecommend" class="inline-link">机场推荐</a>）。
+          </p>
+        </section>
         <section class="free-node-section">
           <h2>免费节点</h2>
           <p class="section-description">每日更新的免费节点资源网站</p>
@@ -54,13 +60,6 @@
               GitHub - mfuu/v2ray
             </a>
           </div>
-        </section>
-
-        <section class="free-node-section note-section">
-          <h2>注意事项</h2>
-          <p class="section-note">
-            免费节点资源少或者觉得免费节点不稳定的话可以考虑购买收费节点（参见<a href="#" @click.prevent="switchToRecommend" class="inline-link">机场推荐</a>）。
-          </p>
         </section>
       </div>
     </div>
