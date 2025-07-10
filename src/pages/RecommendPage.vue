@@ -14,6 +14,7 @@
         <section class="recommend-section">
           <h2>高速、大流量</h2>
           <div class="recommend-btn-group">
+            <a href="https://cokecloud.cyou/#/register?code=wvIsDmnG" target="_blank" class="recommend-btn">CokeCloud</a>
             <a href="https://www.cutecloud.net/register?code=WUHcCLFn" target="_blank" class="recommend-btn">最萌の云CuteCloud</a>
             <a href="https://xs-us.xyz/register?code=9usLmdvb" target="_blank" class="recommend-btn">十八线小机场XSUS</a>
           </div>
