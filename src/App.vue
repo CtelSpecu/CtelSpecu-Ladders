@@ -81,8 +81,6 @@
 
 <script setup>
 import { ref, provide, onMounted, defineAsyncComponent } from 'vue';
-import DownloadCard from './components/DownloadCard.vue';
-import TutorialCard from './components/TutorialCard.vue';
 import SubscriptionCard from './components/SubscriptionCard.vue';
 import NotificationContainer from './components/NotificationContainer.vue';
 // 懒加载页面组件以提高初始加载性能
