@@ -1,6 +1,6 @@
 <template>
   <div class="free-vpn-page">
-    <h1 class="page-title">免费可用的梯子</h1>
+    <h1 class="page-title">免费可用优质VPN</h1>
     <div class="free-vpn-content">
       <div class="free-vpn-grid">        <section class="free-vpn-section">
           <h2>全平台可用</h2>
