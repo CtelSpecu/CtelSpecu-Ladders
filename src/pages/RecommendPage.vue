@@ -63,6 +63,7 @@
           <div class="recommend-btn-group">
             <a href="https://www.优信云.com/#/register?code=UJUm53s7" target="_blank" class="recommend-btn">优信云</a>
             <a href="https://3fan.3f66.net:?code=VaaANnLd" target="_blank" class="recommend-btn">三番云</a>
+            <a href="https://aff01.dgy02.com/#/register?code=0CJS9fTR" target="_blank" class="recommend-btn">大哥云</a>
             
           </div>
         </section>
@@ -83,7 +84,9 @@
           </div>
           <h3><i class="fas fa-check"></i>高速<i class="fas fa-check"></i>优质</h3>
           <div class="recommend-btn-group">
+            <a href="https://suyunti981.xyz/auth/register?code=CGXE" target="_blank" class="recommend-btn">速云梯</a>
             <a href="https://inv03.lmaff01.cc/register?aff=HlFmJcm7" target="_blank" class="recommend-btn">龙猫云机场</a>
+            <a href="https://inv02.ffaff.cc/register?aff=wacXIRos" target="_blank" class="recommend-btn">FlashFox</a>
           </div>
         </section>
 
