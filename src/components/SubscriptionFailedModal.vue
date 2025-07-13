@@ -42,7 +42,7 @@
           免费订阅
         </button>
         <button class="btn-primary" @click="navigateToRecommend">
-          机场推荐
+          购买机场
         </button>
       </div>
     </div>
