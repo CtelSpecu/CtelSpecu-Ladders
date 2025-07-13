@@ -53,6 +53,7 @@
             :reset="subscription.reset"
             :expire="subscription.expire"
             :maximum-rate="subscription.maxRate"
+            @navigate="handleNavigation"
           /></div>
       </div>
       <!-- 客户端下载页面 -->
@@ -104,6 +105,11 @@ const {
 // 提供给子组件的切换页面函数
 const setCurrentTab = (tab) => {
   currentTab.value = tab;
+};
+
+// 处理来自订阅卡片的导航事件
+const handleNavigation = (page) => {
+  currentTab.value = page;
 };
 
 // 通过provide提供给子组件

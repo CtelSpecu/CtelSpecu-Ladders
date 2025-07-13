@@ -136,19 +136,31 @@
         <span class="circle"></span>
         <svg class="arr-1" viewBox="0 0 24 24">
           <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
-        </svg>
-      </button>
+        </svg>      </button>
     </div>
   </div>
+
+  <!-- 订阅失败弹窗 -->
+  <SubscriptionFailedModal 
+    ref="subscriptionFailedModal"
+    @navigate="(page) => emit('navigate', page)"
+  />
 </template>
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue';
 import { useNotification } from '../composables/useNotification.js';
 import { useSubscriptions } from '../composables/useSubscriptions.js';
+import SubscriptionFailedModal from './SubscriptionFailedModal.vue';
 
 const { showSuccess, showError, showInfo } = useNotification();
 const { getSubscriptionRemainingTraffic, forceRefreshTrafficData } = useSubscriptions();
+
+// 失败弹窗引用
+const subscriptionFailedModal = ref(null);
+
+// 导航事件处理
+const emit = defineEmits(['navigate']);
 
 const props = defineProps({
   subscriptionName: String,
@@ -664,6 +676,12 @@ const resetFormatted = computed(() => {
 
 const copySubscriptionLink = async () => {
   try {
+    // 检查订阅评分，如果为0则显示失败弹窗
+    if (props.rating === 0) {
+      subscriptionFailedModal.value.show();
+      return;
+    }
+    
     await navigator.clipboard.writeText(props.subscriptionLink);
     
     // 检查是否为应急订阅
@@ -680,6 +698,12 @@ const copySubscriptionLink = async () => {
 };
 
 const importToClient = (client) => {
+  // 检查订阅评分，如果为0则显示失败弹窗
+  if (props.rating === 0) {
+    subscriptionFailedModal.value.show();
+    return;
+  }
+  
   if (client === 'Clash') {
     window.open(`clash://install-config?url=${encodeURIComponent(props.subscriptionLink)}`, '_blank');
     showInfo(`正在导入到 ${client}...`);
