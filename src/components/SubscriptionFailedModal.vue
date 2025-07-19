@@ -21,16 +21,16 @@
         
         <div class="features">
           <div class="feature-item">
-            <span class="feature-icon">🏆</span>
-            <span>机场推荐 - 高质量付费机场，稳定快速</span>
+            <span class="feature-icon">机场推荐</span>
+            <span><strong>不经常使用，可以购买长期流量</strong>；<br>如果经常使用，可以按月购买</span>
           </div>
           <div class="feature-item">
-            <span class="feature-icon">🆓</span>
-            <span>免费节点 - 免费体验，无需付费</span>
+            <span class="feature-icon">免费节点</span>
+            <span>免费体验，无需付费，每日更新<br>速度慢,延时高，可能有不安全</span>
           </div>
           <div class="feature-item">
-            <span class="feature-icon">📖</span>
-            <span>其他类型 - 免费可用优质VPN</span>
+            <span class="feature-icon">其他类型</span>
+            <span>免费可用的VPN<br>灵活性和可操作性没有机场灵活</span>
           </div>
         </div>
       </div>
