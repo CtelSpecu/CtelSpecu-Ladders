@@ -22,7 +22,7 @@
         <div class="features">
           <div class="feature-item">
             <span class="feature-icon">机场推荐</span>
-            <span><strong>不经常使用，可以购买长期流量</strong>；<br>如果经常使用，可以按月购买</span>
+            <span><strong class="force-bold">不经常使用，可以购买长期流量</strong>；<br>如果经常使用，可以按月购买</span>
           </div>
           <div class="feature-item">
             <span class="feature-icon">免费节点</span>
@@ -247,6 +247,10 @@ defineExpose({
   background: #e9ecef;
   color: #333;
   transform: translateY(-1px);
+}
+
+.force-bold {
+  font-weight: 700 !important;
 }
 
 @keyframes fadeIn {
