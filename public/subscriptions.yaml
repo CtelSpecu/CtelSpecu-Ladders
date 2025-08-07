@@ -20,7 +20,7 @@ subscriptions:
     traffic: 300  # 总流量 GB
     maxRate: "300Mbps"    
     expireTime: "2025-08-18"  # 流量到期时间
-    monthlyReset: 29  # 每月重置时间（日期）
+    monthlyReset: 18  # 每月重置时间（日期）
   - id: 3
     name: "应急订阅"
     # URL链接 - 用于文本框复制和导入到客户端（原始订阅链接）
