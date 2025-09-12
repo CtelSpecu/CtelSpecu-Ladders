@@ -1,11 +1,11 @@
 subscriptions:
   - id: 1
-    name: "订阅01（大流量）"
+    name: "订阅01（快游戏云大流量）"
     # URL链接 - 用于文本框复制和导入到客户端（原始订阅链接）
     url: "https://sub1.qingze-quick.top/api/v1/client/subscribe?token=a7d94f98235337631176267ab0d92cc7"
     # YAML链接 - 用于获取流量信息和功能展示（api.wcc.best展示URL）
-    yamlUrl: "https://api.wcc.best/sub?target=clash&url=ss%3A%2F%2FYWVzLTI1Ni1nY206ZGVmYXVsdA%3D%3D%40127.0.0.1%3A1080%23%E6%A2%AF%E5%AD%90%E4%B8%8B%E8%BD%BD%EF%BC%9Aladders.ctelspecu.hxcn.top%7Css%3A%2F%2FYWVzLTI1Ni1nY206ZGVmYXVsdA%3D%3D%40127.0.0.1%3A1081%23%E6%8E%A8%E8%8D%90%E4%BD%BF%E7%94%A8%E6%96%B0%E5%8A%A0%E5%9D%A1%E7%AD%89%E4%BD%8E%E5%BB%B6%E6%97%B6%E8%8A%82%E7%82%B9%7Chttps%3A%2F%2Fsub3.qingze-quick.top%2Fapi%2Fv1%2Fclient%2Fsubscribe%3Ftoken%3Da517edfee7f42705c0d7d98b634a62ad&insert=false&config=.%2Fkeep-traffic-config.ini&exclude=(%3Fi)(%E6%B0%B8%E4%B9%85%7C%E5%8F%91%E5%B8%83%E9%A1%B5%7C%E7%BD%91%E5%9D%80%7C%E7%BD%91%E7%AB%99%7C%E5%8D%B8%E8%BD%BD%7C%E6%B5%8B%E8%AF%95%7Ctest%7C%E5%AE%98%E7%BD%91%7Cwebsite%7CTG%7CTelegram%7C%E7%BE%A4%7CGroup%7C%E5%85%AC%E5%91%8A%7C%E5%B8%AE%E5%8A%A9%7C%E6%95%99%E7%A8%8B%7C%E4%B8%8B%E8%BD%BD%7C%E6%8E%A8%E5%B9%BF%7C%E9%82%80%E8%AF%B7%7C%E5%85%B3%E6%B3%A8%7C%E5%8A%A0%E5%85%A5%7C%E8%81%94%E7%B3%BB%7C%E5%A4%87%E7%94%A8%7C%E9%95%9C%E5%83%8F%7C%E8%AE%BA%E5%9D%9B%7C%E5%8D%9A%E5%AE%A2%7C%E7%A4%BE%E5%8C%BA)&include=.*&emoji=true&list=true&tfo=false&scv=true&fdn=false&expand=true&sort=false&new_name=true"
-    rating: 5
+    yamlUrl: "https://api.wcc.best/sub?target=clash&url=ss%3A%2F%2FYWVzLTI1Ni1nY206ZGVmYXVsdA%3D%3D%40127.0.0.1%3A1080%23%E6%A2%AF%E5%AD%90%E4%B8%8B%E8%BD%BD%EF%BC%9Aladders.ctelspecu.hxcn.top%7Css%3A%2F%2FYWVzLTI1Ni1nY206ZGVmYXVsdA%3D%3D%40127.0.0.1%3A1081%23%E6%8E%A8%E8%8D%90%E4%BD%BF%E7%94%A8%E6%96%B0%E5%8A%A0%E5%9D%A1%E7%AD%89%E4%BD%8E%E5%BB%B6%E6%97%B6%E8%8A%82%E7%82%B9%7Chttps%3A%2F%2Fsub1.qingze-quick.top%2Fapi%2Fv1%2Fclient%2Fsubscribe%3Ftoken%3Da7d94f98235337631176267ab0d92cc7&insert=false&config=.%2Fkeep-traffic-config.ini&exclude=(%3Fi)(%E6%B0%B8%E4%B9%85%7C%E5%8F%91%E5%B8%83%E9%A1%B5%7C%E7%BD%91%E5%9D%80%7C%E7%BD%91%E7%AB%99%7C%E5%8D%B8%E8%BD%BD%7C%E6%B5%8B%E8%AF%95%7Ctest%7C%E5%AE%98%E7%BD%91%7Cwebsite%7CTG%7CTelegram%7C%E7%BE%A4%7CGroup%7C%E5%85%AC%E5%91%8A%7C%E5%B8%AE%E5%8A%A9%7C%E6%95%99%E7%A8%8B%7C%E4%B8%8B%E8%BD%BD%7C%E6%8E%A8%E5%B9%BF%7C%E9%82%80%E8%AF%B7%7C%E5%85%B3%E6%B3%A8%7C%E5%8A%A0%E5%85%A5%7C%E8%81%94%E7%B3%BB%7C%E5%A4%87%E7%94%A8%7C%E9%95%9C%E5%83%8F%7C%E8%AE%BA%E5%9D%9B%7C%E5%8D%9A%E5%AE%A2%7C%E7%A4%BE%E5%8C%BA)&include=.*&emoji=true&list=true&tfo=false&scv=true&fdn=false&expand=true&sort=false&new_name=true"
+    rating: 3
     traffic: 488  # 总流量 GB
     maxRate: "300Mbps"    
     expireTime: "2026-07-03"
@@ -13,21 +13,21 @@ subscriptions:
   - id: 2
     name: "订阅02（𝘾𝙤𝙠𝙚𝘾𝙡𝙤𝙪𝙙）"
     # URL链接 - 用于文本框复制和导入到客户端（原始订阅链接）
-    url: "https://su.gwzxwk.com/api/v1/client/subscribe?token=7fb3d59ad375f6e540939f432f9ef7bb"
+    url: "https://su.gwzxwk.com/api/v1/client/subscribe?token=bd8f8c1d1cc0dbe99e8e18631397ce98"
     # YAML链接 - 用于获取流量信息和功能展示（api.wcc.best展示URL）
-    yamlUrl: "https://api.wcc.best/sub?target=clash&url=ss%3A%2F%2FYWVzLTI1Ni1nY206ZGVmYXVsdA%3D%3D%40127.0.0.1%3A1080%23%E6%A2%AF%E5%AD%90%E4%B8%8B%E8%BD%BD%EF%BC%9Aladders.ctelspecu.hxcn.top%7Css%3A%2F%2FYWVzLTI1Ni1nY206ZGVmYXVsdA%3D%3D%40127.0.0.1%3A1081%23%E6%8E%A8%E8%8D%90%E4%BD%BF%E7%94%A8%E6%96%B0%E5%8A%A0%E5%9D%A1%E7%AD%89%E4%BD%8E%E5%BB%B6%E6%97%B6%E8%8A%82%E7%82%B9%7Chttps%3A%2F%2Fa780j7.mikasacds.com%2F0bc1c17a450f32a9ce9d25a8e4fa1da7&insert=false&config=.%2Fkeep-traffic-config.ini&exclude=(%3Fi)(%E6%B0%B8%E4%B9%85%7C%E5%8F%91%E5%B8%83%E9%A1%B5%7C%E7%BD%91%E5%9D%80%7C%E7%BD%91%E7%AB%99%7C%E5%8D%B8%E8%BD%BD%7C%E6%B5%8B%E8%AF%95%7Ctest%7C%E5%AE%98%E7%BD%91%7Cwebsite%7CTG%7CTelegram%7C%E7%BE%A4%7CGroup%7C%E5%85%AC%E5%91%8A%7C%E5%B8%AE%E5%8A%A9%7C%E6%95%99%E7%A8%8B%7C%E4%B8%8B%E8%BD%BD%7C%E6%8E%A8%E5%B9%BF%7C%E9%82%80%E8%AF%B7%7C%E5%85%B3%E6%B3%A8%7C%E5%8A%A0%E5%85%A5%7C%E8%81%94%E7%B3%BB%7C%E5%A4%87%E7%94%A8%7C%E9%95%9C%E5%83%8F%7C%E8%AE%BA%E5%9D%9B%7C%E5%8D%9A%E5%AE%A2%7C%E7%A4%BE%E5%8C%BA)&include=.*&emoji=true&list=true&tfo=false&scv=true&fdn=false&expand=true&sort=false&new_name=true"
+    yamlUrl: "https://api.wcc.best/sub?target=clash&url=ss%3A%2F%2FYWVzLTI1Ni1nY206ZGVmYXVsdA%3D%3D%40127.0.0.1%3A1080%23%E6%A2%AF%E5%AD%90%E4%B8%8B%E8%BD%BD%EF%BC%9Aladders.ctelspecu.hxcn.top%7Css%3A%2F%2FYWVzLTI1Ni1nY206ZGVmYXVsdA%3D%3D%40127.0.0.1%3A1081%23%E6%8E%A8%E8%8D%90%E4%BD%BF%E7%94%A8%E6%96%B0%E5%8A%A0%E5%9D%A1%E7%AD%89%E4%BD%8E%E5%BB%B6%E6%97%B6%E8%8A%82%E7%82%B9%7Chttps%3A%2F%2Fsu.gwzxwk.com%2Fapi%2Fv1%2Fclient%2Fsubscribe%3Ftoken%3Dbd8f8c1d1cc0dbe99e8e18631397ce98&insert=false&config=.%2Fkeep-traffic-config.ini&exclude=(%3Fi)(%E6%B0%B8%E4%B9%85%7C%E5%8F%91%E5%B8%83%E9%A1%B5%7C%E7%BD%91%E5%9D%80%7C%E7%BD%91%E7%AB%99%7C%E5%8D%B8%E8%BD%BD%7C%E6%B5%8B%E8%AF%95%7Ctest%7C%E5%AE%98%E7%BD%91%7Cwebsite%7CTG%7CTelegram%7C%E7%BE%A4%7CGroup%7C%E5%85%AC%E5%91%8A%7C%E5%B8%AE%E5%8A%A9%7C%E6%95%99%E7%A8%8B%7C%E4%B8%8B%E8%BD%BD%7C%E6%8E%A8%E5%B9%BF%7C%E9%82%80%E8%AF%B7%7C%E5%85%B3%E6%B3%A8%7C%E5%8A%A0%E5%85%A5%7C%E8%81%94%E7%B3%BB%7C%E5%A4%87%E7%94%A8%7C%E9%95%9C%E5%83%8F%7C%E8%AE%BA%E5%9D%9B%7C%E5%8D%9A%E5%AE%A2%7C%E7%A4%BE%E5%8C%BA)&include=.*&emoji=true&list=true&tfo=false&scv=true&fdn=false&expand=true&sort=false&new_name=true"
     rating: 5
     traffic: 300  # 总流量 GB
-    maxRate: "300Mbps"    
-    expireTime: "2025-08-18"  # 流量到期时间
-    monthlyReset: 18  # 每月重置时间（日期）
+    maxRate: "500Mbps"    
+    expireTime: "2025-10-04"  # 流量到期时间
+    monthlyReset: 4  # 每月重置时间（日期）
   - id: 3
     name: "应急订阅"
     # URL链接 - 用于文本框复制和导入到客户端（原始订阅链接）
-    url: "https://sublink.cute-cloud.de/link?token=386953897ce2621b993450c7d1fcd26e&burn=5eUN2zqKU7ZdzsIc"
+    url: "https://sublink.cute-cloud.de/link?token=386953897ce2621b993450c7d1fcd26e&burn=StNuL2fiOszUwZ5L"
     # YAML链接 - 用于获取流量信息和功能展示（api.wcc.best展示URL）
-    yamlUrl: "https://api.wcc.best/sub?target=clash&url=ss%3A%2F%2FYWVzLTI1Ni1nY206ZGVmYXVsdA%3D%3D%40127.0.0.1%3A1080%23%E6%A2%AF%E5%AD%90%E4%B8%8B%E8%BD%BD%EF%BC%9Aladders.ctelspecu.hxcn.top%7Css%3A%2F%2FYWVzLTI1Ni1nY206ZGVmYXVsdA%3D%3D%40127.0.0.1%3A1081%23%E6%8E%A8%E8%8D%90%E4%BD%BF%E7%94%A8%E6%96%B0%E5%8A%A0%E5%9D%A1%E7%AD%89%E4%BD%8E%E5%BB%B6%E6%97%B6%E8%8A%82%E7%82%B9%7Chttps%3A%2F%2Fsublink.cute-cloud.de%2Flink%3Ftoken%&insert=false&config=.%2Fkeep-traffic-config.ini&exclude=(%3Fi)(%E6%B0%B8%E4%B9%85%7C%E5%8F%91%E5%B8%83%E9%A1%B5%7C%E7%BD%91%E5%9D%80%7C%E7%BD%91%E7%AB%99%7C%E5%8D%B8%E8%BD%BD%7C%E6%B5%8B%E8%AF%95%7Ctest%7C%E5%AE%98%E7%BD%91%7Cwebsite%7CTG%7CTelegram%7C%E7%BE%A4%7CGroup%7C%E5%85%AC%E5%91%8A%7C%E5%B8%AE%E5%8A%A9%7C%E6%95%99%E7%A8%8B%7C%E4%B8%8B%E8%BD%BD%7C%E6%8E%A8%E5%B9%BF%7C%E9%82%80%E8%AF%B7%7C%E5%85%B3%E6%B3%A8%7C%E5%8A%A0%E5%85%A5%7C%E8%81%94%E7%B3%BB%7C%E5%A4%87%E7%94%A8%7C%E9%95%9C%E5%83%8F%7C%E8%AE%BA%E5%9D%9B%7C%E5%8D%9A%E5%AE%A2%7C%E7%A4%BE%E5%8C%BA)&include=.*&emoji=true&list=true&tfo=false&scv=true&fdn=false&expand=true&sort=false&new_name=true"
-    rating: 0
+    yamlUrl: "https://api.wcc.best/sub?target=clash&url=ss%3A%2F%2FYWVzLTI1Ni1nY206ZGVmYXVsdA%3D%3D%40127.0.0.1%3A1080%23%E6%A2%AF%E5%AD%90%E4%B8%8B%E8%BD%BD%EF%BC%9Aladders.ctelspecu.hxcn.top%7Css%3A%2F%2FYWVzLTI1Ni1nY206ZGVmYXVsdA%3D%3D%40127.0.0.1%3A1081%23%E6%8E%A8%E8%8D%90%E4%BD%BF%E7%94%A8%E6%96%B0%E5%8A%A0%E5%9D%A1%E7%AD%89%E4%BD%8E%E5%BB%B6%E6%97%B6%E8%8A%82%E7%82%B9%7Chttps%3A%2F%2Fsublink.cute-cloud.de%2Flink%3Ftoken%3D386953897ce2621b993450c7d1fcd26e%26burn%3DStNuL2fiOszUwZ5L&insert=false&config=.%2Fkeep-traffic-config.ini&exclude=(%3Fi)(%E6%B0%B8%E4%B9%85%7C%E5%8F%91%E5%B8%83%E9%A1%B5%7C%E7%BD%91%E5%9D%80%7C%E7%BD%91%E7%AB%99%7C%E5%8D%B8%E8%BD%BD%7C%E6%B5%8B%E8%AF%95%7Ctest%7C%E5%AE%98%E7%BD%91%7Cwebsite%7CTG%7CTelegram%7C%E7%BE%A4%7CGroup%7C%E5%85%AC%E5%91%8A%7C%E5%B8%AE%E5%8A%A9%7C%E6%95%99%E7%A8%8B%7C%E4%B8%8B%E8%BD%BD%7C%E6%8E%A8%E5%B9%BF%7C%E9%82%80%E8%AF%B7%7C%E5%85%B3%E6%B3%A8%7C%E5%8A%A0%E5%85%A5%7C%E8%81%94%E7%B3%BB%7C%E5%A4%87%E7%94%A8%7C%E9%95%9C%E5%83%8F%7C%E8%AE%BA%E5%9D%9B%7C%E5%8D%9A%E5%AE%A2%7C%E7%A4%BE%E5%8C%BA)&include=.*&emoji=true&list=true&tfo=false&scv=true&fdn=false&expand=true&sort=false&new_name=true"
+    rating: 4
     traffic: 300  # 总流量 GB
     maxRate: "500Mbps"
     expireTime: "2026-03-21"
