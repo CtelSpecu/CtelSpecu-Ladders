@@ -1,6 +1,8 @@
 <template>
-  <div class="page-container">
-    <h1 class="page-title">客户端下载</h1>
+  <div class="guide-layout">
+    <div class="page-header">
+      <h1 class="page-title">客户端下载</h1>
+    </div>
     <div class="guide-content">
       <section class="guide-section">
         <h2>Windows 系统</h2>
@@ -138,144 +140,181 @@
 </template>
 
 <style scoped>
-/* 页面容器 - 简洁样式，参考可用订阅页面 */
-.page-container {
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  background: transparent;
+.guide-content {
+  padding: var(--spacing-xl);
 }
 
-/* 使用全局的 page-title 样式 */
-
 .guide-section {
-  margin-bottom: 48px;
+  margin-bottom: var(--spacing-2xl);
 }
 
 .guide-section h2 {
-  font-size: 1.5em;
-  color: #222;
-  margin-bottom: 24px;
-  padding-bottom: 8px;
-  border-bottom: 2px solid #43e97b;
-  text-shadow: 0 2px 8px rgba(255,255,255,0.15);
+  font-size: var(--font-size-xl);
+  color: var(--text-primary);
+  margin-bottom: var(--spacing-lg);
+  padding-bottom: var(--spacing-md);
+  border-bottom: 2px solid var(--text-accent);
+  font-weight: 600;
+  position: relative;
+}
+
+.guide-section h2::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--main-gradient);
+  border-radius: 2px;
 }
 
 .client-cards {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   grid-template-columns: repeat(2, 1fr);
-  gap: 24px;
+  gap: var(--spacing-lg);
   width: 100%;
 }
 
 .client-card {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border-radius: 20px;
-  padding: 30px;
-  color: white;
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+  background: var(--background-secondary);
+  border: 1px solid var(--border-primary);
+  border-radius: 16px;
+  padding: var(--spacing-xl);
+  color: var(--text-primary);
+  box-shadow: var(--soft-shadow);
   position: relative;
   overflow: hidden;
-  transition: all 0.3s ease;
+  transition: all var(--transition-normal);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 .client-card::before {
   content: '';
   position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: linear-gradient(45deg, transparent, rgba(255,255,255,0.08), transparent);
-  transform: rotate(45deg);
-  transition: all 0.6s ease;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--sub-gradient);
   opacity: 0;
-}
-
-.client-card:hover::before {
-  opacity: 1;
-  animation: shine 1.5s ease-in-out;
+  transition: opacity var(--transition-normal);
+  z-index: -1;
 }
 
 .client-card:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 25px 50px rgba(0,0,0,0.2);
+  transform: translateY(-8px);
+  box-shadow: var(--accent-shadow);
+  border-color: var(--text-accent);
 }
 
-@keyframes shine {
-  0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
-  100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+.client-card:hover::before {
+  opacity: 0.1;
 }
 
 .client-card h3 {
-  font-size: 1.25em;
-  color: #ffd700;
-  margin-bottom: 16px;
-  text-shadow: 0 2px 8px rgba(0,0,0,0.18);
+  font-size: var(--font-size-lg);
+  color: var(--text-accent);
+  margin-bottom: var(--spacing-md);
+  font-weight: 600;
 }
 
 .description {
-  color: #fff;
-  margin-bottom: 16px;
-  text-shadow: 0 1px 4px rgba(0,0,0,0.18);
+  color: var(--text-secondary);
+  margin-bottom: var(--spacing-md);
+  font-size: var(--font-size-base);
 }
 
 .action-links {
   display: flex;
-  gap: 12px;
+  gap: var(--spacing-md);
+  flex-wrap: wrap;
 }
 
 .action-links a {
   flex: 1;
-  padding: 12px 20px;
+  min-width: 140px;
+  padding: var(--spacing-md) var(--spacing-lg);
   border-radius: 12px;
   text-align: center;
   text-decoration: none;
-  transition: all 0.3s;
-  margin-bottom: 8px;
+  transition: all var(--transition-normal);
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 600;
-  font-size: 1em;
-  border: none;
+  font-size: var(--font-size-base);
+  position: relative;
+  overflow: hidden;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .download-link {
-  background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
-  color: white;
-  box-shadow: 0 4px 12px rgba(67, 233, 123, 0.08);
+  background: var(--main-gradient);
+  color: var(--text-bright);
+  box-shadow: var(--accent-shadow);
+  border: none;
+}
+
+.download-link::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.download-link:hover::before {
+  left: 100%;
 }
 
 .download-link:hover {
-  background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+  background: var(--strong-gradient);
   transform: translateY(-2px);
-  box-shadow: 0 10px 20px rgba(67, 233, 123, 0.18);
+  box-shadow: var(--sub-accent-shadow);
 }
 
 .tutorial-link {
-  background: linear-gradient(135deg, #4ecdc4, #44a08d);
-  color: white;
-  border: none;
-  font-weight: 700;
-  font-size: 1em;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 140px;
-  padding: 15px 25px;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 12px rgba(78, 205, 196, 0.08);
+  background: transparent;
+  color: var(--text-accent);
+  border: 2px solid var(--text-accent);
+  box-shadow: none;
+  background: var(--background-tertiary);
 }
 
 .tutorial-link:hover {
-  background: linear-gradient(135deg, #26d0ce, #2a9d8f);
-  color: #fff;
+  background: var(--text-accent);
+  color: var(--text-bright);
   transform: translateY(-2px);
-  box-shadow: 0 10px 20px rgba(78, 205, 196, 0.18);
+  box-shadow: var(--accent-shadow);
+}
+
+/* Enhanced link styles */
+.action-links a {
+  position: relative;
+  overflow: hidden;
+}
+
+.action-links a::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background: var(--text-bright);
+  transition: all var(--transition-normal);
+  transform: translateX(-50%);
+}
+
+.action-links a:hover::after {
+  width: 80%;
 }
 
 @media (max-width: 992px) {

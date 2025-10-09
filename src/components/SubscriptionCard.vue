@@ -713,67 +713,77 @@ const importToClient = (client) => {
 
 <style scoped>
 .subscription-card {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border-radius: 20px;
-  padding: 30px;
-  margin: 20px 0;
-  color: white;
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
+  background: var(--background-secondary);
+  border: 1px solid var(--border-primary);
+  border-radius: 16px;
+  padding: var(--spacing-xl);
+  margin: var(--spacing-md) 0;
+  color: var(--text-primary);
+  box-shadow: var(--soft-shadow);
+  transition: all var(--transition-normal);
   position: relative;
   overflow: hidden;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  animation: card-appear 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+@keyframes card-appear {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
 }
 
 .subscription-card::before {
   content: '';
   position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-  transform: rotate(45deg);
-  transition: all 0.6s ease;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--sub-gradient);
   opacity: 0;
-}
-
-.subscription-card:hover::before {
-  opacity: 1;
-  animation: shine 1.5s ease-in-out;
+  transition: opacity var(--transition-normal);
+  z-index: -1;
 }
 
 .subscription-card:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: var(--accent-shadow);
+  border-color: var(--text-accent);
 }
 
-@keyframes shine {
-  0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
-  100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+.subscription-card:hover::before {
+  opacity: 0.1;
 }
 
 .rating-container {
   display: flex;
   align-items: center;
-  gap: 15px;
-  margin-bottom: 20px;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
 }
 
 .stars {
   display: flex;
-  gap: 5px;
+  gap: var(--spacing-xs);
 }
 
 .star {
-  font-size: 18px;
-  color: rgba(255, 255, 255, 0.3);
-  transition: all 0.3s ease;
+  font-size: var(--font-size-lg);
+  color: var(--text-quaternary);
+  transition: all var(--transition-normal);
   cursor: pointer;
 }
 
 .star.active {
-  color: #ffd700;
-  text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+  color: var(--text-accent);
+  text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
 }
 
 .star:hover {
@@ -781,24 +791,26 @@ const importToClient = (client) => {
 }
 
 .rating-text {
-  font-size: 14px;
+  font-size: var(--font-size-sm);
   font-weight: 600;
-  opacity: 0.9;
+  color: var(--text-secondary);
 }
 
 h2 {
-  font-size: 28px;
+  font-size: var(--font-size-2xl);
   font-weight: 700;
-  margin: 0 0 25px 0;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  margin: 0 0 var(--spacing-xl) 0;
+  color: var(--text-primary);
 }
 
 .traffic-info {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 15px;
-  padding: 20px;
-  margin: 20px 0;
+  background: var(--background-tertiary);
+  border-radius: 12px;
+  padding: var(--spacing-lg);
+  margin: var(--spacing-lg) 0;
   backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid var(--border-secondary);
   text-align: center;
 }
 
@@ -823,19 +835,20 @@ h2 {
 }
 
 .retry-btn {
-  background: rgba(255, 255, 255, 0.2);
-  border: none;
-  border-radius: 12px;
+  background: var(--background-tertiary);
+  border: 1px solid var(--border-secondary);
+  border-radius: 8px;
   padding: 4px 8px;
   display: flex;
   align-items: center;
   gap: 4px;
   cursor: pointer;
-  transition: all 0.3s ease;
-  color: white;
+  transition: all var(--transition-normal);
+  color: var(--text-secondary);
   font-size: 11px;
   font-weight: 500;
   white-space: nowrap;
+  backdrop-filter: blur(5px);
 }
 
 .retry-btn i {
@@ -843,23 +856,29 @@ h2 {
 }
 
 .retry-btn.manual-retry {
-  background: rgba(255, 193, 7, 0.2);
+  background: rgba(255, 193, 7, 0.1);
   border: 1px solid rgba(255, 193, 7, 0.3);
+  color: var(--text-accent);
 }
 
 .retry-btn.manual-retry:hover {
-  background: rgba(255, 193, 7, 0.3);
-  transform: scale(1.05);
+  background: rgba(255, 193, 7, 0.2);
+  border-color: var(--text-accent);
+  transform: translateY(-2px);
+  box-shadow: var(--soft-shadow);
 }
 
 .retry-btn.force-refresh {
-  background: rgba(40, 167, 69, 0.2);
+  background: rgba(40, 167, 69, 0.1);
   border: 1px solid rgba(40, 167, 69, 0.3);
+  color: #4ade80;
 }
 
 .retry-btn.force-refresh:hover {
-  background: rgba(40, 167, 69, 0.3);
-  transform: scale(1.05);
+  background: rgba(40, 167, 69, 0.2);
+  border-color: #4ade80;
+  transform: translateY(-2px);
+  box-shadow: var(--soft-shadow);
 }
 
 .retry-btn:active {
@@ -1036,16 +1055,36 @@ h2 {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: rgba(255, 255, 255, 0.1);
-  padding: 15px;
+  background: var(--background-tertiary);
+  border: 1px solid var(--border-secondary);
+  padding: var(--spacing-md);
   border-radius: 12px;
   backdrop-filter: blur(5px);
-  transition: all 0.3s ease;
+  transition: all var(--transition-normal);
+  position: relative;
+  overflow: hidden;
+}
+
+.time-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.1), transparent);
+  transition: left 0.5s ease;
+}
+
+.time-item:hover::before {
+  left: 100%;
 }
 
 .time-item:hover {
-  background: rgba(255, 255, 255, 0.15);
-  transform: translateX(5px);
+  background: var(--background-trans);
+  border-color: var(--text-accent);
+  transform: translateX(8px);
+  box-shadow: var(--soft-shadow);
 }
 
 .time-label {
@@ -1159,8 +1198,9 @@ h2 {
   border: 4px solid;
   border-color: transparent;
   font-size: 16px;
-  background-color: inherit;
-  border-radius: 100px;
+  background: var(--main-gradient);
+  color: var(--text-bright);
+  border-radius: 12px;
   font-weight: 600;
   cursor: pointer;
   overflow: hidden;
@@ -1170,6 +1210,24 @@ h2 {
   max-width: 200px;
   height: 56px;
   box-sizing: border-box;
+  box-shadow: var(--accent-shadow);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.animated-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.animated-button:hover::before {
+  left: 100%;
 }
 
 .animated-button svg {
@@ -1210,6 +1268,9 @@ h2 {
 }
 
 .animated-button:hover {
+  background: var(--strong-gradient);
+  transform: translateY(-2px);
+  box-shadow: var(--sub-accent-shadow);
   box-shadow: 0 0 0 12px transparent;
   border-radius: 12px;
 }
@@ -1236,56 +1297,66 @@ h2 {
   opacity: 1;
 }
 
-/* 复制链接按钮样式 - 绿色主题 */
+/* 复制链接按钮样式 - Aurora主题 */
 .animated-button-copy {
-  color: greenyellow;
-  box-shadow: 0 0 0 2px greenyellow;
+  border: 2px solid var(--text-accent);
+  background: rgba(0, 212, 255, 0.1);
+  box-shadow: var(--accent-shadow);
 }
 
 .animated-button-copy svg {
-  fill: greenyellow;
+  fill: var(--text-accent);
 }
 
 .animated-button-copy .circle {
-  background-color: greenyellow;
+  background-color: var(--text-accent);
 }
 
 .animated-button-copy:hover {
-  color: #212121;
+  color: var(--text-bright);
+  background: rgba(0, 212, 255, 0.2);
+  border-color: var(--text-accent);
+  box-shadow: var(--sub-accent-shadow);
 }
 
 .animated-button-copy:hover svg {
-  fill: #212121;
+  fill: var(--text-bright);
 }
 
 .animated-button-copy:active {
-  box-shadow: 0 0 0 4px greenyellow;
+  transform: translateY(0px) scale(0.98);
+  box-shadow: 0 0 0 4px var(--text-accent);
 }
 
-/* 导入按钮样式 - 蓝色主题 */
+/* 导入按钮样式 - Aurora主题 */
 .animated-button-import {
-  color: #4ecdc4;
-  box-shadow: 0 0 0 2px #4ecdc4;
+  border: 2px solid var(--text-sub-accent);
+  background: rgba(255, 0, 110, 0.1);
+  box-shadow: var(--accent-shadow);
 }
 
 .animated-button-import svg {
-  fill: #4ecdc4;
+  fill: var(--text-sub-accent);
 }
 
 .animated-button-import .circle {
-  background-color: #4ecdc4;
+  background-color: var(--text-sub-accent);
 }
 
 .animated-button-import:hover {
-  color: white;
+  color: var(--text-bright);
+  background: rgba(255, 0, 110, 0.2);
+  border-color: var(--text-sub-accent);
+  box-shadow: var(--sub-accent-shadow);
 }
 
 .animated-button-import:hover svg {
-  fill: white;
+  fill: var(--text-bright);
 }
 
 .animated-button-import:active {
-  box-shadow: 0 0 0 4px #4ecdc4;
+  transform: translateY(0px) scale(0.98);
+  box-shadow: 0 0 0 4px var(--text-sub-accent);
 }
 
 @media (max-width: 768px) {

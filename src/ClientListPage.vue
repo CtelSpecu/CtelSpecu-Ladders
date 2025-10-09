@@ -213,7 +213,7 @@
   background-color: #0056b3;
   text-decoration: none;
 }
-@media (max-width: 600px) {
+@media (max-width: 768px) {
   .client-btn {
     flex: 1 1 45%;
     min-width: 120px;

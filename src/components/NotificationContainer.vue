@@ -54,28 +54,54 @@ const getIconClass = (type) => {
 <style scoped>
 .notification-container {
   position: fixed;
-  top: 20px;
-  right: 20px;
+  top: var(--spacing-xl);
+  right: var(--spacing-xl);
   z-index: 9999;
   max-width: 400px;
   width: 100%;
 }
 
 .notification-item {
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  border-radius: 12px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
-  margin-bottom: 12px;
+  background: var(--background-secondary);
+  border: 1px solid var(--border-primary);
+  border-radius: 16px;
+  box-shadow: var(--soft-shadow);
+  margin-bottom: var(--spacing-md);
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   position: relative;
+  transition: all var(--transition-normal);
+}
+
+.notification-item::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--sub-gradient);
+  opacity: 0;
+  transition: opacity var(--transition-normal);
+  z-index: -1;
+}
+
+.notification-item:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--accent-shadow);
+  border-color: var(--text-accent);
+}
+
+.notification-item:hover::before {
+  opacity: 0.1;
 }
 
 .notification-content {
   display: flex;
   align-items: flex-start;
-  padding: 16px;
-  gap: 12px;
+  padding: var(--spacing-lg);
+  gap: var(--spacing-md);
 }
 
 .notification-icon {
@@ -91,9 +117,9 @@ const getIconClass = (type) => {
 
 .notification-message {
   flex: 1;
-  font-size: 14px;
+  font-size: var(--font-size-base);
   line-height: 1.5;
-  color: white;
+  color: var(--text-primary);
   font-weight: 500;
 }
 
@@ -101,32 +127,33 @@ const getIconClass = (type) => {
   flex-shrink: 0;
   background: none;
   border: none;
-  color: white;
+  color: var(--text-secondary);
   cursor: pointer;
-  padding: 4px;
-  border-radius: 4px;
-  transition: all 0.2s ease;
-  width: 24px;
-  height: 24px;
+  padding: var(--spacing-xs);
+  border-radius: 8px;
+  transition: all var(--transition-normal);
+  width: 32px;
+  height: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .notification-close:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: var(--background-tertiary);
+  color: var(--text-primary);
 }
 
 .notification-progress {
   height: 3px;
-  background: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.1);
   overflow: hidden;
 }
 
 .notification-progress-bar {
   height: 100%;
   width: 100%;
-  background: linear-gradient(90deg, rgba(255, 255, 255, 0.4), transparent);
+  background: var(--main-gradient);
   animation: progress linear forwards;
   transform-origin: left;
 }
@@ -137,55 +164,55 @@ const getIconClass = (type) => {
 }
 
 .notification-success {
-  border-left: 4px solid #28a745;
+  border-left: 4px solid var(--text-success);
 }
 
 .notification-success .notification-icon {
-  background: rgba(40, 167, 69, 0.2);
-  color: #28a745;
+  background: rgba(34, 197, 94, 0.2);
+  color: var(--text-success);
 }
 
 .notification-success .notification-progress-bar {
-  background: #28a745;
+  background: var(--text-success);
 }
 
 .notification-error {
-  border-left: 4px solid #dc3545;
+  border-left: 4px solid var(--text-error);
 }
 
 .notification-error .notification-icon {
-  background: rgba(220, 53, 69, 0.2);
-  color: #dc3545;
+  background: rgba(239, 68, 68, 0.2);
+  color: var(--text-error);
 }
 
 .notification-error .notification-progress-bar {
-  background: #dc3545;
+  background: var(--text-error);
 }
 
 .notification-warning {
-  border-left: 4px solid #ffc107;
+  border-left: 4px solid var(--text-warning);
 }
 
 .notification-warning .notification-icon {
-  background: rgba(255, 193, 7, 0.2);
-  color: #ffc107;
+  background: rgba(251, 191, 36, 0.2);
+  color: var(--text-warning);
 }
 
 .notification-warning .notification-progress-bar {
-  background: #ffc107;
+  background: var(--text-warning);
 }
 
 .notification-info {
-  border-left: 4px solid #17a2b8;
+  border-left: 4px solid var(--text-info);
 }
 
 .notification-info .notification-icon {
-  background: rgba(23, 162, 184, 0.2);
-  color: #17a2b8;
+  background: rgba(59, 130, 246, 0.2);
+  color: var(--text-info);
 }
 
 .notification-info .notification-progress-bar {
-  background: #17a2b8;
+  background: var(--text-info);
 }
 
 /* 动画效果 */
