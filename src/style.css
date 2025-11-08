@@ -3,7 +3,7 @@
   line-height: 1.5;
   font-weight: 400;
 
-  color-scheme: dark;
+  color-scheme: dark light;
   
   /* Aurora Enhanced Dark Theme Color Palette */
   --background-primary: #0f0f0f;
@@ -131,6 +131,7 @@
   --background-backdrop: rgba(255, 255, 255, 0.9);
   --background-glass: rgba(255, 255, 255, 0.7);
   
+  --text-bright: #000000;
   --text-primary: #212529;
   --text-secondary: #495057;
   --text-tertiary: #6c757d;

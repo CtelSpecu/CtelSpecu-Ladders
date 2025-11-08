@@ -114,6 +114,7 @@ export function useTheme() {
       root.style.setProperty('--background-backdrop', 'rgba(255, 255, 255, 0.9)');
       root.style.setProperty('--background-glass', 'rgba(255, 255, 255, 0.7)');
       
+      root.style.setProperty('--text-bright', '#000000');
       root.style.setProperty('--text-primary', '#212529');
       root.style.setProperty('--text-secondary', '#495057');
       root.style.setProperty('--text-tertiary', '#6c757d');

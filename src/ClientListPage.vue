@@ -195,7 +195,7 @@
 .client-btn {
   display: inline-block;
   background-color: #007bff;
-  color: #fff;
+  color: var(--text-bright);
   border: none;
   border-radius: 5px;
   padding: 8px 18px;
