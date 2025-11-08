@@ -1129,11 +1129,11 @@ h2 {
   width: 100%;
   min-height: 120px;
   max-height: 200px;
-  background: rgba(255, 255, 255, 0.1);
-  border: 2px solid rgba(255, 255, 255, 0.2);
+  background: var(--background-trans);
+  border: 2px solid var(--border-primary);
   border-radius: 12px;
   padding: 15px;
-  color: white;
+  color: var(--text-primary);
   font-family: 'Courier New', monospace;
   font-size: 12px;
   resize: vertical;
@@ -1427,7 +1427,7 @@ h2 {
   gap: 8px;
   font-size: 1.8em;
   font-weight: 600;
-  color: #ffffff;
+  color: var(--text-bright);
   opacity: 0.8;
 }
 
