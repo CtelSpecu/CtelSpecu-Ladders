@@ -222,19 +222,18 @@ onMounted(() => {
   background: var(--background-glass);
   border: 1px solid var(--border-primary);
   box-shadow: var(--soft-shadow);
-  padding: var(--spacing-lg) var(--spacing-xl);
+  padding: var(--spacing-md) var(--spacing-lg);
   margin-bottom: var(--spacing-xl);
-  border-radius: 16px;
-  position: relative;
+  border-radius: 12px;
+  position: sticky;
+  top: var(--spacing-md);
+  z-index: 100;
   overflow: hidden;
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid var(--border-secondary);
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-wrap: wrap;
-  gap: var(--spacing-md);
   will-change: transform, filter;
   transform: translateZ(0);
 }
@@ -252,7 +251,7 @@ onMounted(() => {
 }
 
 .nav-bar:hover::before {
-  opacity: 0.1;
+  opacity: 0.05;
 }
 
 
@@ -260,15 +259,15 @@ onMounted(() => {
   max-width: 1200px;
   margin: 0 auto;
   display: flex;
-  gap: var(--spacing-xl);
+  gap: var(--spacing-sm);
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
 }
 
 .nav-links a {
-  padding: var(--spacing-sm) var(--spacing-md);
-  color: var(--text-primary);
+  padding: var(--spacing-sm) var(--spacing-lg);
+  color: var(--text-secondary);
   text-decoration: none;
   font-size: var(--font-size-sm);
   position: relative;
@@ -278,66 +277,35 @@ onMounted(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 40px;
+  min-height: 38px;
   border: 1px solid transparent;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
   text-align: center;
   line-height: 1.2;
   white-space: nowrap;
 }
 
-.nav-links a::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 0;
-  height: 0;
-  background: var(--sub-gradient);
-  border-radius: 12px;
-  opacity: 0;
-  transition: all var(--transition-normal);
-  z-index: -1;
+.nav-links a:hover {
+  color: var(--text-primary);
+  background: var(--background-tertiary);
 }
 
 .nav-links a.active {
   color: var(--text-accent);
-  border-color: var(--text-accent);
   background: rgba(0, 212, 255, 0.1);
-  box-shadow: 0 0 20px rgba(0, 212, 255, 0.2);
-}
-
-.nav-links a.active::before {
-  width: 100%;
-  height: 100%;
-  opacity: 1;
+  border-color: var(--text-accent);
+  font-weight: 600;
 }
 
 .nav-links a.active::after {
   content: '';
   position: absolute;
-  bottom: 8px;
+  bottom: 6px;
   left: 50%;
   transform: translateX(-50%);
-  width: 40px;
-  height: 3px;
-  background: var(--main-gradient);
-  border-radius: 2px;
-}
-
-.nav-links a:hover {
-  color: var(--text-accent);
-  border-color: var(--text-accent);
-  transform: translateY(-2px);
-  box-shadow: var(--soft-shadow);
-}
-
-.nav-links a:hover::before {
-  width: 100%;
-  height: 100%;
-  opacity: 1;
+  width: 20px;
+  height: 2px;
+  background: var(--text-accent);
+  border-radius: 1px;
 }
 
 /* Aurora Enhanced Page Layouts */
@@ -475,38 +443,21 @@ onMounted(() => {
 /* Aurora Enhanced Mobile Responsive Design */
 @media (max-width: 768px) {
   .nav-bar {
-    padding: var(--spacing-sm);
+    padding: var(--spacing-sm) var(--spacing-md);
     margin-bottom: var(--spacing-lg);
-    border-radius: 12px;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-  }
-
-  .nav-bar::-webkit-scrollbar {
-    display: none;
+    border-radius: 10px;
   }
 
   .nav-links {
     gap: var(--spacing-xs);
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    padding: 0 var(--spacing-sm);
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-  }
-
-  .nav-links::-webkit-scrollbar {
-    display: none;
+    flex-wrap: wrap;
+    justify-content: center;
   }
 
   .nav-links a {
     font-size: var(--font-size-xs);
     padding: var(--spacing-xs) var(--spacing-sm);
-    min-height: 36px;
-    white-space: nowrap;
+    min-height: 32px;
     border-radius: 6px;
   }
 
@@ -546,24 +497,23 @@ onMounted(() => {
   }
 
   .page-container {
-    padding: 0 var(--spacing-md);
+    padding: 0 var(--spacing-sm);
   }
 
   .nav-bar {
-    padding: var(--spacing-xs);
+    padding: var(--spacing-xs) var(--spacing-sm);
     margin-bottom: var(--spacing-md);
     border-radius: 8px;
   }
 
   .nav-links {
-    gap: var(--spacing-xs);
-    padding: 0 var(--spacing-xs);
+    gap: 4px;
   }
 
   .nav-links a {
-    font-size: var(--font-size-xs);
-    padding: var(--spacing-xs) var(--spacing-xs);
-    min-height: 32px;
+    font-size: 11px;
+    padding: 6px 8px;
+    min-height: 28px;
     border-radius: 4px;
   }
 
