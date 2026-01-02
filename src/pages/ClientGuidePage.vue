@@ -156,48 +156,71 @@
 </template>
 
 <style scoped>
+.guide-layout {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.page-header {
+  text-align: center;
+  margin-bottom: var(--spacing-xl);
+}
+
+.page-title {
+  margin: 0;
+  color: var(--text-title-h1);
+  font-size: var(--font-size-2xl);
+  font-weight: 700;
+  background: var(--main-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: var(--spacing-sm);
+}
+
+.page-subtitle {
+  color: var(--text-secondary);
+  font-size: var(--font-size-base);
+  margin: 0;
+}
+
 .guide-content {
-  padding: var(--spacing-xl);
+  padding: 0 var(--spacing-md);
 }
 
 .guide-section {
-  margin-bottom: var(--spacing-2xl);
+  margin-bottom: var(--spacing-xl);
 }
 
 .guide-section h2 {
-  font-size: var(--font-size-xl);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  font-size: var(--font-size-lg);
   color: var(--text-primary);
   margin-bottom: var(--spacing-lg);
-  padding-bottom: var(--spacing-md);
-  border-bottom: 2px solid var(--text-accent);
+  padding-bottom: var(--spacing-sm);
+  border-bottom: 2px solid var(--border-primary);
   font-weight: 600;
-  position: relative;
 }
 
-.guide-section h2::after {
-  content: '';
-  position: absolute;
-  bottom: -2px;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: var(--main-gradient);
-  border-radius: 2px;
+.section-icon {
+  font-size: 1.2em;
 }
 
 .client-cards {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   grid-template-columns: repeat(2, 1fr);
-  gap: var(--spacing-lg);
+  gap: var(--spacing-md);
   width: 100%;
 }
 
 .client-card {
   background: var(--background-secondary);
   border: 1px solid var(--border-primary);
-  border-radius: 16px;
-  padding: var(--spacing-xl);
+  border-radius: 14px;
+  padding: var(--spacing-lg);
   color: var(--text-primary);
   box-shadow: var(--soft-shadow);
   position: relative;
@@ -207,130 +230,82 @@
   -webkit-backdrop-filter: blur(10px);
 }
 
-.client-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: var(--sub-gradient);
-  opacity: 0;
-  transition: opacity var(--transition-normal);
-  z-index: -1;
-}
-
 .client-card:hover {
-  transform: translateY(-8px);
+  transform: translateY(-4px);
   box-shadow: var(--accent-shadow);
   border-color: var(--text-accent);
 }
 
-.client-card:hover::before {
-  opacity: 0.1;
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--spacing-sm);
 }
 
 .client-card h3 {
-  font-size: var(--font-size-lg);
+  font-size: var(--font-size-base);
   color: var(--text-accent);
-  margin-bottom: var(--spacing-md);
+  margin: 0;
+  font-weight: 600;
+}
+
+.recommend-badge {
+  background: var(--main-gradient);
+  color: var(--text-bright);
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: var(--font-size-xs);
   font-weight: 600;
 }
 
 .description {
   color: var(--text-secondary);
   margin-bottom: var(--spacing-md);
-  font-size: var(--font-size-base);
+  font-size: var(--font-size-sm);
 }
 
 .action-links {
   display: flex;
-  gap: var(--spacing-md);
+  gap: var(--spacing-sm);
   flex-wrap: wrap;
 }
 
 .action-links a {
   flex: 1;
-  min-width: 140px;
-  padding: var(--spacing-md) var(--spacing-lg);
-  border-radius: 12px;
+  min-width: 60px;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: 8px;
   text-align: center;
   text-decoration: none;
   transition: all var(--transition-normal);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 600;
-  font-size: var(--font-size-base);
-  position: relative;
-  overflow: hidden;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+  font-weight: 500;
+  font-size: var(--font-size-sm);
 }
 
 .download-link {
-  background: var(--main-gradient);
-  color: var(--text-bright);
-  box-shadow: var(--accent-shadow);
-  border: none;
-}
-
-.download-link::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-  transition: left 0.5s ease;
-}
-
-.download-link:hover::before {
-  left: 100%;
+  background: var(--background-tertiary);
+  color: var(--text-primary);
+  border: 1px solid var(--border-primary);
 }
 
 .download-link:hover {
-  background: var(--strong-gradient);
+  background: var(--main-gradient);
+  color: var(--text-bright);
+  border-color: transparent;
   transform: translateY(-2px);
-  box-shadow: var(--sub-accent-shadow);
 }
 
 .tutorial-link {
   background: transparent;
   color: var(--text-accent);
-  border: 2px solid var(--text-accent);
-  box-shadow: none;
-  background: var(--background-tertiary);
+  border: 1px solid var(--text-accent);
 }
 
 .tutorial-link:hover {
   background: var(--text-accent);
   color: var(--text-bright);
   transform: translateY(-2px);
-  box-shadow: var(--accent-shadow);
-}
-
-/* Enhanced link styles */
-.action-links a {
-  position: relative;
-  overflow: hidden;
-}
-
-.action-links a::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  width: 0;
-  height: 2px;
-  background: var(--text-bright);
-  transition: all var(--transition-normal);
-  transform: translateX(-50%);
-}
-
-.action-links a:hover::after {
-  width: 80%;
 }
 
 @media (max-width: 992px) {
@@ -340,27 +315,30 @@
 }
 
 @media (max-width: 768px) {
+  .guide-content {
+    padding: 0 var(--spacing-sm);
+  }
+  
   .client-card {
-    padding: 20px;
-    width: 100%;
+    padding: var(--spacing-md);
   }
 
   .action-links {
     flex-direction: column;
   }
+  
+  .action-links a {
+    min-width: 100%;
+  }
 }
 
 @media (max-width: 480px) {
-  .client-card {
-    padding: 15px;
-  }
-  
   .page-title {
-    font-size: 1.5em;
+    font-size: var(--font-size-xl);
   }
   
   .guide-section h2 {
-    font-size: 1.3em;
+    font-size: var(--font-size-base);
   }
 }
 </style>
