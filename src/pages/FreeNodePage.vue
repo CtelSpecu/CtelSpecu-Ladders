@@ -4,60 +4,73 @@
     <div class="free-node-content">
       <div class="free-node-grid">
         <section class="free-node-section note-section">
-          <h2>注意事项</h2>
+          <h2>📢 注意事项</h2>
           <p class="section-note">
-            免费节点资源少或者觉得免费节点不稳定的话可以考虑购买收费节点（参见<a href="#" @click.prevent="switchToRecommend" class="inline-link">机场推荐</a>）。
+            免费节点资源有限且稳定性较差，如需更好体验可考虑付费节点（参见<a href="#" @click.prevent="switchToRecommend" class="inline-link">机场推荐</a>）。
           </p>
         </section>
         <section class="free-node-section">
-          <h2>免费节点</h2>
-          <p class="section-description">每日更新的免费节点资源网站</p>
+          <h2>🌐 免费节点网站</h2>
+          <p class="section-description">每日更新的免费节点资源</p>
           <div class="free-node-links">
             <a href="https://www.freeclashnode.com/free-node/" target="_blank" class="free-node-link">
-              2025最新免费Clash节点，每日更新，节点资源大全 - FreeClashNode
+              <span class="link-icon">🔗</span>
+              <span class="link-text">FreeClashNode - 每日更新节点</span>
             </a>
             <a href="https://github.com/crossxx-labs/free-proxy" target="_blank" class="free-node-link">
-              GitHub - crossxx-labs/free-proxy: 提供免费clash订阅，免费ssr节点，免费trojan节点，免费vmess节点，免费hysteria2节点服务器
+              <span class="link-icon">📦</span>
+              <span class="link-text">crossxx-labs - 多协议免费订阅</span>
             </a>
             <a href="https://nodefree.net/" target="_blank" class="free-node-link">
-              NodeFree - 免费节点|网络自由工具箱
+              <span class="link-icon">🔗</span>
+              <span class="link-text">NodeFree - 网络自由工具箱</span>
             </a>
             <a href="https://github.com/Flikify/getNode" target="_blank" class="free-node-link">
-              GitHub - Flikify/getNode: 每小时更新最新的Clash、v2ray节点信息
+              <span class="link-icon">📦</span>
+              <span class="link-text">Flikify - 每小时更新节点</span>
             </a>
             <a href="https://telegeam.github.io/clashnode/" target="_blank" class="free-node-link">
-              clashnode | SSR/V2ray/Clash免费节点
+              <span class="link-icon">🔗</span>
+              <span class="link-text">ClashNode - SSR/V2ray节点</span>
             </a>
             <a href="https://clashnode.cc/free-node/" target="_blank" class="free-node-link">
-              免费节点订阅，每天更新，V2ray节点大全 - ClashNode中文网
+              <span class="link-icon">🔗</span>
+              <span class="link-text">ClashNode中文网 - 每天更新</span>
             </a>
             <a href="https://clash-free-node.github.io/" target="_blank" class="free-node-link">
-              Clash免费节点 | V2ray/Clash/SSR/VPN免费机场订阅地址持续更新，2025免费机场分享
+              <span class="link-icon">🔗</span>
+              <span class="link-text">Clash免费节点 - 机场订阅</span>
             </a>
           </div>
         </section>
 
         <section class="free-node-section">
-          <h2>GitHub资源</h2>
-          <p class="section-description">GitHub上的免费节点项目</p>
+          <h2>📂 GitHub资源</h2>
+          <p class="section-description">GitHub上的开源节点项目</p>
           <div class="free-node-links">
             <a href="https://github.com/Pawdroid/Free-servers" target="_blank" class="free-node-link">
-              GitHub - Pawdroid/Free-servers
+              <span class="link-icon">📦</span>
+              <span class="link-text">Pawdroid/Free-servers</span>
             </a>
             <a href="https://github.com/peasoft/NoMoreWalls" target="_blank" class="free-node-link">
-              GitHub - peasoft/NoMoreWalls
+              <span class="link-icon">📦</span>
+              <span class="link-text">peasoft/NoMoreWalls</span>
             </a>
             <a href="https://github.com/mahdibland/V2RayAggregator" target="_blank" class="free-node-link">
-              GitHub - mahdibland/V2RayAggregator
+              <span class="link-icon">📦</span>
+              <span class="link-text">mahdibland/V2RayAggregator</span>
             </a>
             <a href="https://github.com/w1770946466/Auto_proxy" target="_blank" class="free-node-link">
-              GitHub - w1770946466/Auto_proxy
+              <span class="link-icon">📦</span>
+              <span class="link-text">w1770946466/Auto_proxy</span>
             </a>
             <a href="https://github.com/ermaozi/get_subscribe" target="_blank" class="free-node-link">
-              GitHub - ermaozi/get_subscribe
+              <span class="link-icon">📦</span>
+              <span class="link-text">ermaozi/get_subscribe</span>
             </a>
             <a href="https://github.com/mfuu/v2ray" target="_blank" class="free-node-link">
-              GitHub - mfuu/v2ray
+              <span class="link-icon">📦</span>
+              <span class="link-text">mfuu/v2ray</span>
             </a>
           </div>
         </section>
@@ -169,27 +182,38 @@ const switchToRecommend = () => {
 }
 
 .free-node-links {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: var(--spacing-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
 }
 
 .free-node-link {
   display: flex;
   align-items: center;
-  height: 100%;
+  gap: var(--spacing-sm);
   background: var(--background-tertiary);
   color: var(--text-primary);
   border: 1px solid var(--border-primary);
-  border-radius: 12px;
-  padding: var(--spacing-lg);
+  border-radius: 10px;
+  padding: var(--spacing-md) var(--spacing-lg);
   text-decoration: none;
   transition: all var(--transition-normal);
   font-size: var(--font-size-base);
   font-weight: 500;
   position: relative;
   overflow: hidden;
-  line-height: 1.5;
+}
+
+.link-icon {
+  flex-shrink: 0;
+  font-size: 1.1em;
+}
+
+.link-text {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .free-node-link::before {
@@ -210,7 +234,7 @@ const switchToRecommend = () => {
 .free-node-link:hover {
   background: var(--background-trans);
   border-color: var(--text-accent);
-  transform: translateY(-2px);
+  transform: translateX(4px);
   box-shadow: var(--soft-shadow);
 }
 
@@ -265,7 +289,11 @@ const switchToRecommend = () => {
     padding: var(--spacing-lg);
   }
   .free-node-link {
-    padding: var(--spacing-md);
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-size: var(--font-size-sm);
+  }
+  .link-icon {
+    font-size: 1em;
   }
 }
 </style>
