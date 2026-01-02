@@ -9,10 +9,11 @@
           rel="noopener noreferrer"
           class="brand-link"
         >
-          星空之镜 (CtelSpecu)
+          ✨ 星空之镜 (CtelSpecu)
         </a>
+        <span class="divider">|</span>
         <span class="powered-by">
-          由Vite和Vue.js强力驱动
+          ⚡ Vite + Vue.js
         </span>
       </div>
     </div>
@@ -73,6 +74,11 @@
   font-weight: 500;
 }
 
+.divider {
+  color: var(--text-quaternary);
+  font-weight: 300;
+}
+
 .brand-link {
   color: var(--text-accent);
   text-decoration: none;
@@ -110,8 +116,7 @@
 .powered-by {
   color: var(--text-tertiary);
   font-size: var(--font-size-xs);
-  font-style: italic;
-  opacity: 0.8;
+  opacity: 0.9;
 }
 
 /* 移动端适配 */
@@ -132,6 +137,10 @@
   
   .brand-link {
     padding: var(--spacing-xs);
+  }
+  
+  .divider {
+    display: none;
   }
 }
 
