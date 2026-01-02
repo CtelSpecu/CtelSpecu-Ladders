@@ -28,7 +28,7 @@
 .app-footer {
   width: 100%;
   margin-top: auto;
-  padding: var(--spacing-xl) 0;
+  padding: var(--spacing-lg) 0;
   background: var(--background-glass);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
@@ -67,6 +67,7 @@
   justify-content: center;
   font-size: var(--font-size-sm);
   color: var(--text-secondary);
+  line-height: 1.35;
 }
 
 .copyright {
@@ -122,7 +123,7 @@
 /* 移动端适配 */
 @media (max-width: 768px) {
   .app-footer {
-    padding: var(--spacing-lg) 0;
+    padding: var(--spacing-md) 0;
   }
   
   .footer-content {
@@ -146,7 +147,7 @@
 
 @media (max-width: 480px) {
   .app-footer {
-    padding: var(--spacing-md) 0;
+    padding: var(--spacing-sm) 0;
   }
   
   .footer-content {
@@ -156,7 +157,7 @@
   .footer-text {
     flex-direction: column;
     gap: var(--spacing-xs);
-    line-height: 1.4;
+    line-height: 1.3;
   }
   
   .powered-by {
