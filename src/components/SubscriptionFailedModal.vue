@@ -11,26 +11,35 @@
       
       <div class="modal-body">
         <div class="warning-icon">
-          <svg width="64" height="64" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <svg width="56" height="56" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M12 9V13M12 17H12.01M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="#667eea" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </div>
           <p class="warning-message">
-          抱歉，该订阅已不可用。为了获得更好的网络体验，建议您选择以下方案：
+          该订阅已失效，建议选择以下方案获取更好体验：
         </p>
         
         <div class="features">
           <div class="feature-item">
-            <span class="feature-icon">机场推荐</span>
-            <span><strong class="force-bold">不经常使用，可以购买长期流量</strong>；<br>如果经常使用，可以按月购买</span>
+            <span class="feature-icon">🚀</span>
+            <div class="feature-content">
+              <span class="feature-title">机场推荐</span>
+              <span class="feature-desc">稳定高速，按需购买流量或月付</span>
+            </div>
           </div>
           <div class="feature-item">
-            <span class="feature-icon">免费节点</span>
-            <span>免费体验，无需付费，每日更新<br>速度慢,延时高，可能有不安全</span>
+            <span class="feature-icon">🆓</span>
+            <div class="feature-content">
+              <span class="feature-title">免费节点</span>
+              <span class="feature-desc">每日更新，免费体验（速度较慢）</span>
+            </div>
           </div>
           <div class="feature-item">
-            <span class="feature-icon">其他类型</span>
-            <span>免费可用的VPN<br>灵活性和可操作性没有机场灵活</span>
+            <span class="feature-icon">🔐</span>
+            <div class="feature-content">
+              <span class="feature-title">免费VPN</span>
+              <span class="feature-desc">简单易用，灵活性稍低</span>
+            </div>
           </div>
         </div>
       </div>
@@ -166,32 +175,32 @@ defineExpose({
 }
 
 .warning-icon {
-  margin-bottom: 24px;
-  animation: bounce 2s infinite;
+  margin-bottom: 20px;
+  animation: pulse 2s infinite;
 }
 
 .warning-message {
   font-size: var(--font-size-base);
   color: var(--text-primary);
-  margin-bottom: var(--spacing-2xl);
+  margin-bottom: var(--spacing-xl);
   line-height: 1.6;
 }
 
 .features {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-md);
-  margin-bottom: var(--spacing-xl);
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-lg);
 }
 
 .feature-item {
   display: flex;
   align-items: center;
   gap: var(--spacing-md);
-  padding: var(--spacing-md) var(--spacing-lg);
+  padding: var(--spacing-md);
   background: var(--background-tertiary);
-  border-radius: 12px;
-  border-left: 4px solid var(--text-accent);
+  border-radius: 10px;
+  border-left: 3px solid var(--text-accent);
   transition: all var(--transition-normal);
 }
 
@@ -201,8 +210,25 @@ defineExpose({
 }
 
 .feature-icon {
-  font-size: var(--font-size-lg);
-  color: var(--text-accent);
+  font-size: var(--font-size-xl);
+  flex-shrink: 0;
+}
+
+.feature-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.feature-title {
+  font-weight: 600;
+  color: var(--text-primary);
+  font-size: var(--font-size-sm);
+}
+
+.feature-desc {
+  color: var(--text-secondary);
+  font-size: var(--font-size-xs);
 }
 
 .modal-footer {
@@ -278,10 +304,6 @@ defineExpose({
   transform: translateY(-1px);
 }
 
-.force-bold {
-  font-weight: 700 !important;
-}
-
 @keyframes fadeIn {
   from {
     opacity: 0;
@@ -302,15 +324,14 @@ defineExpose({
   }
 }
 
-@keyframes bounce {
-  0%, 20%, 50%, 80%, 100% {
-    transform: translateY(0);
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
   }
-  40% {
-    transform: translateY(-8px);
-  }
-  60% {
-    transform: translateY(-4px);
+  50% {
+    transform: scale(1.05);
+    opacity: 0.8;
   }
 }
 
