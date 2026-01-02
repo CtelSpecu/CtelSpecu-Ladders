@@ -107,17 +107,19 @@ watch(dontShowAgain, (newValue) => {
   align-items: center;
   z-index: 1000;
   animation: fadeIn 0.3s ease-out;
+  padding: var(--spacing-md);
+  box-sizing: border-box;
 }
 
 .modal-content {
   background: var(--background-secondary);
   border: 1px solid var(--border-primary);
-  border-radius: 20px;
+  border-radius: 16px;
   padding: 0;
-  max-width: 500px;
-  width: 90%;
-  max-height: 90vh;
-  overflow: hidden;
+  max-width: 420px;
+  width: 100%;
+  max-height: calc(100vh - 32px);
+  overflow-y: auto;
   box-shadow: 
     0 20px 40px rgba(0, 0, 0, 0.4),
     0 0 0 1px rgba(255, 255, 255, 0.1);
@@ -133,7 +135,7 @@ watch(dontShowAgain, (newValue) => {
   top: 0;
   left: 0;
   right: 0;
-  height: 4px;
+  height: 3px;
   background: var(--main-gradient);
 }
 
@@ -141,13 +143,13 @@ watch(dontShowAgain, (newValue) => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: var(--spacing-xl) var(--spacing-2xl) var(--spacing-lg);
+  padding: var(--spacing-md) var(--spacing-lg);
   border-bottom: 1px solid var(--border-primary);
 }
 
 .modal-title {
   margin: 0;
-  font-size: var(--font-size-xl);
+  font-size: var(--font-size-lg);
   font-weight: 700;
   background: var(--main-gradient);
   -webkit-background-clip: text;
@@ -159,13 +161,19 @@ watch(dontShowAgain, (newValue) => {
   background: none;
   border: none;
   cursor: pointer;
-  padding: var(--spacing-md);
+  padding: var(--spacing-sm);
   border-radius: 50%;
   color: var(--text-secondary);
   transition: all var(--transition-normal);
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
+}
+
+.close-btn svg {
+  width: 20px;
+  height: 20px;
 }
 
 .close-btn:hover {
@@ -175,38 +183,43 @@ watch(dontShowAgain, (newValue) => {
 }
 
 .modal-body {
-  padding: var(--spacing-2xl);
+  padding: var(--spacing-lg);
   text-align: center;
 }
 
 .update-icon {
-  margin-bottom: 24px;
+  margin-bottom: var(--spacing-md);
+}
+
+.update-icon svg {
+  width: 48px;
+  height: 48px;
   animation: bounce 2s infinite;
 }
 
 .update-message {
-  font-size: var(--font-size-base);
+  font-size: var(--font-size-sm);
   color: var(--text-primary);
-  margin-bottom: var(--spacing-2xl);
-  line-height: 1.6;
+  margin-bottom: var(--spacing-md);
+  line-height: 1.5;
 }
 
 .features {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-md);
-  margin-bottom: var(--spacing-xl);
+  gap: var(--spacing-sm);
 }
 
 .feature-item {
   display: flex;
   align-items: center;
-  gap: var(--spacing-md);
-  padding: var(--spacing-md) var(--spacing-lg);
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
   background: var(--background-tertiary);
-  border-radius: 12px;
-  border-left: 4px solid var(--text-accent);
+  border-radius: 8px;
+  border-left: 3px solid var(--text-accent);
   transition: all var(--transition-normal);
+  font-size: var(--font-size-sm);
 }
 
 .feature-item:hover {
@@ -215,31 +228,34 @@ watch(dontShowAgain, (newValue) => {
 }
 
 .feature-icon {
-  font-size: var(--font-size-lg);
+  font-size: var(--font-size-base);
   color: var(--text-accent);
+  flex-shrink: 0;
 }
 
 .modal-footer {
   display: flex;
-  gap: var(--spacing-md);
-  padding: 0 var(--spacing-2xl) var(--spacing-xl);
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md) var(--spacing-lg);
 }
 
 .btn-primary, .btn-secondary {
   flex: 1;
-  padding: var(--spacing-md) var(--spacing-lg);
+  padding: var(--spacing-sm) var(--spacing-md);
   border: none;
-  border-radius: 12px;
-  font-size: var(--font-size-base);
+  border-radius: 8px;
+  font-size: var(--font-size-sm);
   font-weight: 600;
   cursor: pointer;
   text-decoration: none;
   text-align: center;
   transition: all var(--transition-normal);
-  display: inline-block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   position: relative;
   overflow: hidden;
-  min-height: 48px;
+  min-height: 40px;
 }
 
 .btn-primary {
@@ -282,17 +298,16 @@ watch(dontShowAgain, (newValue) => {
 }
 
 .modal-bottom {
-  padding: 0 var(--spacing-2xl) var(--spacing-2xl);
+  padding: var(--spacing-sm) var(--spacing-lg) var(--spacing-md);
   border-top: 1px solid var(--border-primary);
-  padding-top: var(--spacing-lg);
 }
 
 .checkbox-container {
   display: flex;
   align-items: center;
-  gap: var(--spacing-md);
+  gap: var(--spacing-sm);
   cursor: pointer;
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-xs);
   color: var(--text-secondary);
   justify-content: center;
 }
@@ -302,12 +317,13 @@ watch(dontShowAgain, (newValue) => {
 }
 
 .checkmark {
-  width: 20px;
-  height: 20px;
+  width: 16px;
+  height: 16px;
   border: 2px solid var(--border-primary);
   border-radius: 4px;
   position: relative;
   transition: all var(--transition-normal);
+  flex-shrink: 0;
 }
 
 .checkbox-container input[type="checkbox"]:checked + .checkmark {
@@ -318,8 +334,8 @@ watch(dontShowAgain, (newValue) => {
 .checkbox-container input[type="checkbox"]:checked + .checkmark::after {
   content: '';
   position: absolute;
-  left: 6px;
-  top: 2px;
+  left: 4px;
+  top: 1px;
   width: 4px;
   height: 8px;
   border: solid white;
@@ -360,29 +376,75 @@ watch(dontShowAgain, (newValue) => {
 }
 
 @media (max-width: 768px) {
+  .modal-overlay {
+    padding: var(--spacing-sm);
+  }
+  
   .modal-content {
-    width: 95%;
-    margin: var(--spacing-lg);
+    max-height: calc(100vh - 16px);
   }
   
-  .modal-header,
-  .modal-body,
-  .modal-footer,
-  .modal-bottom {
-    padding-left: var(--spacing-lg);
-    padding-right: var(--spacing-lg);
+  .modal-header {
+    padding: var(--spacing-sm) var(--spacing-md);
   }
   
-  .modal-footer {
-    flex-direction: column;
+  .modal-title {
+    font-size: var(--font-size-base);
+  }
+  
+  .modal-body {
+    padding: var(--spacing-md);
+  }
+  
+  .update-icon svg {
+    width: 40px;
+    height: 40px;
+  }
+  
+  .update-message {
+    font-size: var(--font-size-xs);
   }
   
   .features {
-    gap: var(--spacing-sm);
+    gap: var(--spacing-xs);
   }
   
   .feature-item {
-    padding: var(--spacing-md);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    font-size: var(--font-size-xs);
+  }
+  
+  .modal-footer {
+    padding: var(--spacing-sm) var(--spacing-md);
+    gap: var(--spacing-xs);
+  }
+  
+  .btn-primary, .btn-secondary {
+    min-height: 36px;
+    font-size: var(--font-size-xs);
+    padding: var(--spacing-xs) var(--spacing-sm);
+  }
+  
+  .modal-bottom {
+    padding: var(--spacing-xs) var(--spacing-md) var(--spacing-sm);
+  }
+}
+
+@media (max-height: 600px) {
+  .modal-content {
+    max-height: calc(100vh - 16px);
+  }
+  
+  .update-icon {
+    display: none;
+  }
+  
+  .modal-body {
+    padding: var(--spacing-sm) var(--spacing-md);
+  }
+  
+  .update-message {
+    margin-bottom: var(--spacing-sm);
   }
 }
 </style>
