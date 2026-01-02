@@ -5,9 +5,14 @@
       <ThemeToggle />
     </div>
     
-    <!-- 顶部导航栏 -->
-    <nav class="nav-bar">
+    <!-- 顶部导航栏 (非主页时显示) -->
+    <nav class="nav-bar" v-if="currentTab !== 'home'">
       <div class="nav-links">
+        <a
+          href="#"
+          :class="{ active: currentTab === 'home' }"
+          @click.prevent="currentTab = 'home'"
+        >🏠 首页</a>
         <a
           href="#"
           :class="{ active: currentTab === 'sub' }"
@@ -27,12 +32,13 @@
           href="#"
           :class="{ active: currentTab === 'recommend' }"
           @click.prevent="currentTab = 'recommend'"
-        >机场推荐</a>        <a
+        >机场推荐</a>
+        <a
           href="#"
           :class="{ active: currentTab === 'freevpn' }"
           @click.prevent="currentTab = 'freevpn'"
         >其他类型</a>
-          <a
+        <a
           href="https://sub.ctelspecu.hxcn.top"
           target="_blank"
         >订阅转换</a>
@@ -41,8 +47,90 @@
 
     <!-- 主内容区 -->
     <div class="page-container">
+      <!-- 主页导航卡片 -->
+      <div v-if="currentTab === 'home'" class="home-page fade-in-scale">
+        <div class="home-header">
+          <h1 class="home-title">
+            <span class="title-icon">✨</span>
+            <span class="title-text">星空之镜</span>
+          </h1>
+          <p class="home-subtitle">CtelSpecu Ladders - 您的网络自由导航站</p>
+        </div>
+        
+        <div class="nav-cards">
+          <div class="nav-card" @click="currentTab = 'sub'">
+            <div class="card-icon">📡</div>
+            <div class="card-content">
+              <h3>共享订阅</h3>
+              <p>免费可用的代理订阅链接，一键导入即可使用，定期更新维护</p>
+            </div>
+            <div class="card-arrow">→</div>
+          </div>
+          
+          <div class="nav-card" @click="currentTab = 'guide'">
+            <div class="card-icon">📥</div>
+            <div class="card-content">
+              <h3>客户端下载</h3>
+              <p>各平台代理客户端推荐与下载，附带详细使用教程</p>
+            </div>
+            <div class="card-arrow">→</div>
+          </div>
+          
+          <div class="nav-card" @click="currentTab = 'freenode'">
+            <div class="card-icon">🆓</div>
+            <div class="card-content">
+              <h3>免费节点</h3>
+              <p>每日更新的免费节点资源汇总，来自各大分享站点</p>
+            </div>
+            <div class="card-arrow">→</div>
+          </div>
+          
+          <div class="nav-card" @click="currentTab = 'recommend'">
+            <div class="card-icon">🚀</div>
+            <div class="card-content">
+              <h3>机场推荐</h3>
+              <p>精选优质付费机场服务商，稳定高速的上网体验</p>
+            </div>
+            <div class="card-arrow">→</div>
+          </div>
+          
+          <div class="nav-card" @click="currentTab = 'freevpn'">
+            <div class="card-icon">🔐</div>
+            <div class="card-content">
+              <h3>免费VPN</h3>
+              <p>免费可用的VPN应用推荐，简单易用无需配置</p>
+            </div>
+            <div class="card-arrow">→</div>
+          </div>
+          
+          <a class="nav-card external" href="https://sub.ctelspecu.hxcn.top" target="_blank">
+            <div class="card-icon">🔄</div>
+            <div class="card-content">
+              <h3>订阅转换</h3>
+              <p>将订阅链接转换为不同客户端支持的格式</p>
+            </div>
+            <div class="card-arrow">↗</div>
+          </a>
+        </div>
+        
+        <div class="home-tips">
+          <div class="tip-item">
+            <span class="tip-icon">💡</span>
+            <span class="tip-text">新手建议：先下载客户端，再使用共享订阅</span>
+          </div>
+          <div class="tip-item">
+            <span class="tip-icon">⚡</span>
+            <span class="tip-text">追求稳定：推荐选择机场推荐中的付费服务</span>
+          </div>
+          <div class="tip-item">
+            <span class="tip-icon">🎯</span>
+            <span class="tip-text">共享订阅用着不错？可在机场推荐自行购买，更安全、稳定、快速</span>
+          </div>
+        </div>
+      </div>
+
       <!-- 可用订阅页面 -->
-      <div v-if="currentTab === 'sub'" class="subscription-page fade-in-scale">
+      <div v-else-if="currentTab === 'sub'" class="subscription-page fade-in-scale">
         <!-- 页面标题 -->
         <div class="page-header">
           <h1 class="page-title">共享订阅</h1>
@@ -81,10 +169,6 @@
       <div v-else-if="currentTab === 'freevpn'" class="freevpn-layout slide-in-left">
         <FreeVpnPage />
       </div>
-      <!-- 默认页面 -->
-      <div v-else class="recommend-layout fade-in-up">
-        <RecommendPage />
-      </div>
     </div>
     <!-- 全局通知容器 -->
     <NotificationContainer />
@@ -112,7 +196,7 @@ const FreeVpnPage = defineAsyncComponent(() => import('./pages/FreeVpnPage.vue')
 import { useSubscriptions } from './composables/useSubscriptions.js';
 import { useTheme } from './composables/useTheme.js';
 
-const currentTab = ref('sub');
+const currentTab = ref('home');
 
 // 使用主题管理composable
 const { 
@@ -146,6 +230,242 @@ onMounted(() => {
 </script>
 
 <style scoped>
+/* 主页样式 */
+.home-page {
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: var(--spacing-xl);
+}
+
+.home-header {
+  text-align: center;
+  margin-bottom: var(--spacing-2xl);
+}
+
+.home-title {
+  margin: 0;
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: var(--spacing-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-md);
+}
+
+.home-title .title-icon {
+  font-size: 1.2em;
+  animation: float 3s ease-in-out infinite;
+}
+
+.home-title .title-text {
+  background: var(--main-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+.home-subtitle {
+  color: var(--text-secondary);
+  font-size: var(--font-size-lg);
+  margin: 0;
+}
+
+.nav-cards {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-2xl);
+}
+
+.nav-card {
+  background: var(--background-secondary);
+  border: 1px solid var(--border-primary);
+  border-radius: 16px;
+  padding: var(--spacing-xl);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-lg);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  position: relative;
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+}
+
+.nav-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--main-gradient);
+  opacity: 0;
+  transition: opacity var(--transition-normal);
+}
+
+.nav-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--accent-shadow);
+  border-color: var(--text-accent);
+}
+
+.nav-card:hover::before {
+  opacity: 1;
+}
+
+.nav-card:active {
+  transform: translateY(-2px);
+}
+
+.card-icon {
+  font-size: 2.5rem;
+  flex-shrink: 0;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--background-tertiary);
+  border-radius: 14px;
+}
+
+.card-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.card-content h3 {
+  margin: 0 0 var(--spacing-xs) 0;
+  font-size: var(--font-size-lg);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.card-content p {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.card-arrow {
+  font-size: var(--font-size-xl);
+  color: var(--text-tertiary);
+  transition: all var(--transition-normal);
+  flex-shrink: 0;
+}
+
+.nav-card:hover .card-arrow {
+  color: var(--text-accent);
+  transform: translateX(4px);
+}
+
+.nav-card.external .card-arrow {
+  font-size: var(--font-size-lg);
+}
+
+.home-tips {
+  background: var(--background-secondary);
+  border: 1px solid var(--border-primary);
+  border-radius: 12px;
+  padding: var(--spacing-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.tip-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-sm) 0;
+}
+
+.tip-icon {
+  font-size: var(--font-size-lg);
+}
+
+.tip-text {
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+@media (max-width: 768px) {
+  .home-page {
+    padding: var(--spacing-lg);
+  }
+  
+  .home-title {
+    font-size: 1.8rem;
+  }
+  
+  .home-subtitle {
+    font-size: var(--font-size-base);
+  }
+  
+  .nav-cards {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+  }
+  
+  .nav-card {
+    padding: var(--spacing-lg);
+  }
+  
+  .card-icon {
+    font-size: 2rem;
+    width: 50px;
+    height: 50px;
+  }
+  
+  .card-content h3 {
+    font-size: var(--font-size-base);
+  }
+  
+  .card-content p {
+    font-size: var(--font-size-xs);
+  }
+}
+
+@media (max-width: 480px) {
+  .home-title {
+    font-size: 1.5rem;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+  }
+  
+  .nav-card {
+    padding: var(--spacing-md);
+    gap: var(--spacing-md);
+  }
+  
+  .card-icon {
+    font-size: 1.5rem;
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+  }
+  
+  .home-tips {
+    padding: var(--spacing-md);
+  }
+  
+  .tip-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-xs);
+  }
+}
+
 .app-container {
   min-height: 100vh;
   background: transparent;
