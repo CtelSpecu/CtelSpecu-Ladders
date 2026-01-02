@@ -1,132 +1,148 @@
 <template>
   <div class="guide-layout">
     <div class="page-header">
-      <h1 class="page-title">客户端下载</h1>
+      <h1 class="page-title">📥 客户端下载</h1>
+      <p class="page-subtitle">选择适合您系统的代理客户端</p>
     </div>
     <div class="guide-content">
       <section class="guide-section">
-        <h2>Windows 系统</h2>
+        <h2><span class="section-icon">🪟</span> Windows 系统</h2>
         <div class="client-cards">
           <div class="client-card">
-            <h3>Clash Verge Rev</h3>
-            <p class="description">推荐指数：⭐⭐⭐⭐⭐</p>
-
+            <div class="card-header">
+              <h3>Clash Verge Rev</h3>
+              <span class="recommend-badge">推荐</span>
+            </div>
+            <p class="description">⭐⭐⭐⭐⭐ 功能强大，界面美观</p>
             <div class="action-links">
               <a href="https://github.com/Clash-Verge-rev/clash-verge-rev/releases" target="_blank" class="download-link">Github</a>
-              <a href="https://clashcn.com/clash-verge-rev-official" target="_blank" class="download-link">Clash中文网</a>
-              <a href="https://getclashvergerev.org/download.html" target="_blank" class="download-link">镜像下载</a>
-              <a href="https://8mkhkm.mikasadocs.com/tutorials/windows/clash-verge/" target="_blank" class="tutorial-link">使用教程</a>
+              <a href="https://clashcn.com/clash-verge-rev-official" target="_blank" class="download-link">中文网</a>
+              <a href="https://getclashvergerev.org/download.html" target="_blank" class="download-link">镜像</a>
+              <a href="https://8mkhkm.mikasadocs.com/tutorials/windows/clash-verge/" target="_blank" class="tutorial-link">教程</a>
             </div>
           </div>
           <div class="client-card">
-            <h3>v2rayN</h3>
-            <p class="description">推荐指数：⭐⭐⭐⭐</p>
-
+            <div class="card-header">
+              <h3>v2rayN</h3>
+            </div>
+            <p class="description">⭐⭐⭐⭐ 轻量简洁，易于上手</p>
             <div class="action-links">
               <a href="https://github.com/2dust/v2rayN/releases" target="_blank" class="download-link">Github</a>
-              <a href="https://5s63qp.mikasadocs.com/tutorials/windows/v2rayn6/" target="_blank" class="tutorial-link">使用教程</a>
+              <a href="https://5s63qp.mikasadocs.com/tutorials/windows/v2rayn6/" target="_blank" class="tutorial-link">教程</a>
             </div>
           </div>
         </div>
       </section>
 
-
-
       <section class="guide-section">
-        <h2>Android 系统</h2>
+        <h2><span class="section-icon">🤖</span> Android 系统</h2>
         <div class="client-cards">
           <div class="client-card">
-            <h3>Clash Meta for Android</h3>
-            <p class="description">推荐指数：⭐⭐⭐⭐⭐</p>
-
+            <div class="card-header">
+              <h3>Clash Meta for Android</h3>
+              <span class="recommend-badge">推荐</span>
+            </div>
+            <p class="description">⭐⭐⭐⭐⭐ 安卓最佳选择</p>
             <div class="action-links">
               <a href="https://github.com/MetaCubeX/ClashMetaForAndroid/releases" target="_blank" class="download-link">Github</a>
-              <a href="https://clashcn.com/clash-meta-for-android" target="_blank" class="download-link">Clash中文网</a>
-              <a href="https://8mkhkm.mikasadocs.com/tutorials/android/clash-meta-for-android/" target="_blank" class="tutorial-link">使用教程</a>
+              <a href="https://clashcn.com/clash-meta-for-android" target="_blank" class="download-link">中文网</a>
+              <a href="https://8mkhkm.mikasadocs.com/tutorials/android/clash-meta-for-android/" target="_blank" class="tutorial-link">教程</a>
             </div>
           </div>
           <div class="client-card">
-            <h3>v2rayNG</h3>
-            <p class="description">推荐指数：⭐⭐⭐⭐</p>
-
+            <div class="card-header">
+              <h3>v2rayNG</h3>
+            </div>
+            <p class="description">⭐⭐⭐⭐ 轻量级客户端</p>
             <div class="action-links">
               <a href="https://github.com/2dust/v2rayNG/releases" target="_blank" class="download-link">Github</a>
-              <a href="https://v2rayn.org" target="_blank" class="tutorial-link">使用教程</a>
+              <a href="https://v2rayn.org" target="_blank" class="tutorial-link">教程</a>
             </div>
           </div>
         </div>
       </section>
 
       <section class="guide-section">
-        <h2>iOS 系统</h2>
+        <h2><span class="section-icon">🍎</span> iOS 系统</h2>
         <div class="client-cards">
           <div class="client-card">
-            <h3>Shadowrocket</h3>
-            <p class="description">推荐指数：⭐⭐⭐⭐⭐</p>
-
+            <div class="card-header">
+              <h3>Shadowrocket</h3>
+              <span class="recommend-badge">推荐</span>
+            </div>
+            <p class="description">⭐⭐⭐⭐⭐ 小火箭，稳定可靠</p>
             <div class="action-links">
               <a href="https://apps.apple.com/us/app/shadowrocket/id932747118" target="_blank" class="download-link">App Store</a>
-              <a href="https://8mkhkm.mikasadocs.com/tutorials/ios/shadowrocket/" target="_blank" class="tutorial-link">使用教程</a>
+              <a href="https://8mkhkm.mikasadocs.com/tutorials/ios/shadowrocket/" target="_blank" class="tutorial-link">教程</a>
             </div>
           </div>
           <div class="client-card">
-            <h3>Stash</h3>
-            <p class="description">推荐指数：⭐⭐⭐⭐</p>
-
+            <div class="card-header">
+              <h3>Stash</h3>
+            </div>
+            <p class="description">⭐⭐⭐⭐ 功能丰富的代理工具</p>
             <div class="action-links">
               <a href="https://apps.apple.com/us/app/stash-rule-based-proxy/id1596063349" target="_blank" class="download-link">App Store</a>
-              <a href="https://stash.wiki" target="_blank" class="tutorial-link">使用教程</a>
+              <a href="https://stash.wiki" target="_blank" class="tutorial-link">教程</a>
             </div>
           </div>
         </div>
       </section>
 
       <section class="guide-section">
-        <h2>Linux 系统</h2>
+        <h2><span class="section-icon">🐧</span> Linux 系统</h2>
         <div class="client-cards">
           <div class="client-card">
-            <h3>Clash Verge Rev</h3>
-            <p class="description">推荐指数：⭐⭐⭐⭐⭐</p>
-
+            <div class="card-header">
+              <h3>Clash Verge Rev</h3>
+              <span class="recommend-badge">推荐</span>
+            </div>
+            <p class="description">⭐⭐⭐⭐⭐ 跨平台GUI客户端</p>
             <div class="action-links">
               <a href="https://github.com/Clash-Verge-rev/clash-verge-rev/releases" target="_blank" class="download-link">Github</a>
-              <a href="https://clashcn.com/clash-verge-rev-official" target="_blank" class="download-link">Clash中文网</a>
-              <a href="https://getclashvergerev.org/download.html" target="_blank" class="download-link">镜像下载</a>
-              <a href="https://8mkhkm.mikasadocs.com/tutorials/linux/clash-verge/" target="_blank" class="tutorial-link">使用教程</a>
+              <a href="https://clashcn.com/clash-verge-rev-official" target="_blank" class="download-link">中文网</a>
+              <a href="https://getclashvergerev.org/download.html" target="_blank" class="download-link">镜像</a>
+              <a href="https://8mkhkm.mikasadocs.com/tutorials/linux/clash-verge/" target="_blank" class="tutorial-link">教程</a>
             </div>
           </div>
           <div class="client-card">
-            <h3>v2rayA</h3>
-            <p class="description">推荐指数：⭐⭐⭐⭐⭐</p>
-
+            <div class="card-header">
+              <h3>v2rayA</h3>
+              <span class="recommend-badge">推荐</span>
+            </div>
+            <p class="description">⭐⭐⭐⭐⭐ Web界面管理</p>
             <div class="action-links">
               <a href="https://github.com/v2rayA/v2rayA/releases" target="_blank" class="download-link">Github</a>
-              <a href="https://v2raya.org" target="_blank" class="tutorial-link">使用教程</a>
+              <a href="https://v2raya.org" target="_blank" class="tutorial-link">教程</a>
             </div>
           </div>
         </div>
       </section>
+
       <section class="guide-section">
-        <h2>MacOS 系统</h2>
+        <h2><span class="section-icon">🍏</span> MacOS 系统</h2>
         <div class="client-cards">
           <div class="client-card">
-            <h3>Clash Verge Rev</h3>
-            <p class="description">推荐指数：⭐⭐⭐⭐⭐</p>
-
+            <div class="card-header">
+              <h3>Clash Verge Rev</h3>
+              <span class="recommend-badge">推荐</span>
+            </div>
+            <p class="description">⭐⭐⭐⭐⭐ Mac最佳体验</p>
             <div class="action-links">
               <a href="https://github.com/Clash-Verge-rev/clash-verge-rev/releases" target="_blank" class="download-link">Github</a>
-              <a href="https://clashcn.com/clash-verge-rev-official" target="_blank" class="download-link">Clash中文网</a>
-              <a href="https://getclashvergerev.org/download.html" target="_blank" class="download-link">镜像下载</a>
-              <a href="https://8mkhkm.mikasadocs.com/tutorials/macos/clash-verge/" target="_blank" class="tutorial-link">使用教程</a>
+              <a href="https://clashcn.com/clash-verge-rev-official" target="_blank" class="download-link">中文网</a>
+              <a href="https://getclashvergerev.org/download.html" target="_blank" class="download-link">镜像</a>
+              <a href="https://8mkhkm.mikasadocs.com/tutorials/macos/clash-verge/" target="_blank" class="tutorial-link">教程</a>
             </div>
           </div>
           <div class="client-card">
-            <h3>v2rayN</h3>
-            <p class="description">推荐指数：⭐⭐⭐⭐</p>
-
+            <div class="card-header">
+              <h3>v2rayN</h3>
+            </div>
+            <p class="description">⭐⭐⭐⭐ 跨平台支持</p>
             <div class="action-links">
               <a href="https://github.com/2dust/v2rayN/releases" target="_blank" class="download-link">Github</a>
-              <a href="https://iqrclj.mikasadocs.com/tutorials/macos/v2rayN7/" target="_blank" class="tutorial-link">使用教程</a>
+              <a href="https://iqrclj.mikasadocs.com/tutorials/macos/v2rayN7/" target="_blank" class="tutorial-link">教程</a>
             </div>
           </div>
         </div>
