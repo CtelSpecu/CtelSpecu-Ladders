@@ -21,9 +21,8 @@ export function useTheme() {
       if (savedTheme !== null) {
         isDark.value = savedTheme === 'dark';
       } else {
-        // 2. 检查系统偏好（仅在本地没有存储时）
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-        isDark.value = prefersDark;
+        // 2. 默认使用深色模式（不再检查系统偏好）
+        isDark.value = true;
       }
       
       // 3. 应用主题
