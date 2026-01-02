@@ -287,15 +287,39 @@ const tvClients = [
   font-weight: 500;
 }
 
+.client-section h3:first-of-type,
+.platform-group:first-child h3 {
+  margin-top: 0;
+}
+
+.platform-group {
+  margin-bottom: var(--spacing-md);
+}
+
+.platform-group:last-child {
+  margin-bottom: 0;
+}
+
+.platform-group:last-child .client-btn-group {
+  margin-bottom: 0;
+}
+
 .section-description {
   color: var(--text-secondary);
   margin-bottom: var(--spacing-md);
   line-height: 1.6;
 }
 
+.intro-section {
+  border-left: 4px solid var(--text-accent);
+}
+
+.intro-section .section-description:last-child {
+  margin-bottom: 0;
+}
+
 .table-wrapper {
   overflow-x: auto;
-  margin-bottom: var(--spacing-lg);
   border-radius: 8px;
   border: 1px solid var(--border-primary);
 }
@@ -337,9 +361,9 @@ td a:hover {
 
 .client-btn-group {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: var(--spacing-md);
-  margin-bottom: var(--spacing-lg);
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-md);
 }
 
 .client-btn {
@@ -350,14 +374,15 @@ td a:hover {
   color: var(--text-primary);
   border: 1px solid var(--border-primary);
   border-radius: 8px;
-  padding: 12px 16px;
+  padding: 10px 14px;
   text-decoration: none;
   transition: all var(--transition-normal);
-  font-size: var(--font-size-base);
+  font-size: var(--font-size-sm);
   font-weight: 500;
   text-align: center;
   position: relative;
   overflow: hidden;
+  white-space: nowrap;
 }
 
 .client-btn:hover {
@@ -386,11 +411,47 @@ td a:hover {
 
 @media (max-width: 768px) {
   .client-section {
-    padding: var(--spacing-lg);
+    padding: var(--spacing-md);
+  }
+  
+  .client-section h2 {
+    font-size: var(--font-size-base);
+    margin-bottom: var(--spacing-md);
+  }
+  
+  .client-section h3 {
+    font-size: var(--font-size-sm);
+    margin-top: var(--spacing-md);
+    margin-bottom: var(--spacing-sm);
   }
   
   .client-btn-group {
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: var(--spacing-xs);
+  }
+  
+  .client-btn {
+    padding: 8px 10px;
+    font-size: var(--font-size-xs);
+  }
+  
+  .recommend-tag {
+    font-size: 0.7em;
+  }
+  
+  th, td {
+    padding: 8px;
+    font-size: var(--font-size-sm);
+  }
+}
+
+@media (max-width: 480px) {
+  .page-title {
+    font-size: var(--font-size-xl);
+  }
+  
+  .client-btn-group {
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 </style>
