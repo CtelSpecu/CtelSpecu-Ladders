@@ -240,7 +240,7 @@ onMounted(() => {
 
 .home-header {
   text-align: center;
-  margin-bottom: var(--spacing-2xl);
+  margin-bottom: var(--spacing-xl);
 }
 
 .home-title {
@@ -280,18 +280,18 @@ onMounted(() => {
 .nav-cards {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: var(--spacing-lg);
-  margin-bottom: var(--spacing-2xl);
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-xl);
 }
 
 .nav-card {
   background: var(--background-secondary);
   border: 1px solid var(--border-primary);
   border-radius: 16px;
-  padding: var(--spacing-xl);
+  padding: var(--spacing-lg);
   display: flex;
   align-items: center;
-  gap: var(--spacing-lg);
+  gap: var(--spacing-md);
   cursor: pointer;
   transition: all var(--transition-normal);
   position: relative;
@@ -329,8 +329,8 @@ onMounted(() => {
 .card-icon {
   font-size: 2.5rem;
   flex-shrink: 0;
-  width: 60px;
-  height: 60px;
+  width: 56px;
+  height: 56px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -354,7 +354,7 @@ onMounted(() => {
   margin: 0;
   font-size: var(--font-size-sm);
   color: var(--text-secondary);
-  line-height: 1.5;
+  line-height: 1.45;
 }
 
 .card-arrow {
@@ -377,7 +377,7 @@ onMounted(() => {
   background: var(--background-secondary);
   border: 1px solid var(--border-primary);
   border-radius: 12px;
-  padding: var(--spacing-lg);
+  padding: var(--spacing-md);
   display: flex;
   flex-direction: column;
   gap: var(--spacing-sm);
@@ -386,8 +386,8 @@ onMounted(() => {
 .tip-item {
   display: flex;
   align-items: center;
-  gap: var(--spacing-md);
-  padding: var(--spacing-sm) 0;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-xs) 0;
 }
 
 .tip-icon {
