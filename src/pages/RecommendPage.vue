@@ -20,7 +20,9 @@
           <h3><i class="fas fa-check"></i>高速<i class="fas fa-check"></i>稳定<i class="fas fa-check"></i>IP纯净（推荐）</h3>
           <div class="recommend-btn-group">
             <a href="https://a.mikasass.pro/signup?referralCode=A9ti5mtf" target="_blank" class="recommend-btn">Mikasa</a>
-            <a href="https://mojie.kim/register?aff=r3JESYAG" target="_blank" class="recommend-btn">魔戒</a>
+            <a href="https://www.优信云.com/#/register?code=UJUm53s7" target="_blank" class="recommend-btn">优信云</a>
+            <a href="https://www.cutecloud.net/register?code=WUHcCLFn" target="_blank" class="recommend-btn">最萌の云CuteCloud</a>
+            
           </div>
         </section>
 
@@ -41,55 +43,10 @@
           <h3><i class="fas fa-check"></i>高速<i class="fas fa-check"></i>大流量<i class="fas fa-check"></i>性价比</h3>
           <div class="recommend-btn-group">
             <a href="https://cokecloud.cyou/#/register?code=wvIsDmnG" target="_blank" class="recommend-btn">CokeCloud</a>
-            <a href="https://www.cutecloud.net/register?code=WUHcCLFn" target="_blank" class="recommend-btn">最萌の云CuteCloud</a>
+            <a href="https://mojie.kim/register?aff=r3JESYAG" target="_blank" class="recommend-btn">魔戒</a>
             <a href="https://xs-us.xyz/register?code=9usLmdvb" target="_blank" class="recommend-btn">十八线小机场XSUS</a>
           </div>
         </section>
-        <section class="recommend-section">
-          <div class="rating-container">
-            <div class="stars">
-              <i v-for="i in 5" 
-                 :key="i" 
-                 class="star" 
-                 :class="{ 
-                   'fas fa-star active': i <= 4,
-                   'far fa-star': i > 4
-                 }">
-              </i>
-            </div>
-            <span class="rating-text">4/5 推荐</span>
-          </div>
-          <h3><i class="fas fa-check"></i>高速<i class="fas fa-check"></i>优质<i class="fas fa-check"></i>IP纯净</h3>
-          <div class="recommend-btn-group">
-            <a href="https://www.优信云.com/#/register?code=UJUm53s7" target="_blank" class="recommend-btn">优信云</a>
-            <a href="https://3fan.3f66.net:?code=VaaANnLd" target="_blank" class="recommend-btn">三番云</a>
-            <a href="https://aff01.dgy02.com/#/register?code=0CJS9fTR" target="_blank" class="recommend-btn">大哥云</a>
-            
-          </div>
-        </section>
-
-        <section class="recommend-section">
-          <div class="rating-container">
-            <div class="stars">
-              <i v-for="i in 5" 
-                 :key="i" 
-                 class="star" 
-                 :class="{ 
-                   'fas fa-star active': i <= 3,
-                   'far fa-star': i > 3
-                 }">
-              </i>
-            </div>
-            <span class="rating-text">3/5 推荐</span>
-          </div>
-          <h3><i class="fas fa-check"></i>高速<i class="fas fa-check"></i>优质</h3>
-          <div class="recommend-btn-group">
-            <a href="https://suyunti981.xyz/auth/register?code=CGXE" target="_blank" class="recommend-btn">速云梯</a>
-            <a href="https://inv03.lmaff01.cc/register?aff=HlFmJcm7" target="_blank" class="recommend-btn">龙猫云机场</a>
-            <a href="https://inv02.ffaff.cc/register?aff=wacXIRos" target="_blank" class="recommend-btn">FlashFox</a>
-          </div>
-        </section>
-
         <section class="recommend-section">
           <div class="rating-container">
             <div class="stars">
