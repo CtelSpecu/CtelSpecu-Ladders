@@ -1,7 +1,7 @@
 <template>
   <div class="guide-layout">
     <div class="page-header">
-      <h1 class="page-title">📥 客户端下载</h1>
+      <h1 class="page-title"><span class="title-icon">📥</span> <span class="title-text">客户端下载</span></h1>
       <p class="page-subtitle">选择适合您系统的代理客户端</p>
     </div>
     <div class="guide-content">
@@ -169,14 +169,27 @@
 
 .page-title {
   margin: 0;
-  color: var(--text-title-h1);
   font-size: var(--font-size-2xl);
   font-weight: 700;
+  margin-bottom: var(--spacing-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+}
+
+.title-icon {
+  font-size: 1.2em;
+  -webkit-text-fill-color: initial;
+  background: none;
+}
+
+.title-text {
+  color: var(--text-title-h1);
   background: var(--main-gradient);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  margin-bottom: var(--spacing-sm);
 }
 
 .page-subtitle {
