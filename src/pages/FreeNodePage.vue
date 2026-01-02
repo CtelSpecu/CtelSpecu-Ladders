@@ -1,6 +1,6 @@
 <template>
   <div class="free-node-page">
-    <h1 class="page-title">免费节点</h1>
+    <h1 class="page-title"><span class="title-icon">🆓</span> <span class="title-text">免费节点</span></h1>
     <div class="free-node-content">
       <div class="free-node-grid">
         <section class="free-node-section note-section">
@@ -102,15 +102,28 @@ const switchToRecommend = () => {
 
 .page-title {
   margin: 0;
-  color: var(--text-title-h1);
   font-size: var(--font-size-2xl);
   font-weight: 700;
+  text-align: center;
+  margin-bottom: var(--spacing-xl);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+}
+
+.title-icon {
+  font-size: 1.2em;
+  -webkit-text-fill-color: initial;
+  background: none;
+}
+
+.title-text {
+  color: var(--text-title-h1);
   background: var(--main-gradient);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  text-align: center;
-  margin-bottom: var(--spacing-xl);
 }
 
 .free-node-grid {
