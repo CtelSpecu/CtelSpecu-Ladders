@@ -1,6 +1,6 @@
 <template>
   <div class="recommend-page">
-    <h1 class="page-title">🚀 机场推荐</h1>
+    <h1 class="page-title"><span class="title-icon">🚀</span> <span class="title-text">机场推荐</span></h1>
     <p class="page-subtitle">精选优质服务商，稳定高速的网络体验</p>
     <div class="recommend-content">
       <div class="recommend-grid">
@@ -112,15 +112,28 @@
 
 .page-title {
   margin: 0;
-  color: var(--text-title-h1);
   font-size: var(--font-size-2xl);
   font-weight: 700;
+  text-align: center;
+  margin-bottom: var(--spacing-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+}
+
+.title-icon {
+  font-size: 1.2em;
+  -webkit-text-fill-color: initial;
+  background: none;
+}
+
+.title-text {
+  color: var(--text-title-h1);
   background: var(--main-gradient);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  text-align: center;
-  margin-bottom: var(--spacing-sm);
 }
 
 .page-subtitle {
