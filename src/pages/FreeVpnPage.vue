@@ -1,9 +1,9 @@
 <template>
   <div class="free-vpn-page">
-    <h1 class="page-title">免费可用优质VPN</h1>
+    <h1 class="page-title"><span class="title-icon">🔐</span> <span class="title-text">免费VPN推荐</span></h1>
     <div class="free-vpn-content">
       <div class="free-vpn-grid">        <section class="free-vpn-section">
-          <h2>全平台可用</h2>
+          <h2><span class="section-icon">🌍</span> 全平台可用</h2>
           <div class="free-vpn-btn-group">            <div class="vpn-item">
               <a href="https://china-letsvpn.com/" target="_blank" class="free-vpn-btn">
                 LetsVPN
@@ -56,7 +56,7 @@
         </section>
 
         <section class="free-vpn-section">
-          <h2>移动端应用</h2>
+          <h2><span class="section-icon">📱</span> 移动端应用</h2>
           <div class="free-vpn-btn-group">            <div class="vpn-item">
               <a href="https://apps.apple.com/us/app/pandavpn-lite-最好最快無限流量的-vpn/id1466932207?l=zh" target="_blank" class="free-vpn-btn">
                 PandaVPN Lite (iOS)
@@ -97,15 +97,34 @@
 
 .page-title {
   margin: 0;
-  color: var(--text-title-h1);
   font-size: var(--font-size-2xl);
   font-weight: 700;
+  text-align: center;
+  margin-bottom: var(--spacing-xl);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+}
+
+.title-icon {
+  font-size: 1.2em;
+  -webkit-text-fill-color: initial;
+  background: none;
+}
+
+.title-text {
+  color: var(--text-title-h1);
   background: var(--main-gradient);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  text-align: center;
-  margin-bottom: var(--spacing-xl);
+}
+
+.section-icon {
+  -webkit-text-fill-color: initial;
+  background: none;
+  margin-right: var(--spacing-xs);
 }
 
 .free-vpn-grid {
