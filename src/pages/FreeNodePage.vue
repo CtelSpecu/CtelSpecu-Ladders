@@ -107,6 +107,16 @@ const switchToRecommend = () => {
   width: 100%;
 }
 
+@media (min-width: 1024px) {
+  .free-node-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  
+  .note-section {
+    grid-column: 1 / -1;
+  }
+}
+
 .free-node-section {
   background: var(--background-secondary);
   border: 1px solid var(--border-primary);
@@ -159,13 +169,15 @@ const switchToRecommend = () => {
 }
 
 .free-node-links {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: var(--spacing-md);
 }
 
 .free-node-link {
-  display: block;
+  display: flex;
+  align-items: center;
+  height: 100%;
   background: var(--background-tertiary);
   color: var(--text-primary);
   border: 1px solid var(--border-primary);
@@ -177,6 +189,7 @@ const switchToRecommend = () => {
   font-weight: 500;
   position: relative;
   overflow: hidden;
+  line-height: 1.5;
 }
 
 .free-node-link::before {
@@ -205,6 +218,15 @@ const switchToRecommend = () => {
   background: var(--background-tertiary);
   border-left: 4px solid var(--text-sub-accent);
   border: 1px solid var(--border-primary);
+  padding: var(--spacing-lg);
+}
+
+.note-section h2 {
+  font-size: var(--font-size-lg);
+  margin-bottom: var(--spacing-sm);
+  border-bottom: none;
+  padding-bottom: 0;
+  color: var(--text-sub-accent);
 }
 
 .section-note {
