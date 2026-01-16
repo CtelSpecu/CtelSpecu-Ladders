@@ -11,32 +11,37 @@
         <a
           href="#"
           :class="{ active: currentTab === 'home' }"
-          @click.prevent="currentTab = 'home'"
-        >🏠 首页</a>
+          @click.prevent="navigate('home')"
+        ><VueIcon class="nav-icon" icon="house" aria-label="首页" /> 首页</a>
         <a
           href="#"
           :class="{ active: currentTab === 'sub' }"
-          @click.prevent="currentTab = 'sub'"
+          @click.prevent="navigate('sub')"
         >共享订阅</a>
         <a
           href="#"
           :class="{ active: currentTab === 'guide' }"
-          @click.prevent="currentTab = 'guide'"
+          @click.prevent="navigate('guide')"
         >客户端下载</a>
         <a
           href="#"
+          :class="{ active: currentTab === 'client-category' }"
+          @click.prevent="navigate('client-category')"
+        >客户端分类</a>
+        <a
+          href="#"
           :class="{ active: currentTab === 'freenode' }"
-          @click.prevent="currentTab = 'freenode'"
+          @click.prevent="navigate('freenode')"
         >免费节点</a>
         <a
           href="#"
           :class="{ active: currentTab === 'recommend' }"
-          @click.prevent="currentTab = 'recommend'"
+          @click.prevent="navigate('recommend')"
         >机场推荐</a>
         <a
           href="#"
           :class="{ active: currentTab === 'freevpn' }"
-          @click.prevent="currentTab = 'freevpn'"
+          @click.prevent="navigate('freevpn')"
         >其他类型</a>
         <a
           href="https://sub.ctelspecu.hxcn.top"
@@ -51,79 +56,88 @@
       <div v-if="currentTab === 'home'" class="home-page fade-in-scale">
         <div class="home-header">
           <h1 class="home-title">
-            <span class="title-icon">✨</span>
+            <VueIcon class="title-icon" icon="star" aria-label="星空之镜" />
             <span class="title-text">星空之镜</span>
           </h1>
           <p class="home-subtitle">CtelSpecu Ladders - 您的网络自由导航站</p>
         </div>
         
         <div class="nav-cards">
-          <div class="nav-card" @click="currentTab = 'sub'">
-            <div class="card-icon">📡</div>
+          <div class="nav-card" @click="navigate('sub')">
+            <div class="card-icon"><VueIcon icon="link" aria-label="共享订阅" /></div>
             <div class="card-content">
               <h3>共享订阅</h3>
               <p>免费可用的代理订阅链接，一键导入即可使用，定期更新维护</p>
             </div>
-            <div class="card-arrow">→</div>
+            <div class="card-arrow"><VueIcon icon="arrow-right" aria-label="进入" /></div>
           </div>
           
-          <div class="nav-card" @click="currentTab = 'guide'">
-            <div class="card-icon">📥</div>
+          <div class="nav-card" @click="navigate('guide')">
+            <div class="card-icon"><VueIcon icon="download" aria-label="客户端下载" /></div>
             <div class="card-content">
               <h3>客户端下载</h3>
               <p>各平台代理客户端推荐与下载，附带详细使用教程</p>
             </div>
-            <div class="card-arrow">→</div>
+            <div class="card-arrow"><VueIcon icon="arrow-right" aria-label="进入" /></div>
+          </div>
+
+          <div class="nav-card" @click="navigate('client-category')">
+            <div class="card-icon"><VueIcon icon="layer-group" aria-label="客户端分类" /></div>
+            <div class="card-content">
+              <h3>客户端分类</h3>
+              <p>按 Clash / V2Ray 分类对比，查看不同客户端支持的系统与下载渠道</p>
+            </div>
+            <div class="card-arrow"><VueIcon icon="arrow-right" aria-label="进入" /></div>
           </div>
           
-          <div class="nav-card" @click="currentTab = 'freenode'">
-            <div class="card-icon">🆓</div>
+          <div class="nav-card" @click="navigate('freenode')">
+            <div class="card-icon"><VueIcon icon="wifi" aria-label="免费节点" /></div>
             <div class="card-content">
               <h3>免费节点</h3>
               <p>每日更新的免费节点资源汇总，来自各大分享站点</p>
             </div>
-            <div class="card-arrow">→</div>
+            <div class="card-arrow"><VueIcon icon="arrow-right" aria-label="进入" /></div>
           </div>
           
-          <div class="nav-card" @click="currentTab = 'recommend'">
-            <div class="card-icon">🚀</div>
+          <div class="nav-card" @click="navigate('recommend')">
+            <div class="card-icon"><VueIcon icon="rocket" aria-label="机场推荐" /></div>
             <div class="card-content">
               <h3>机场推荐</h3>
               <p>精选优质付费机场服务商，稳定高速的上网体验</p>
             </div>
-            <div class="card-arrow">→</div>
+            <div class="card-arrow"><VueIcon icon="arrow-right" aria-label="进入" /></div>
           </div>
           
-          <div class="nav-card" @click="currentTab = 'freevpn'">
-            <div class="card-icon">🔐</div>
+          <div class="nav-card" @click="navigate('freevpn')">
+            <div class="card-icon"><VueIcon icon="lock" aria-label="免费VPN" /></div>
             <div class="card-content">
               <h3>免费VPN</h3>
               <p>免费可用的VPN应用推荐，简单易用无需配置</p>
             </div>
-            <div class="card-arrow">→</div>
+            <div class="card-arrow"><VueIcon icon="arrow-right" aria-label="进入" /></div>
           </div>
           
           <a class="nav-card external" href="https://sub.ctelspecu.hxcn.top" target="_blank">
-            <div class="card-icon">🔄</div>
+            <div class="card-icon"><VueIcon icon="arrows-rotate" aria-label="订阅转换" /></div>
             <div class="card-content">
               <h3>订阅转换</h3>
               <p>将订阅链接转换为不同客户端支持的格式</p>
             </div>
-            <div class="card-arrow">↗</div>
+            <div class="card-arrow"><VueIcon icon="arrow-up-right-from-square" aria-label="新窗口打开" /></div>
           </a>
         </div>
         
         <div class="home-tips">
           <div class="tip-item">
-            <span class="tip-icon">💡</span>
+            <span class="tip-icon"><VueIcon icon="lightbulb" aria-label="提示" /></span>
             <span class="tip-text">新手建议：先下载客户端，再使用共享订阅</span>
           </div>
           <div class="tip-item">
-            <span class="tip-icon">⚡</span>
+            <span class="tip-icon"><VueIcon icon="bolt" aria-label="提示" /></span>
             <span class="tip-text">追求稳定：推荐选择机场推荐中的付费服务</span>
           </div>
           <div class="tip-item">
-            <span class="tip-icon">🎯</span>
+            <span class="tip-icon"><VueIcon icon="bullseye" aria-label="提示" /></span>
             <span class="tip-text">共享订阅用着不错？可在机场推荐自行购买，更安全、稳定、快速</span>
           </div>
         </div>
@@ -155,7 +169,11 @@
       </div>
       <!-- 客户端下载页面 -->
       <div v-else-if="currentTab === 'guide'" class="guide-layout slide-in-left">
-        <ClientGuidePage />
+        <ClientGuidePage :initial-os="guideOs" />
+      </div>
+      <!-- 客户端分类页面 -->
+      <div v-else-if="currentTab === 'client-category'" class="guide-layout slide-in-left">
+        <ClientCategoryPage />
       </div>
       <!-- 免费节点页面 -->
       <div v-else-if="currentTab === 'freenode'" class="freenode-layout slide-in-right">
@@ -174,7 +192,7 @@
     <NotificationContainer />
     
     <!-- 客户端更新提醒弹窗 -->
-    <UpdateModal />
+    <UpdateModal v-if="currentTab === 'home'" />
     
     <!-- 页脚 -->
     <AppFooter />
@@ -188,8 +206,10 @@ import NotificationContainer from './components/NotificationContainer.vue';
 import UpdateModal from './components/UpdateModal.vue';
 import ThemeToggle from './components/ThemeToggle.vue';
 import AppFooter from './components/AppFooter.vue';
+import VueIcon from './components/VueIcon.vue';
 // 懒加载页面组件以提高初始加载性能
 const ClientGuidePage = defineAsyncComponent(() => import('./pages/ClientGuidePage.vue'));
+const ClientCategoryPage = defineAsyncComponent(() => import('./pages/ClientCategoryPage.vue'));
 const FreeNodePage = defineAsyncComponent(() => import('./pages/FreeNodePage.vue'));
 const RecommendPage = defineAsyncComponent(() => import('./pages/RecommendPage.vue'));
 const FreeVpnPage = defineAsyncComponent(() => import('./pages/FreeVpnPage.vue'));
@@ -197,6 +217,7 @@ import { useSubscriptions } from './composables/useSubscriptions.js';
 import { useTheme } from './composables/useTheme.js';
 
 const currentTab = ref('home');
+const guideOs = ref('');
 
 // 使用主题管理composable
 const { 
@@ -211,21 +232,100 @@ const {
 } = useSubscriptions();
 
 // 提供给子组件的切换页面函数
-const setCurrentTab = (tab) => {
-  currentTab.value = tab;
+const TAB_PATH = {
+  home: '',
+  sub: 'subscriptions',
+  guide: 'clients',
+  'client-category': 'clients/categories',
+  freenode: 'free-nodes',
+  recommend: 'recommend',
+  freevpn: 'other',
 };
+
+const PATH_TAB = Object.entries(TAB_PATH).reduce((acc, [tab, path]) => {
+  acc[path] = tab;
+  return acc;
+}, {});
+
+function buildHash(tab, params = {}) {
+  const path = TAB_PATH[tab] ?? '';
+  const query = new URLSearchParams();
+  if (tab === 'guide' && params.os) query.set('os', params.os);
+  const qs = query.toString();
+  return `#/${path}${qs ? `?${qs}` : ''}`;
+}
+
+function parseHash() {
+  const raw = window.location.hash || '#/';
+  const cleaned = raw.replace(/^#\/?/, '');
+  const [pathPart, queryPart] = cleaned.split('?');
+  const path = (pathPart || '').replace(/\/+$/, '');
+  const tab = PATH_TAB[path] ?? 'home';
+  const params = new URLSearchParams(queryPart || '');
+  return { tab, os: params.get('os') || '' };
+}
+
+function trackUmami(tab, params = {}) {
+  const umami = window.umami;
+  if (!umami) return;
+
+  const urlPath = `/${TAB_PATH[tab] ?? ''}`;
+  const url = tab === 'guide' && params.os ? `${urlPath}?os=${params.os}` : urlPath;
+
+  try {
+    if (typeof umami.trackView === 'function') {
+      umami.trackView(url);
+      return;
+    }
+    if (typeof umami.track === 'function') {
+      umami.track('navigate', { url, tab, ...(params.os ? { os: params.os } : {}) });
+    }
+  } catch {
+    // ignore
+  }
+}
+
+function navigate(tab, params = {}) {
+  if (tab === 'guide') {
+    guideOs.value = params.os || guideOs.value || '';
+  } else {
+    guideOs.value = '';
+  }
+
+  currentTab.value = tab;
+  const hash = buildHash(tab, params);
+  history.pushState({ tab, ...params }, '', hash);
+  trackUmami(tab, params);
+}
+
+const setCurrentTab = (tab) => navigate(tab);
 
 // 处理来自订阅卡片的导航事件
 const handleNavigation = (page) => {
-  currentTab.value = page;
+  navigate(page);
 };
 
 // 通过provide提供给子组件
 provide('setCurrentTab', setCurrentTab);
+provide('navigate', navigate);
 
 // 组件挂载时的初始化
 onMounted(() => {
   console.log('订阅数据已加载:', subscriptions.value);
+
+  const { tab, os } = parseHash();
+  if (tab === 'guide' && os) {
+    guideOs.value = os;
+  }
+  currentTab.value = tab;
+  trackUmami(tab, tab === 'guide' ? { os } : {});
+
+  window.addEventListener('popstate', () => {
+    const parsed = parseHash();
+    guideOs.value = parsed.tab === 'guide' ? parsed.os : '';
+    currentTab.value = parsed.tab;
+    trackUmami(parsed.tab, parsed.tab === 'guide' ? { os: parsed.os } : {});
+  });
 });
 </script>
 
