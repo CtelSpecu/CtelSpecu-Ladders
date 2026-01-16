@@ -1,6 +1,9 @@
 <template>
   <div class="recommend-page">
-    <h1 class="page-title"><span class="title-icon">🚀</span> <span class="title-text">机场推荐</span></h1>
+    <h1 class="page-title">
+      <VueIcon class="title-icon" icon="rocket" aria-label="机场推荐" />
+      <span class="title-text">机场推荐</span>
+    </h1>
     <p class="page-subtitle">精选优质服务商，稳定高速的网络体验</p>
     <div class="recommend-content">
       <div class="recommend-grid">
@@ -26,13 +29,13 @@
           </h3>
           <div class="recommend-btn-group">
             <a href="https://a.mikasass.pro/signup?referralCode=A9ti5mtf" target="_blank" class="recommend-btn">
-              <span class="btn-icon">⚡</span>Mikasa
+              <span class="btn-icon"><VueIcon icon="bolt" aria-label="Mikasa" /></span>Mikasa
             </a>
             <a href="https://www.优信云.com/#/register?code=UJUm53s7" target="_blank" class="recommend-btn">
-              <span class="btn-icon">☁️</span>优信云
+              <span class="btn-icon"><VueIcon icon="cloud" aria-label="优信云" /></span>优信云
             </a>
             <a href="https://www.cutecloud.net/register?code=WUHcCLFn" target="_blank" class="recommend-btn">
-              <span class="btn-icon">🌸</span>CuteCloud
+              <span class="btn-icon"><VueIcon icon="heart" aria-label="CuteCloud" /></span>CuteCloud
             </a>
           </div>
         </section>
@@ -59,13 +62,13 @@
           </h3>
           <div class="recommend-btn-group">
             <a href="https://cokecloud.cyou/#/register?code=wvIsDmnG" target="_blank" class="recommend-btn">
-              <span class="btn-icon">🥤</span>CokeCloud
+              <span class="btn-icon"><VueIcon icon="mug-hot" aria-label="CokeCloud" /></span>CokeCloud
             </a>
             <a href="https://mojie.kim/register?aff=r3JESYAG" target="_blank" class="recommend-btn">
-              <span class="btn-icon">💍</span>魔戒
+              <span class="btn-icon"><VueIcon icon="gem" aria-label="魔戒" /></span>魔戒
             </a>
             <a href="https://xs-us.xyz/register?code=9usLmdvb" target="_blank" class="recommend-btn">
-              <span class="btn-icon">✈️</span>XSUS小机场
+              <span class="btn-icon"><VueIcon icon="plane" aria-label="XSUS小机场" /></span>XSUS小机场
             </a>
           </div>
         </section>
@@ -91,10 +94,10 @@
           </h3>
           <div class="recommend-btn-group">
             <a href="https://www.qingzeyy.top/#/register?code=KENq3MAR" target="_blank" class="recommend-btn">
-              <span class="btn-icon">🎮</span>快游戏云加速
+              <span class="btn-icon"><VueIcon icon="gamepad" aria-label="快游戏云加速" /></span>快游戏云加速
             </a>
             <a href="https://1元机场.com/#/" target="_blank" class="recommend-btn">
-              <span class="btn-icon">💰</span>一元机场
+              <span class="btn-icon"><VueIcon icon="dollar-sign" aria-label="一元机场" /></span>一元机场
             </a>
           </div>
         </section>
@@ -102,6 +105,10 @@
     </div>
   </div>
 </template>
+
+<script setup>
+import VueIcon from '../components/VueIcon.vue';
+</script>
 
 <style scoped>
 .recommend-page {
@@ -123,9 +130,8 @@
 }
 
 .title-icon {
-  font-size: 1.2em;
-  -webkit-text-fill-color: initial;
-  background: none;
+  font-size: 1.1em;
+  color: var(--text-accent);
 }
 
 .title-text {

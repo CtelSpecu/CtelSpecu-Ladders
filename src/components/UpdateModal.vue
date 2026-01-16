@@ -2,7 +2,10 @@
   <div v-if="showModal" class="modal-overlay" @click="closeModal">
     <div class="modal-content" @click.stop>
       <div class="modal-header">
-        <h2 class="modal-title">🚀 客户端更新提醒</h2>
+        <h2 class="modal-title">
+          <VueIcon class="title-icon" icon="rocket" aria-label="客户端更新提醒" />
+          客户端更新提醒
+        </h2>
         <button class="close-btn" @click="closeModal">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -23,15 +26,15 @@
         
         <div class="features">
           <div class="feature-item">
-            <span class="feature-icon">✨</span>
+            <span class="feature-icon"><VueIcon icon="star" aria-label="亮点" /></span>
             <span>更好的性能优化</span>
           </div>
           <div class="feature-item">
-            <span class="feature-icon">🔧</span>
+            <span class="feature-icon"><VueIcon icon="wrench" aria-label="修复" /></span>
             <span>修复致命漏洞</span>
           </div>
           <div class="feature-item">
-            <span class="feature-icon">🎨</span>
+            <span class="feature-icon"><VueIcon icon="palette" aria-label="设计" /></span>
             <span>全新界面设计</span>
           </div>
         </div>
@@ -41,14 +44,9 @@
         <button class="btn-secondary" @click="closeModal">
           稍后提醒
         </button>
-        <a 
-          href="https://github.com/Clash-Verge-rev/clash-verge-rev/releases" 
-          target="_blank" 
-          class="btn-primary"
-          @click="closeModal"
-        >
+        <button class="btn-primary" type="button" @click="goToClients">
           立即更新
-        </a>
+        </button>
       </div>
       
       <div class="modal-bottom">
@@ -63,10 +61,12 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from 'vue'
+import { inject, ref, onMounted, watch } from 'vue'
+import VueIcon from './VueIcon.vue'
 
 const showModal = ref(false)
 const dontShowAgain = ref(false)
+const navigate = inject('navigate', null)
 
 const STORAGE_KEY = 'clash-update-modal-dismissed'
 
@@ -74,6 +74,13 @@ const closeModal = () => {
   showModal.value = false
   if (dontShowAgain.value) {
     localStorage.setItem(STORAGE_KEY, 'true')
+  }
+}
+
+const goToClients = () => {
+  closeModal()
+  if (typeof navigate === 'function') {
+    navigate('guide')
   }
 }
 
@@ -155,6 +162,14 @@ watch(dontShowAgain, (newValue) => {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.title-icon {
+  -webkit-text-fill-color: initial;
+  color: var(--text-accent);
 }
 
 .close-btn {

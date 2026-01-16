@@ -1,7 +1,11 @@
 <template>
   <div v-if="showModal" class="modal-overlay" @click="closeModal">
-    <div class="modal-content" @click.stop>      <div class="modal-header">
-        <h2 class="modal-title">⚠️ 订阅不可用</h2>
+    <div class="modal-content" @click.stop>
+      <div class="modal-header">
+        <h2 class="modal-title">
+          <VueIcon class="title-icon" icon="triangle-exclamation" aria-label="订阅不可用" />
+          订阅不可用
+        </h2>
         <button class="close-btn" @click="closeModal">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M18 6L6 18M6 6L18 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -21,21 +25,21 @@
         
         <div class="features">
           <div class="feature-item">
-            <span class="feature-icon">🚀</span>
+            <span class="feature-icon"><VueIcon icon="rocket" aria-label="机场推荐" /></span>
             <div class="feature-content">
               <span class="feature-title">机场推荐</span>
               <span class="feature-desc">稳定高速，按需购买流量或月付</span>
             </div>
           </div>
           <div class="feature-item">
-            <span class="feature-icon">🆓</span>
+            <span class="feature-icon"><VueIcon icon="wifi" aria-label="免费节点" /></span>
             <div class="feature-content">
               <span class="feature-title">免费节点</span>
               <span class="feature-desc">每日更新，免费体验（速度较慢）</span>
             </div>
           </div>
           <div class="feature-item">
-            <span class="feature-icon">🔐</span>
+            <span class="feature-icon"><VueIcon icon="lock" aria-label="免费VPN" /></span>
             <div class="feature-content">
               <span class="feature-title">免费VPN</span>
               <span class="feature-desc">简单易用，灵活性稍低</span>
@@ -43,7 +47,7 @@
           </div>
         </div>
       </div>
-        <div class="modal-footer">
+      <div class="modal-footer">
         <button class="btn-secondary" @click="closeModal">
           知道了
         </button>
@@ -60,6 +64,7 @@
 
 <script setup>
 import { ref } from 'vue'
+import VueIcon from './VueIcon.vue'
 
 const showModal = ref(false)
 
@@ -148,6 +153,14 @@ defineExpose({
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.title-icon {
+  -webkit-text-fill-color: initial;
+  color: var(--text-accent);
 }
 
 .close-btn {

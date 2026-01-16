@@ -685,12 +685,12 @@ const copySubscriptionLink = async () => {
     await navigator.clipboard.writeText(props.subscriptionLink);
     
     // 检查是否为应急订阅
-    if (props.subscriptionName === '应急订阅') {
-      // 使用原生 JS 弹窗
-      alert('复制失败！\n\n⚠️ 该订阅仅用于应急使用！\n⚠️ 请勿滥用此应急通道！');
-    } else {
-      showSuccess('复制成功!');
-    }
+	    if (props.subscriptionName === '应急订阅') {
+	      // 使用原生 JS 弹窗
+	      alert('提示：\n\n该订阅仅用于应急使用！\n请勿滥用此应急通道！');
+	    } else {
+	      showSuccess('复制成功!');
+	    }
   } catch (err) {
     console.error('复制失败:', err);
     showError('复制失败，请手动复制');

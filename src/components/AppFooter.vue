@@ -9,11 +9,13 @@
           rel="noopener noreferrer"
           class="brand-link"
         >
-          ✨ 星空之镜 (CtelSpecu)
+          <VueIcon class="brand-icon" icon="star" aria-label="星空之镜" />
+          星空之镜 (CtelSpecu)
         </a>
         <span class="divider">|</span>
         <span class="powered-by">
-          ⚡ Vite + Vue.js
+          <VueIcon class="powered-icon" icon="bolt" aria-label="Vite + Vue.js" />
+          Vite + Vue.js
         </span>
       </div>
     </div>
@@ -21,7 +23,7 @@
 </template>
 
 <script setup>
-// Footer组件 - 无需额外逻辑
+import VueIcon from './VueIcon.vue'
 </script>
 
 <style scoped>
@@ -88,6 +90,14 @@
   transition: all var(--transition-normal);
   padding: var(--spacing-xs) var(--spacing-sm);
   border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.brand-icon {
+  -webkit-text-fill-color: initial;
+  color: var(--text-accent);
 }
 
 .brand-link::before {
@@ -118,6 +128,14 @@
   color: var(--text-tertiary);
   font-size: var(--font-size-xs);
   opacity: 0.9;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.powered-icon {
+  -webkit-text-fill-color: initial;
+  color: var(--text-tertiary);
 }
 
 /* 移动端适配 */
