@@ -1,10 +1,15 @@
 <template>
   <div class="free-vpn-page">
-    <h1 class="page-title"><span class="title-icon">🔐</span> <span class="title-text">免费VPN推荐</span></h1>
+    <h1 class="page-title">
+      <VueIcon class="title-icon" icon="lock" aria-label="免费VPN推荐" />
+      <span class="title-text">免费VPN推荐</span>
+    </h1>
     <div class="free-vpn-content">
-      <div class="free-vpn-grid">        <section class="free-vpn-section">
-          <h2><span class="section-icon">🌍</span> 全平台可用</h2>
-          <div class="free-vpn-btn-group">            <div class="vpn-item">
+      <div class="free-vpn-grid">
+        <section class="free-vpn-section">
+          <h2><VueIcon class="section-icon" icon="globe" aria-label="全平台可用" /> 全平台可用</h2>
+          <div class="free-vpn-btn-group">
+            <div class="vpn-item">
               <a href="https://china-letsvpn.com/" target="_blank" class="free-vpn-btn">
                 LetsVPN
                 <span class="rating">
@@ -56,8 +61,9 @@
         </section>
 
         <section class="free-vpn-section">
-          <h2><span class="section-icon">📱</span> 移动端应用</h2>
-          <div class="free-vpn-btn-group">            <div class="vpn-item">
+          <h2><VueIcon class="section-icon" icon="mobile-screen-button" aria-label="移动端应用" /> 移动端应用</h2>
+          <div class="free-vpn-btn-group">
+            <div class="vpn-item">
               <a href="https://apps.apple.com/us/app/pandavpn-lite-最好最快無限流量的-vpn/id1466932207?l=zh" target="_blank" class="free-vpn-btn">
                 PandaVPN Lite (iOS)
                 <span class="rating">
@@ -88,6 +94,10 @@
   </div>
 </template>
 
+<script setup>
+import VueIcon from '../components/VueIcon.vue';
+</script>
+
 <style scoped>
 .free-vpn-page {
   width: 100%;
@@ -108,9 +118,8 @@
 }
 
 .title-icon {
-  font-size: 1.2em;
-  -webkit-text-fill-color: initial;
-  background: none;
+  font-size: 1.1em;
+  color: var(--text-accent);
 }
 
 .title-text {
@@ -122,9 +131,7 @@
 }
 
 .section-icon {
-  -webkit-text-fill-color: initial;
-  background: none;
-  margin-right: var(--spacing-xs);
+  color: var(--text-accent);
 }
 
 .free-vpn-grid {
@@ -179,6 +186,9 @@
   padding-bottom: var(--spacing-sm);
   border-bottom: 2px solid var(--text-accent);
   font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
 }
 
 .free-vpn-btn-group {

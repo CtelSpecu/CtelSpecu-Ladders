@@ -1,75 +1,78 @@
 <template>
   <div class="free-node-page">
-    <h1 class="page-title"><span class="title-icon">🆓</span> <span class="title-text">免费节点</span></h1>
+    <h1 class="page-title">
+      <VueIcon class="title-icon" icon="wifi" aria-label="免费节点" />
+      <span class="title-text">免费节点</span>
+    </h1>
     <div class="free-node-content">
       <div class="free-node-grid">
         <section class="free-node-section note-section">
-          <h2>📢 注意事项</h2>
+          <h2><VueIcon class="section-icon" icon="bullhorn" aria-label="注意事项" /> 注意事项</h2>
           <p class="section-note">
             免费节点资源有限且稳定性较差，如需更好体验可考虑付费节点（参见<a href="#" @click.prevent="switchToRecommend" class="inline-link">机场推荐</a>）。
           </p>
         </section>
         <section class="free-node-section">
-          <h2>🌐 免费节点网站</h2>
+          <h2><VueIcon class="section-icon" icon="globe" aria-label="免费节点网站" /> 免费节点网站</h2>
           <p class="section-description">每日更新的免费节点资源</p>
           <div class="free-node-links">
             <a href="https://www.freeclashnode.com/free-node/" target="_blank" class="free-node-link">
-              <span class="link-icon">🔗</span>
+              <span class="link-icon"><VueIcon icon="link" aria-label="链接" /></span>
               <span class="link-text">FreeClashNode - 每日更新节点</span>
             </a>
             <a href="https://github.com/crossxx-labs/free-proxy" target="_blank" class="free-node-link">
-              <span class="link-icon">📦</span>
+              <span class="link-icon"><VueIcon icon="box" aria-label="仓库" /></span>
               <span class="link-text">crossxx-labs - 多协议免费订阅</span>
             </a>
             <a href="https://nodefree.net/" target="_blank" class="free-node-link">
-              <span class="link-icon">🔗</span>
+              <span class="link-icon"><VueIcon icon="link" aria-label="链接" /></span>
               <span class="link-text">NodeFree - 网络自由工具箱</span>
             </a>
             <a href="https://github.com/Flikify/getNode" target="_blank" class="free-node-link">
-              <span class="link-icon">📦</span>
+              <span class="link-icon"><VueIcon icon="box" aria-label="仓库" /></span>
               <span class="link-text">Flikify - 每小时更新节点</span>
             </a>
             <a href="https://telegeam.github.io/clashnode/" target="_blank" class="free-node-link">
-              <span class="link-icon">🔗</span>
+              <span class="link-icon"><VueIcon icon="link" aria-label="链接" /></span>
               <span class="link-text">ClashNode - SSR/V2ray节点</span>
             </a>
             <a href="https://clashnode.cc/free-node/" target="_blank" class="free-node-link">
-              <span class="link-icon">🔗</span>
+              <span class="link-icon"><VueIcon icon="link" aria-label="链接" /></span>
               <span class="link-text">ClashNode中文网 - 每天更新</span>
             </a>
             <a href="https://clash-free-node.github.io/" target="_blank" class="free-node-link">
-              <span class="link-icon">🔗</span>
+              <span class="link-icon"><VueIcon icon="link" aria-label="链接" /></span>
               <span class="link-text">Clash免费节点 - 机场订阅</span>
             </a>
           </div>
         </section>
 
         <section class="free-node-section">
-          <h2>📂 GitHub资源</h2>
+          <h2><VueIcon class="section-icon" icon="folder-open" aria-label="GitHub资源" /> GitHub资源</h2>
           <p class="section-description">GitHub上的开源节点项目</p>
           <div class="free-node-links">
             <a href="https://github.com/Pawdroid/Free-servers" target="_blank" class="free-node-link">
-              <span class="link-icon">📦</span>
+              <span class="link-icon"><VueIcon icon="box" aria-label="仓库" /></span>
               <span class="link-text">Pawdroid/Free-servers</span>
             </a>
             <a href="https://github.com/peasoft/NoMoreWalls" target="_blank" class="free-node-link">
-              <span class="link-icon">📦</span>
+              <span class="link-icon"><VueIcon icon="box" aria-label="仓库" /></span>
               <span class="link-text">peasoft/NoMoreWalls</span>
             </a>
             <a href="https://github.com/mahdibland/V2RayAggregator" target="_blank" class="free-node-link">
-              <span class="link-icon">📦</span>
+              <span class="link-icon"><VueIcon icon="box" aria-label="仓库" /></span>
               <span class="link-text">mahdibland/V2RayAggregator</span>
             </a>
             <a href="https://github.com/w1770946466/Auto_proxy" target="_blank" class="free-node-link">
-              <span class="link-icon">📦</span>
+              <span class="link-icon"><VueIcon icon="box" aria-label="仓库" /></span>
               <span class="link-text">w1770946466/Auto_proxy</span>
             </a>
             <a href="https://github.com/ermaozi/get_subscribe" target="_blank" class="free-node-link">
-              <span class="link-icon">📦</span>
+              <span class="link-icon"><VueIcon icon="box" aria-label="仓库" /></span>
               <span class="link-text">ermaozi/get_subscribe</span>
             </a>
             <a href="https://github.com/mfuu/v2ray" target="_blank" class="free-node-link">
-              <span class="link-icon">📦</span>
+              <span class="link-icon"><VueIcon icon="box" aria-label="仓库" /></span>
               <span class="link-text">mfuu/v2ray</span>
             </a>
           </div>
@@ -81,6 +84,7 @@
 
 <script setup>
 import { inject } from 'vue';
+import VueIcon from '../components/VueIcon.vue';
 
 // 获取切换页面的函数
 const setCurrentTab = inject('setCurrentTab');
@@ -113,9 +117,8 @@ const switchToRecommend = () => {
 }
 
 .title-icon {
-  font-size: 1.2em;
-  -webkit-text-fill-color: initial;
-  background: none;
+  font-size: 1.1em;
+  color: var(--text-accent);
 }
 
 .title-text {
@@ -187,6 +190,13 @@ const switchToRecommend = () => {
   padding-bottom: var(--spacing-sm);
   border-bottom: 2px solid var(--text-accent);
   font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.section-icon {
+  color: var(--text-accent);
 }
 
 .section-description {
