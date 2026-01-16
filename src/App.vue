@@ -25,11 +25,6 @@
         >客户端下载</a>
         <a
           href="#"
-          :class="{ active: currentTab === 'client-category' }"
-          @click.prevent="navigate('client-category')"
-        >客户端分类</a>
-        <a
-          href="#"
           :class="{ active: currentTab === 'freenode' }"
           @click.prevent="navigate('freenode')"
         >免费节点</a>
@@ -77,15 +72,6 @@
             <div class="card-content">
               <h3>客户端下载</h3>
               <p>各平台代理客户端推荐与下载，附带详细使用教程</p>
-            </div>
-            <div class="card-arrow"><VueIcon icon="arrow-right" aria-label="进入" /></div>
-          </div>
-
-          <div class="nav-card" @click="navigate('client-category')">
-            <div class="card-icon"><VueIcon icon="layer-group" aria-label="客户端分类" /></div>
-            <div class="card-content">
-              <h3>客户端分类</h3>
-              <p>按 Clash / V2Ray 分类对比，查看不同客户端支持的系统与下载渠道</p>
             </div>
             <div class="card-arrow"><VueIcon icon="arrow-right" aria-label="进入" /></div>
           </div>
