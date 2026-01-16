@@ -277,7 +277,7 @@ function goToCategory() {
 }
 
 function osIconVariant(os) {
-  if (os === OS.windows || os === OS.linux || os === OS.android) return 'brands';
+  if (os === OS.windows || os === OS.macos || os === OS.linux || os === OS.android) return 'brands';
   return 'solid';
 }
 

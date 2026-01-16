@@ -3,6 +3,7 @@ import './style.css'
 // 只加载需要的图标，而不是整个FontAwesome库
 import '@fortawesome/fontawesome-free/css/fontawesome.css'
 import '@fortawesome/fontawesome-free/css/solid.css'
+import '@fortawesome/fontawesome-free/css/brands.css'
 import App from './App.vue'
 import { lazyLoad, preloadCriticalAssets } from './utils/performance.js'
 
