@@ -1,184 +1,652 @@
 <template>
-  <button
-    class="theme-toggle-btn"
-    @click="toggleTheme"
-    :title="isDark ? '切换到浅色模式' : '切换到深色模式'"
-    :aria-label="isDark ? '切换到浅色模式' : '切换到深色模式'"
-  >
-    <div class="theme-toggle-icon">
-      <svg
-        v-if="isDark"
-        class="sun-icon"
-        viewBox="0 0 24 24"
-        fill="currentColor"
-      >
-        <path d="M12 2.25a.75.75 0 01.75.75v2.25a.75.75 0 01-1.5 0V3a.75.75 0 01.75-.75zM7.5 12a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM18.894 6.166a.75.75 0 00-1.06-1.06l-1.591 1.591a.75.75 0 101.06 1.06l1.591-1.591zM21.75 12a.75.75 0 01-.75.75h-2.25a.75.75 0 010-1.5H21a.75.75 0 01.75.75zM17.834 18.894a.75.75 0 001.06-1.06l-1.591-1.591a.75.75 0 10-1.06 1.06l1.591 1.591zM12 18a.75.75 0 01.75.75V21a.75.75 0 01-1.5 0v-2.25A.75.75 0 0112 18zM7.758 17.303a.75.75 0 00-1.061-1.06l-1.591 1.591a.75.75 0 001.06 1.06l1.591-1.591zM6 12a.75.75 0 01-.75.75H3a.75.75 0 010-1.5h2.25A.75.75 0 016 12zM6.697 7.757a.75.75 0 001.06-1.06l-1.591-1.591a.75.75 0 00-1.06 1.06l1.591 1.591z" />
-      </svg>
-      <svg
-        v-else
-        class="moon-icon"
-        viewBox="0 0 24 24"
-        fill="currentColor"
-      >
-        <path fill-rule="evenodd" d="M9.528 1.718a.75.75 0 01.162.819A8.97 8.97 0 009 6a9 9 0 009 9 8.97 8.97 0 003.463-.69.75.75 0 01.981.98 10.503 10.503 0 01-9.694 6.46c-5.799 0-10.5-4.701-10.5-10.5 0-4.368 2.667-8.112 6.46-9.694a.75.75 0 01.818.162z" clip-rule="evenodd" />
-      </svg>
+  <label>
+    <input
+      class="slider"
+      type="checkbox"
+      :checked="isDark"
+      :aria-label="isDark ? '切换到浅色模式' : '切换到深色模式'"
+      @change="toggleTheme"
+    >
+    <div class="switch">
+      <div class="suns"></div>
+      <div class="moons">
+        <div class="star star-1"></div>
+        <div class="star star-2"></div>
+        <div class="star star-3"></div>
+        <div class="star star-4"></div>
+        <div class="star star-5"></div>
+        <div class="first-moon"></div>
+      </div>
+      <div class="sand"></div>
+      <div class="bb8">
+        <div class="antennas">
+          <div class="antenna short"></div>
+          <div class="antenna long"></div>
+        </div>
+        <div class="head">
+          <div class="stripe one"></div>
+          <div class="stripe two"></div>
+          <div class="eyes">
+            <div class="eye one"></div>
+            <div class="eye two"></div>
+          </div>
+          <div class="stripe detail">
+            <div class="detail zero"></div>
+            <div class="detail zero"></div>
+            <div class="detail one"></div>
+            <div class="detail two"></div>
+            <div class="detail three"></div>
+            <div class="detail four"></div>
+            <div class="detail five"></div>
+            <div class="detail five"></div>
+          </div>
+          <div class="stripe three"></div>
+        </div>
+        <div class="ball">
+          <div class="lines one"></div>
+          <div class="lines two"></div>
+          <div class="ring one"></div>
+          <div class="ring two"></div>
+          <div class="ring three"></div>
+        </div>
+        <div class="shadow"></div>
+      </div>
     </div>
-    <span class="theme-toggle-text">{{ isDark ? '浅色' : '深色' }}</span>
-    <div class="theme-toggle-bg" :class="{ 'dark': isDark }"></div>
-  </button>
+  </label>
 </template>
 
 <script setup>
-import { computed, watch } from 'vue';
 import { useTheme } from '../composables/useTheme.js';
 
 const { isDark, toggleTheme } = useTheme();
-
-// 添加切换动画
-const addSwitchAnimation = () => {
-  const button = document.querySelector('.theme-toggle-btn');
-  if (button) {
-    button.classList.add('switching');
-    setTimeout(() => {
-      button.classList.remove('switching');
-    }, 500);
-  }
-};
-
-// 监听主题变化并添加动画
-watch(isDark, (newDark, oldDark) => {
-  if (newDark !== oldDark) {
-    addSwitchAnimation();
-  }
-});
 </script>
 
 <style scoped>
-.theme-toggle-btn {
+.switch {
+  --toggle-size: 0.4;
+}
+
+.switch *, .switch *::after, *::before {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.switch {
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  display: -webkit-inline-box;
+  display: -ms-inline-flexbox;
+  display: inline-flex;
+  -webkit-box-align: center;
+  -ms-flex-align: center;
+  align-items: center;
+  width: 170px;
+  height: 90px;
+  background-color: #b7cecc;
   position: relative;
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-sm);
-  padding: var(--spacing-sm) var(--spacing-md);
-  background: var(--background-secondary);
-  border: 1px solid var(--border-primary);
-  border-radius: 12px;
-  color: var(--text-primary);
+  border-radius: 999px;
+  -webkit-transition: .4s;
+  -o-transition: .4s;
+  transition: .4s;
   cursor: pointer;
-  transition: all var(--transition-normal);
+  -webkit-transform: scale(var(--toggle-size));
+  -ms-transform: scale(var(--toggle-size));
+  transform: scale(var(--toggle-size));
+}
+
+.moons {
+  position: absolute;
+  width: 100px;
+  height: 65px;
   overflow: hidden;
-  min-height: 40px;
-  min-width: 100px;
-  justify-content: center;
-  align-items: center;
-  font-size: var(--font-size-sm);
-  font-weight: 600;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-}
-
-.theme-toggle-btn::before {
-  content: '';
-  position: absolute;
   top: 0;
+  left: -10px;
+}
+
+.moons .star {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  top: 45px;
+  left: 30px;
+  border-radius: 999px;
+  background-color: #ffffff;
+}
+
+.moons .star.star-1 {
+  top: 100%;
+  left: 75px;
+  -webkit-transition: .2s;
+  -o-transition: .2s;
+  transition: .2s;
+}
+
+.moons .star.star-2 {
+  top: 100%;
+  left: 65px;
+  -webkit-transition: .3s;
+  -o-transition: .3s;
+  transition: .3s;
+}
+
+.moons .star.star-3 {
+  top: 100%;
+  left: 85px;
+  -webkit-transition: .4s;
+  -o-transition: .4s;
+  transition: .4s;
+}
+
+.moons .star.star-4 {
+  top: 100%;
+  left: 60px;
+  -webkit-transition: .5s;
+  -o-transition: .5s;
+  transition: .5s;
+}
+
+.moons .star.star-5 {
+  top: 100%;
+  left: 44px;
+  -webkit-transition: .6s;
+  -o-transition: .6s;
+  transition: .6s;
+}
+
+.moons .first-moon {
+  position: absolute;
+  -webkit-transition: .4s;
+  -o-transition: .4s;
+  transition: .4s;
+  width: 30px;
+  height: 30px;
+  top: 100%;
+  left: 30px;
+  background-color: #e0d6d6;
+  border-radius: 999px;
+}
+
+.moons::before, .moons::after {
+  -webkit-transition: .6s;
+  -o-transition: .6s;
+  transition: .6s;
+  content: "";
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background-color: #dde4e6;
+  border-radius: 999px;
+  top: 100%;
+  left: 70px;
+}
+
+.moons::after {
+  width: 5px;
+  height: 5px;
+  left: 81px;
+  -webkit-transition: .8s;
+  -o-transition: .8s;
+  transition: .8s;
+}
+
+.sand {
+  position: absolute;
+  width: 100%;
+  height: 45px;
+  bottom: 0px;
   left: 0;
-  right: 0;
-  bottom: 0;
-  background: var(--sub-gradient);
-  opacity: 0;
-  transition: opacity var(--transition-normal);
-  z-index: -1;
+  border-radius: 0 0 999px 999px;
+  overflow: hidden;
 }
 
-.theme-toggle-btn:hover {
-  border-color: var(--text-accent);
-  transform: translateY(-1px);
-  box-shadow: var(--soft-shadow);
+.suns {
+  position: absolute;
+  border-radius: 1in;
+  width: 40px;
+  height: 40px;
+  top: 10px;
+  right: 30px;
+  box-shadow: 0 0 15px #EAB308;
+  -webkit-box-shadow: 0 0 15px #EAB308;
+  background-color: #EAB308;
+  -webkit-transition: .6s;
+  -o-transition: .6s;
+  transition: .6s;
 }
 
-.theme-toggle-btn:hover::before {
-  opacity: 0.1;
+.sand::before {
+  position: absolute;
+  width: 100%;
+  height: 25px;
+  bottom: 0px;
+  left: 0;
+  content: "";
+  background-color: #B69C77;
+  border-radius: 0 0 999px 999px;
 }
 
-.theme-toggle-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 20px;
+.bb8 {
+  position: absolute;
+  left: -18%;
+  width: 140px;
+  -webkit-transform: scale(0.45);
+  -ms-transform: scale(0.45);
+  transform: scale(0.45);
+  -webkit-transition: left .4s;
+  -o-transition: left .4s;
+  transition: left .4s;
+}
+
+.slider {
+  display: none;
+}
+
+.antennas {
+  position: absolute;
+  -webkit-transition: all 0.4s;
+  -o-transition: all 0.4s;
+  transition: all 0.4s;
+  left: 28%;
+}
+
+.antenna {
+  background: #e0d2be;
+  position: absolute;
+  width: 2px;
+}
+
+.antenna.short {
   height: 20px;
-  transition: all var(--transition-normal);
+  top: -65px;
+  left: 50px;
 }
 
-.sun-icon, .moon-icon {
-  width: 18px;
-  height: 18px;
-  transition: all var(--transition-normal);
+.antenna.long {
+  border-top: 6px solid #020204;
+  border-bottom: 6px solid #020204;
+  height: 36px;
+  top: -80px;
+  left: 56px;
 }
 
-.theme-toggle-btn:hover .sun-icon,
-.theme-toggle-btn:hover .moon-icon {
-  transform: scale(1.1);
-}
-
-.theme-toggle-text {
-  font-weight: 600;
-  color: var(--text-primary);
-  transition: color var(--transition-normal);
-}
-
-.theme-toggle-bg {
+.head {
+  -webkit-transition: -webkit-transform .4s;
+  transition: -webkit-transform .4s;
+  -o-transition: transform .4s;
+  transition: transform .4s, -webkit-transform .4s;
+  background-color: ghostwhite;
+  border-radius: 90px 90px 25px 25px;
+  -moz-border-radius: 90px 90px 25px 25px;
+  -webkit-border-radius: 90px 90px 25px 25px;
+  height: 63px;
+  margin-left: -45px;
+  overflow: hidden;
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 0%;
-  height: 100%;
-  background: var(--main-gradient);
-  border-radius: 12px;
-  transition: width var(--transition-slow);
-  z-index: -1;
+  width: 95px;
+  z-index: 1;
+  top: -56px;
+  left: 56%;
 }
 
-.theme-toggle-bg.dark {
+.head .stripe {
+  position: absolute;
   width: 100%;
 }
 
-/* 响应式优化 */
-@media (max-width: 768px) {
-  .theme-toggle-btn {
-    min-width: 80px;
-    padding: var(--spacing-xs) var(--spacing-sm);
-    font-size: var(--font-size-xs);
-  }
-  
-  .theme-toggle-icon {
-    width: 16px;
-    height: 16px;
-  }
-  
-  .sun-icon, .moon-icon {
-    width: 14px;
-    height: 14px;
-  }
+.head .stripe.one {
+  background: #7699B7;
+  height: 7px;
+  opacity: 0.8;
+  z-index: 1;
+  top: 3px;
 }
 
-/* 无障碍支持 */
-.theme-toggle-btn:focus {
-  outline: 2px solid var(--text-accent);
-  outline-offset: 2px;
+.head .stripe.two {
+  background: #CD7640;
+  height: 4px;
+  top: 14px;
 }
 
-.theme-toggle-btn:active {
-  transform: translateY(0px);
+.head .stripe.three {
+  background: #999;
+  height: 4px;
+  opacity: 0.5;
+  bottom: 3px;
 }
 
-/* 加载动画 */
-@keyframes theme-switch {
-  0% { transform: scale(1) rotate(0deg); }
-  50% { transform: scale(1.2) rotate(180deg); }
-  100% { transform: scale(1) rotate(360deg); }
+.head .stripe.detail {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  width: 200px;
+  bottom: 7px;
+  left: -38%;
+  -webkit-transition: left 0.4s;
+  -o-transition: left 0.4s;
+  transition: left 0.4s;
 }
 
-.theme-toggle-btn.switching {
-  animation: theme-switch 0.5s ease-in-out;
+.head .detail {
+  height: 7px;
+}
+
+.head .detail.zero {
+  background-color: #CD7640;
+  width: 2%;
+  margin-left: 3px;
+}
+
+.head .detail.one {
+  background-color: #CD7640;
+  width: 8%;
+  margin-left: 3px;
+}
+
+.head .detail.two {
+  background-color: #CD7640;
+  width: 6%;
+  margin-left: 5px;
+}
+
+.head .detail.three {
+  background-color: #CD7640;
+  width: 4%;
+  margin-left: 45px;
+  height: 5px;
+  margin-top: 2px;
+}
+
+.head .detail.four {
+  background-color: #CD7640;
+  width: 10%;
+  margin-left: 4px;
+}
+
+.head .detail.five {
+  background-color: #CD7640;
+  width: 2%;
+  margin-left: 3px;
+}
+
+.head .eyes {
+  display: inline-block;
+  height: 100%;
+  position: absolute;
+  width: 100%;
+  -webkit-transition: left 0.4s;
+  -o-transition: left 0.4s;
+  transition: left 0.4s;
+  left: 22%;
+}
+
+.head .eye {
+  border-radius: 50%;
+  display: block;
+  position: absolute;
+}
+
+.head .eye.one {
+  background: #020204;
+  border: 4px solid lightgray;
+  height: 30px;
+  width: 30px;
+  top: 12px;
+  left: 12%;
+}
+
+.head .eye.one:after {
+  background: white;
+  border-radius: 50%;
+  content: "";
+  display: block;
+  height: 3px;
+  position: absolute;
+  width: 3px;
+  top: 4px;
+  right: 4px;
+}
+
+.head .eye.two {
+  background-color: lightgrey;
+  border: 1px solid #020204;
+  height: 16px;
+  width: 16px;
+  top: 30px;
+  left: 40%;
+}
+
+.head .eye.two:after {
+  background: #020204;
+  border-radius: 50%;
+  content: "";
+  display: block;
+  height: 10px;
+  position: absolute;
+  width: 10px;
+  top: 2px;
+  left: 2px;
+}
+
+.ball {
+  background-color: ghostwhite;
+  border-radius: 50%;
+  height: 165px;
+  overflow: hidden;
+  position: relative;
+  width: 165px;
+  -webkit-transition: -webkit-transform .4s;
+  transition: -webkit-transform .4s;
+  -o-transition: transform .4s;
+  transition: transform .4s, -webkit-transform .4s;
+}
+
+.lines {
+  border: 2px solid #B19669;
+  border-radius: 50%;
+  height: 400px;
+  opacity: 0.6;
+  position: absolute;
+  width: 400px;
+}
+
+.lines.two {
+  top: -10px;
+  left: -250px;
+}
+
+.ring {
+  background: #CD7640;
+  border-radius: 50%;
+  height: 70px;
+  margin-left: -35px;
+  position: absolute;
+  width: 70px;
+}
+
+.ring:after {
+  background-color: ghostwhite;
+  border-radius: 50%;
+  content: "";
+  display: block;
+  height: 73%;
+  margin-top: -36%;
+  margin-left: -36%;
+  position: absolute;
+  width: 73%;
+  top: 50%;
+  left: 50%;
+}
+
+.ring.one {
+  margin-left: -40px;
+  height: 90px;
+  width: 100px;
+  top: 2%;
+  left: 42%;
+}
+
+.ring.two {
+  height: 40px;
+  width: 80px;
+  -ms-transform: rotate(50deg);
+  -webkit-transform: rotate(50deg);
+  transform: rotate(50deg);
+  top: 65%;
+  left: 8%;
+}
+
+.ring.two:after {
+  top: 100%;
+}
+
+.ring.three {
+  height: 37px;
+  width: 80px;
+  -ms-transform: rotate(-50deg);
+  -webkit-transform: rotate(-50deg);
+  transform: rotate(-50deg);
+  top: 68%;
+  left: 84%;
+}
+
+.ring.three:after {
+  top: 110%;
+}
+
+.shadow {
+  background: #3A271C;
+  -webkit-box-shadow: 5px 0 50px #3A271C;
+  box-shadow: 5px 0 50px #3A271C;
+  border-radius: 50%;
+  height: 23.3333333333px;
+  opacity: 0.25;
+  position: absolute;
+  width: 110px;
+  left: 28px;
+  z-index: -1;
+  bottom: -8px;
+}
+
+/* actions */
+
+.slider:checked+ .switch .bb8 {
+  left: 29%;
+}
+
+.slider:checked + .switch  .bb8 .ball {
+  -webkit-transform: rotate(180deg);
+  -ms-transform: rotate(180deg);
+  transform: rotate(180deg);
+}
+
+.slider:hover+ .switch .bb8 .eyes {
+  left: 60%;
+}
+
+.slider:checked:hover+ .switch .bb8 .eyes {
+  left: -20%;
+}
+
+.slider:active+ .switch .bb8 .head {
+  -webkit-transform: translate(35px, 3px) rotateZ(17deg);
+  -ms-transform: translate(35px, 3px) rotate(17deg);
+  transform: translate(30px, 3px) rotateZ(17deg);
+}
+
+.slider:checked:active+ .switch .bb8 .head {
+  -webkit-transform: translate(-35px, 6px) rotateZ(-17deg);
+  -ms-transform: translate(-35px, 6px) rotate(-17deg);
+  transform: translate(-35px, 6px) rotateZ(-17deg);
+}
+
+.slider:active+.switch .antennas {
+  -webkit-transform: translate(35px, -20px) rotateZ(17deg);
+  -ms-transform: translate(35px, -20px) rotate(17deg);
+  transform: translate(35px, -20px) rotateZ(17deg);
+}
+
+.slider:active:not(:hover)+.switch .antennas {
+  -webkit-transform: translate(35px, -10px) rotateZ(17deg);
+  -ms-transform: translate(35px, -10px) rotate(17deg);
+  transform: translate(35px, -10px) rotateZ(17deg);
+}
+
+.slider:checked:active+.switch .antennas {
+  -webkit-transform: translate(-35px, 10px) rotateZ(-17deg);
+  -ms-transform: translate(-35px, 10px) rotate(-17deg);
+  transform: translate(-35px, 15px) rotateZ(-17deg);
+}
+
+.slider:checked:active:not(:hover)+.switch .antennas {
+  -webkit-transform: translate(-30px, 20px) rotateZ(-17deg);
+  -ms-transform: translate(-30px, 20px) rotate(-17deg);
+  transform: translate(-25px, 25px) rotateZ(-17deg);
+}
+
+.slider:hover+ .switch .antennas, .slider:checked+ .switch .antennas {
+  left: 6%;
+}
+
+.slider:hover+ .switch .stripe.detail, .slider:checked+ .switch .stripe.detail {
+  left: 0;
+}
+
+.slider:checked:hover+ .switch .antennas {
+  left: 28%;
+}
+
+.slider:checked:hover+ .switch .stripe.detail {
+  left: -38%;
+}
+
+.slider:checked + .switch {
+  background-color: #112350;
+}
+
+.slider:checked + .switch .suns {
+  top: 50px;
+}
+
+.slider:checked + .switch .moons .first-moon {
+  top: 15px;
+  -webkit-box-shadow: 0 0 10px #B8CCCD;
+  box-shadow: 0 0 10px #B8CCCD;
+}
+
+.slider:checked + .switch .moons::after {
+  top: 38px;
+  -webkit-box-shadow: 0 0 15px #B8CCCD;
+  box-shadow: 0 0 15px #B8CCCD;
+}
+
+.slider:checked + .switch .moons::before {
+  top: 34px;
+  -webkit-box-shadow: 0 0 15px #B8CCCD;
+  box-shadow: 0 0 15px #B8CCCD;
+}
+
+.slider:checked + .switch .moons .star {
+  -webkit-box-shadow: 0 0 20px 2px #fff;
+  box-shadow: 0 0 20px 2px #fff;
+}
+
+.slider:checked + .switch .moons .star.star-1 {
+  top: 20px;
+}
+
+.slider:checked + .switch .moons .star.star-2 {
+  top: 15px;
+}
+
+.slider:checked + .switch .moons .star.star-3 {
+  top: 15px;
+}
+
+.slider:checked + .switch .moons .star.star-4 {
+  top: 45px;
+}
+
+.slider:checked + .switch .moons .star.star-5 {
+  top: 53px;
 }
 </style>
