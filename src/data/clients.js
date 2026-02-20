@@ -108,6 +108,7 @@ export const clients = [
     category: CLIENT_CATEGORY.clash,
     description: '基于 Flutter 的多平台 Clash Meta 客户端，Material You 设计，简洁易用',
     platforms: [OS.windows, OS.macos, OS.linux, OS.android],
+    recommended: [OS.windows, OS.macos, OS.linux, OS.android],
     downloads: [
       links({ label: 'GitHub', url: 'https://github.com/chen08209/FlClash/releases' }),
     ],
@@ -186,11 +187,11 @@ export const clients = [
 ];
 
 export const recommendedByOs = {
-  [OS.windows]: ['clash-verge-rev', 'v2rayn'],
-  [OS.macos]: ['clash-mac', 'clash-verge-rev'],
-  [OS.linux]: ['clash-verge-rev', 'v2raya'],
+  [OS.windows]: ['clash-verge-rev', 'v2rayn', 'flclash'],
+  [OS.macos]: ['clash-mac', 'clash-verge-rev', 'flclash'],
+  [OS.linux]: ['clash-verge-rev', 'v2raya', 'flclash'],
   [OS.ios]: ['shadowrocket', 'stash'],
-  [OS.android]: ['mihomo-android', 'v2rayng'],
+  [OS.android]: ['mihomo-android', 'v2rayng', 'flclash'],
 };
 
 export function getClientById(id) {
