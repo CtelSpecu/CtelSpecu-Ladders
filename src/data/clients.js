@@ -103,6 +103,16 @@ export const clients = [
     ],
   },
   {
+    id: 'flclash',
+    name: 'FlClash',
+    category: CLIENT_CATEGORY.clash,
+    description: '基于 Flutter 的多平台 Clash Meta 客户端，Material You 设计，简洁易用',
+    platforms: [OS.windows, OS.macos, OS.linux, OS.android],
+    downloads: [
+      links({ label: 'GitHub', url: 'https://github.com/chen08209/FlClash/releases' }),
+    ],
+  },
+  {
     id: 'v2rayn',
     name: 'v2rayN',
     category: CLIENT_CATEGORY.v2ray,
