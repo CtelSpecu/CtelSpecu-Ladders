@@ -64,8 +64,8 @@
             <a href="https://cokecloud.cyou/#/register?code=wvIsDmnG" target="_blank" class="recommend-btn">
               <span class="btn-icon"><VueIcon icon="mug-hot" aria-label="CokeCloud" /></span>CokeCloud
             </a>
-            <a href="https://mojie.kim/register?aff=r3JESYAG" target="_blank" class="recommend-btn">
-              <span class="btn-icon"><VueIcon icon="gem" aria-label="魔戒" /></span>魔戒
+            <a href="https://down.dginv.click/#/register?code=ammg9FA2" target="_blank" class="recommend-btn">
+              <span class="btn-icon"><VueIcon icon="dog" aria-label="狗狗加速" /></span>狗狗加速
             </a>
             <a href="https://xs-us.xyz/register?code=9usLmdvb" target="_blank" class="recommend-btn">
               <span class="btn-icon"><VueIcon icon="plane" aria-label="XSUS小机场" /></span>XSUS小机场

@@ -114,6 +114,22 @@ export const clients = [
     ],
   },
   {
+    id: 'clash-party',
+    name: 'Clash Party',
+    category: CLIENT_CATEGORY.clash,
+    description: '基于 Mihomo 的桌面客户端，现代化界面',
+    platforms: [OS.windows, OS.macos, OS.linux],
+    recommended: [OS.windows, OS.macos, OS.linux],
+    downloads: [
+      links({ label: 'GitHub', url: 'https://github.com/mihomo-party-org/clash-party/releases' }),
+    ],
+    tutorials: {
+      [OS.windows]: 'https://clashparty.org/docs/handson',
+      [OS.macos]: 'https://clashparty.org/docs/handson',
+      [OS.linux]: 'https://clashparty.org/docs/handson',
+    },
+  },
+  {
     id: 'v2rayn',
     name: 'v2rayN',
     category: CLIENT_CATEGORY.v2ray,
@@ -187,9 +203,9 @@ export const clients = [
 ];
 
 export const recommendedByOs = {
-  [OS.windows]: ['clash-verge-rev', 'v2rayn', 'flclash'],
-  [OS.macos]: ['clash-mac', 'clash-verge-rev', 'flclash'],
-  [OS.linux]: ['clash-verge-rev', 'v2raya', 'flclash'],
+  [OS.windows]: ['clash-verge-rev', 'v2rayn', 'flclash', 'clash-party'],
+  [OS.macos]: ['clash-mac', 'clash-verge-rev', 'flclash', 'clash-party'],
+  [OS.linux]: ['clash-verge-rev', 'v2raya', 'flclash', 'clash-party'],
   [OS.ios]: ['shadowrocket', 'stash'],
   [OS.android]: ['mihomo-android', 'v2rayng', 'flclash'],
 };
