@@ -88,7 +88,6 @@ const categories = [
 const providers = [
   // 优质高速 (按推荐顺序)
   { name: 'Mikasa', url: 'https://a.mikasass.pro/signup?referralCode=A9ti5mtf', icon: 'bolt', category: 'premium', order: 1 },
-  { name: '优信云', url: 'https://www.优信云.com/#/register?code=UJUm53s7', icon: 'cloud', category: 'premium', order: 2 },
   { name: 'CuteCloud', url: 'https://www.cutecloud.net/register?code=WUHcCLFn', icon: 'heart', category: 'premium', order: 3 },
   { name: '狗狗加速', url: 'https://down.dginv.click/#/register?code=ammg9FA2', icon: 'dog', category: 'premium', order: 4 },
   { name: 'XSUS', url: 'https://xs-us.xyz/register?code=9usLmdvb', icon: 'plane', category: 'premium', order: 5 },
