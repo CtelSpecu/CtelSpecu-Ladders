@@ -90,18 +90,29 @@ export const clients = [
       [OS.android]: 'https://8mkhkm.mikasadocs.com/tutorials/android/cmfa/',
     },
   },
-  {
-    id: 'mihomo-desktop',
-    name: 'Mihomo（桌面）',
-    category: CLIENT_CATEGORY.clash,
-    description: '一个简易的 Mihomo 桌面客户端（Pandora Box）',
-    platforms: [OS.windows, OS.macos, OS.linux],
-    downloads: [
-      links({ label: 'GitHub', url: 'https://github.com/snakem982/Pandora-Box' }),
-      links({ label: 'Mihomo 官网', url: 'https://wiki.metacubex.one/' }),
-      links({ label: 'Mihomo 下载', url: 'https://wiki.metacubex.one/startup/' }),
-    ],
-  },
+   {
+     id: 'mihomo-desktop',
+     name: 'Mihomo（桌面）',
+     category: CLIENT_CATEGORY.clash,
+     description: '一个简易的 Mihomo 桌面客户端（Pandora Box）',
+     platforms: [OS.windows, OS.macos, OS.linux],
+     downloads: [
+       links({ label: 'GitHub', url: 'https://github.com/snakem982/Pandora-Box' }),
+       links({ label: 'Mihomo 官网', url: 'https://wiki.metacubex.one/' }),
+       links({ label: 'Mihomo 下载', url: 'https://wiki.metacubex.one/startup/' }),
+     ],
+   },
+   {
+     id: 'sparkle',
+     name: 'Sparkle',
+     category: CLIENT_CATEGORY.clash,
+     description: 'Another Mihomo GUI. (🛠building...)',
+     platforms: [OS.windows, OS.macos, OS.linux],
+     recommended: [OS.windows, OS.macos, OS.linux],
+     downloads: [
+       links({ label: 'GitHub', url: 'https://github.com/xishang0128/sparkle/releases' }),
+     ],
+   },
   {
     id: 'flclash',
     name: 'FlClash',
@@ -203,9 +214,9 @@ export const clients = [
 ];
 
 export const recommendedByOs = {
-  [OS.windows]: ['clash-verge-rev', 'v2rayn', 'flclash', 'clash-party'],
-  [OS.macos]: ['clash-mac', 'clash-verge-rev', 'flclash', 'clash-party'],
-  [OS.linux]: ['clash-verge-rev', 'v2raya', 'flclash', 'clash-party'],
+  [OS.windows]: ['clash-verge-rev', 'v2rayn', 'flclash', 'clash-party', 'sparkle'],
+  [OS.macos]: ['clash-mac', 'clash-verge-rev', 'flclash', 'clash-party', 'sparkle'],
+  [OS.linux]: ['clash-verge-rev', 'v2raya', 'flclash', 'clash-party', 'sparkle'],
   [OS.ios]: ['shadowrocket', 'stash'],
   [OS.android]: ['mihomo-android', 'v2rayng', 'flclash'],
 };
