@@ -78,7 +78,7 @@ const categories = [
   },
   {
     id: 'periodic',
-    label: '周期购买',
+    label: '按量购买',
     icon: 'clock',
     description: '购买固定流量，适合不常用代理的用户',
     tags: ['按需购买', '灵活'],
@@ -95,9 +95,11 @@ const providers = [
   { name: 'CokeCloud', url: 'https://cokecloud.cyou/#/register?code=wvIsDmnG', icon: 'mug-hot', category: 'budget', order: 1 },
   { name: '快游戏云加速', url: 'https://www.qingzeyy.top/#/register?code=KENq3MAR', icon: 'gamepad', category: 'budget', order: 2 },
   { name: '一元机场', url: 'https://1元机场.com/#/', icon: 'dollar-sign', category: 'budget', order: 3 },
-  // 周期购买 (按推荐顺序)
-  { name: '魔戒', url: 'https://mojie.kim/register?aff=r3JESYAG', icon: 'ring', category: 'periodic', order: 1 },
-  { name: 'CuteCloud', url: 'https://www.cutecloud.net/register?code=WUHcCLFn', icon: 'heart', category: 'periodic', order: 2, description: '支持按流量购买' },
+  // 按量购买 (按推荐顺序)
+  { name: '萌云', url: 'https://www.cutecloud.net/register?code=WUHcCLFn', icon: 'heart', category: 'periodic', order: 1, description: '支持按流量购买' },
+  { name: '丛雨云', url: 'https://congyu.moe/auth/register?invite=02fbcb72b9', icon: 'cloud', category: 'periodic', order: 3, description: '按量购买' },
+  { name: '魔戒', url: 'https://mojie.kim/register?aff=r3JESYAG', icon: 'ring', category: 'periodic', order: 2 },
+
 ];
 
 const selectedCategory = ref('premium');
