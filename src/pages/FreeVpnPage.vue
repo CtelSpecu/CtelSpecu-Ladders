@@ -45,18 +45,30 @@
                 </span>
               </a>
             </div>
-            <div class="vpn-item">
-              <a href="https://join.protonvpn.com/downloads" target="_blank" class="free-vpn-btn">
-                ProtonVPN
-                <span class="rating">
-                  <i class="fas fa-star"></i>
-                  <i class="fas fa-star"></i>
-                  <i class="fas fa-star"></i>
-                  <i class="far fa-star"></i>
-                  <i class="far fa-star"></i>
-                </span>
-              </a>
-            </div>
+              <div class="vpn-item">
+                <a href="https://join.protonvpn.com/downloads" target="_blank" class="free-vpn-btn">
+                  ProtonVPN
+                  <span class="rating">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="far fa-star"></i>
+                    <i class="far fa-star"></i>
+                  </span>
+                </a>
+              </div>
+              <div class="vpn-item">
+                <a href="https://developers.cloudflare.com/cloudflare-one/team-and-resources/devices/cloudflare-one-client/download/" target="_blank" class="free-vpn-btn">
+                  Cloudflare One (原WARP)
+                  <span class="rating">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="far fa-star"></i>
+                  </span>
+                </a>
+              </div>
           </div>
         </section>
 
