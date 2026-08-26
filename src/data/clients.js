@@ -54,6 +54,20 @@ export const clients = [
     },
   },
   {
+    id: 'clash',
+    name: 'Clash',
+    category: CLIENT_CATEGORY.clash,
+    description: 'Apple 原生全平台客户端（iPhone / iPad / Mac / Apple TV），基于 Mihomo / Hako，免费开源',
+    platforms: [OS.ios, OS.macos],
+    recommended: [OS.ios, OS.macos],
+    downloads: [
+      links({ label: '官网', url: 'https://clash.md/zh/' }),
+      links({ label: 'App Store', url: 'https://apps.apple.com/us/app/clash-rule-based-proxy-utility/id6794257189' }),
+      links({ label: 'TestFlight', url: 'https://testflight.apple.com/join/QJWrVrxT' }),
+      links({ label: 'GitHub', url: 'https://github.com/TokenPLS/Hako-Client' }),
+    ],
+  },
+  {
     id: 'clash-nyanpasu',
     name: 'Clash Nyanpasu',
     category: CLIENT_CATEGORY.clash,
@@ -211,13 +225,34 @@ export const clients = [
       [OS.ios]: 'https://stash.wiki',
     },
   },
+  {
+    id: 'v2box-pro',
+    name: 'V2Box Pro',
+    category: CLIENT_CATEGORY.v2ray,
+    description: 'iOS 多协议代理客户端，支持 Shadowsocks / V2Ray / VMess / VLESS / Trojan / Hysteria2 / WireGuard / SSH / PingTunnel / DNSTT，Reality / Vision / uTLS',
+    platforms: [OS.ios],
+    downloads: [
+      links({ label: 'App Store', url: 'https://apps.apple.com/us/app/v2box-pro-v2ray-client/id6756966178' }),
+    ],
+  },
+  {
+    id: 'loon',
+    name: 'Loon',
+    category: CLIENT_CATEGORY.v2ray,
+    description: 'Apple 生态全平台网络工具（iOS / macOS / tvOS），支持 SS / SSR / VMess / VLESS / Trojan / Hysteria2 / WireGuard 等，规则分流 / MITM / JS 脚本，iCloud 同步（付费 $7.99）',
+    platforms: [OS.ios, OS.macos],
+    downloads: [
+      links({ label: '官网', url: 'https://loonapp.org/' }),
+      links({ label: 'App Store', url: 'https://apps.apple.com/in/app/loon/id1373567447' }),
+    ],
+  },
 ];
 
 export const recommendedByOs = {
   [OS.windows]: ['clash-verge-rev', 'v2rayn', 'flclash', 'clash-party', 'sparkle'],
-  [OS.macos]: ['clash-mac', 'clash-verge-rev', 'flclash', 'clash-party', 'sparkle'],
+  [OS.macos]: ['clash', 'clash-mac', 'clash-verge-rev', 'flclash', 'clash-party', 'sparkle'],
   [OS.linux]: ['clash-verge-rev', 'v2raya', 'flclash', 'clash-party', 'sparkle'],
-  [OS.ios]: ['shadowrocket', 'stash'],
+  [OS.ios]: ['clash', 'shadowrocket', 'stash'],
   [OS.android]: ['mihomo-android', 'v2rayng', 'flclash'],
 };
 

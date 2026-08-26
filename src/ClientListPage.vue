@@ -129,6 +129,9 @@
 
 <script setup>
 const clientList = [
+  { name: 'Clash', url: 'https://clash.md/zh/', macos: true, ios: true },
+  { name: 'Loon', url: 'https://loonapp.org/', macos: true, ios: true },
+  { name: 'V2Box Pro', url: 'https://apps.apple.com/us/app/v2box-pro-v2ray-client/id6756966178', ios: true },
   { name: 'Clash Meta for Android', url: 'https://github.com/MetaCubeX/ClashMetaForAndroid', android: true },
   { name: 'Clash Verge Rev', url: 'https://clashvergerev.org/', windows: true, macos: true, linux: true },
   { name: 'Shadowrocket', url: 'https://shadowrocketios.org/', ios: true },
@@ -150,8 +153,9 @@ const windowsClients = [
   { name: 'sing-box', url: 'https://sing-box.org/' },
   { name: 'Qv2ray', url: 'https://qv2ray.org/' },
 ];
-
 const macClients = [
+  { name: 'Clash', url: 'https://clash.md/zh/', recommended: true },
+  { name: 'Loon', url: 'https://loonapp.org/' },
   { name: 'Clash Verge', url: 'https://clashverge.org/' },
   { name: 'Clash Verge Rev', url: 'https://clashvergerev.org/' },
   { name: 'Clash Nyanpasu', url: 'https://clashnyanpasu.org/' },
@@ -184,6 +188,9 @@ const androidClients = [
 ];
 
 const iosClients = [
+  { name: 'Clash', url: 'https://clash.md/zh/', recommended: true },
+  { name: 'Loon', url: 'https://loonapp.org/' },
+  { name: 'V2Box Pro', url: 'https://apps.apple.com/us/app/v2box-pro-v2ray-client/id6756966178' },
   { name: 'Shadowrocket', url: 'https://shadowrocketios.org/', recommended: true },
   { name: 'Quantumult', url: 'https://quantumult.org/' },
   { name: 'Quantumult X', url: 'https://quantumultx.org/' },
@@ -200,6 +207,8 @@ const routerClients = [
 ];
 
 const tvClients = [
+  { name: 'Clash', url: 'https://clash.md/zh/', recommended: true },
+  { name: 'Loon', url: 'https://loonapp.org/' },
   { name: 'Shadowrocket', url: 'https://shadowrocketios.org/', recommended: true },
   { name: 'Quantumult X', url: 'https://quantumultx.org/' },
   { name: 'Stash', url: 'https://clashstash.org/' },
