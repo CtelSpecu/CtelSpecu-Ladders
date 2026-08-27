@@ -118,35 +118,28 @@
           :value="subscriptionLink"
       ></textarea>
     </div>    <div class="import-buttons">
-      <button class="animated-button animated-button-copy" @click="copySubscriptionLink">
-        <svg class="arr-2" viewBox="0 0 24 24">
+      <button class="uiverse-btn uiverse-btn--copy" @click="copySubscriptionLink" aria-label="复制链接">
+        <p>复制链接</p>
+        <svg viewBox="0 0 24 24" aria-hidden="true">
           <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
         </svg>
-        <span class="text">复制链接</span>
-        <span class="circle"></span>
-        <svg class="arr-1" viewBox="0 0 24 24">
-          <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm5 4H9c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H9V7h11v14z"/>
+      </button>
+      <button class="uiverse-btn uiverse-btn--import" @click="importToClient('Clash')" aria-label="导入Clash">
+        <p>导入Clash</p>
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
         </svg>
       </button>
-      <button class="animated-button animated-button-import" @click="importToClient('Clash')">
-        <svg class="arr-2" viewBox="0 0 24 24">
-          <path d="M19 9h-4V3H9v6H5l7 7 7-7z"/>
-        </svg>
-        <span class="text">导入Clash</span>
-        <span class="circle"></span>
-        <svg class="arr-1" viewBox="0 0 24 24">
-          <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
-        </svg>      </button>
     </div>
   </div>
 
   <!-- 订阅失败弹窗 -->
-  <SubscriptionFailedModal 
+  <SubscriptionFailedModal
     ref="subscriptionFailedModal"
     @navigate="(page) => emit('navigate', page)"
   />
-</template>
 
+</template>
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue';
 import { useNotification } from '../composables/useNotification.js';
@@ -684,13 +677,12 @@ const copySubscriptionLink = async () => {
     
     await navigator.clipboard.writeText(props.subscriptionLink);
     
-    // 检查是否为应急订阅
-	    if (props.subscriptionName === '应急订阅') {
-	      // 使用原生 JS 弹窗
-	      alert('提示：\n\n该订阅仅用于应急使用！\n请勿滥用此应急通道！');
-	    } else {
-	      showSuccess('复制成功!');
-	    }
+    // 检查是否为应急订阅 - toast 提示
+    if (props.subscriptionName === '应急订阅') {
+      showInfo('该订阅仅用于应急使用！\n请勿滥用此应急通道！');
+    } else {
+      showSuccess('复制成功!');
+    }
   } catch (err) {
     console.error('复制失败:', err);
     showError('复制失败，请手动复制');
@@ -720,11 +712,9 @@ const importToClient = (client) => {
   margin: 0;
   color: var(--text-primary);
   box-shadow: var(--soft-shadow);
-  transition: all var(--transition-spring);
+  transition: all 0.5s cubic-bezier(0.4,0,0.2,1);
   position: relative;
   overflow: hidden;
-  backdrop-filter: blur(14px) saturate(1.05);
-  -webkit-backdrop-filter: blur(14px) saturate(1.05);
   animation: card-appear 0.7s cubic-bezier(0.23, 1, 0.32, 1);
 }
 
@@ -742,26 +732,56 @@ const importToClient = (client) => {
 .subscription-card::before {
   content: '';
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: var(--sub-gradient);
-  opacity: 0;
-  transition: opacity var(--transition-normal);
-  z-index: -1;
+  width: 48px;
+  height: 48px;
+  right: 4px;
+  top: 4px;
+  background: var(--orb-violet);
+  border-radius: 9999px;
+  filter: blur(12px);
+  opacity: var(--orb-opacity);
+  z-index: 0;
+  transition: all 0.5s cubic-bezier(0.4,0,0.2,1);
+}
+
+.subscription-card::after {
+  content: '';
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  right: 32px;
+  top: 12px;
+  background: var(--orb-rose);
+  border-radius: 9999px;
+  filter: blur(16px);
+  opacity: calc(var(--orb-opacity) * 0.9);
+  z-index: 0;
+  transition: all 0.5s cubic-bezier(0.4,0,0.2,1);
 }
 
 .subscription-card:hover {
-  transform: translateY(-6px);
+  transform: translateY(-4px);
   box-shadow: var(--card-shadow);
-  border-color: rgba(var(--accent-rgb), 0.22);
+  border-color: rgba(var(--orb-rose-rgb), 0.5);
 }
 
 .subscription-card:hover::before {
-  opacity: 0.07;
+  right: 48px;
+  top: auto;
+  bottom: -32px;
+  filter: blur(14px);
+  box-shadow: 20px 20px 30px 10px rgba(var(--orb-violet-rgb), 0.32);
 }
 
+.subscription-card:hover::after {
+  right: -32px;
+  filter: blur(18px);
+}
+
+.subscription-card > * {
+  position: relative;
+  z-index: 1;
+}
 .rating-container {
   display: flex;
   align-items: center;
@@ -1186,198 +1206,80 @@ h2 {
   justify-content: center;
   align-items: center;
 }
-.copy-link-btn, .import-btn {
-  flex: 1;
-  min-width: 140px;
-  padding: 15px 25px;
-  border: none;
-  border-radius: var(--radius-md);
-  font-weight: 700;
-  font-size: 13px;
-  cursor: pointer;
-  transition: all var(--transition-normal);
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-}
 
-.copy-link-btn i, .import-btn i {
-  font-size: 16px;
-}
-
-/* 基础动画按钮样式 - 统一半径与过渡 */
-.animated-button {
+/* Uiverse sliding button - 统一项目配色，注意深浅色 */
+.uiverse-btn {
   position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  padding: 16px 28px;
-  border: 2px solid transparent;
+  width: 168px;
+  height: 44px;
+  border-radius: 10px;
+  border: 1.5px solid var(--btn-accent);
+  background: var(--background-secondary);
+  color: var(--btn-accent);
   font-size: 14px;
-  background: var(--main-gradient);
-  color: var(--text-bright);
-  border-radius: var(--radius-md);
   font-weight: 700;
-  letter-spacing: 0.03em;
+  letter-spacing: 0.02em;
   cursor: pointer;
   overflow: hidden;
-  transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
-  flex: 1;
-  min-width: 140px;
-  max-width: 220px;
-  height: 52px;
-  box-sizing: border-box;
-  box-shadow: var(--accent-shadow);
+  transition: background 0.45s, border-color 0.45s, transform 0.2s, box-shadow 0.45s;
+  box-shadow: var(--soft-shadow);
+  flex: 0 0 auto;
 }
 
-.animated-button::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.18), transparent);
-  transition: left 0.5s ease;
-}
+.uiverse-btn--copy { --btn-accent: var(--text-accent); }
+.uiverse-btn--import { --btn-accent: var(--text-sub-accent); }
 
-.animated-button:hover::before {
-  left: 100%;
-}
-
-.animated-button svg {
-  position: absolute;
-  width: 22px;
-  z-index: 9;
-  transition: all 0.7s cubic-bezier(0.23, 1, 0.32, 1);
-}
-
-.animated-button .arr-1 {
-  right: 14px;
-}
-
-.animated-button .arr-2 {
-  left: -25%;
-}
-
-.animated-button .circle {
+.uiverse-btn p {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  opacity: 0;
-  transition: all 0.7s cubic-bezier(0.23, 1, 0.32, 1);
-  z-index: 0;
-}
-
-.animated-button .text {
-  position: relative;
-  z-index: 2;
-  transform: translateX(-10px);
-  transition: all 0.7s cubic-bezier(0.23, 1, 0.32, 1);
-  text-align: center;
+  margin: 0;
+  transition: all 0.45s;
+  color: var(--btn-accent);
   white-space: nowrap;
+  font-weight: 700;
+  letter-spacing: 0.02em;
 }
 
-.animated-button:hover {
-  background: var(--strong-gradient);
-  transform: translateY(-2px);
-  box-shadow: var(--sub-accent-shadow);
-  border-radius: var(--radius-md);
+.uiverse-btn svg {
+  position: absolute;
+  top: 50%;
+  right: 14px;
+  transform: translateY(-50%);
+  opacity: 0;
+  transition: all 0.45s;
+  height: 18px;
+  width: 18px;
+  fill: #fff;
+  pointer-events: none;
 }
 
-.animated-button:hover .arr-1 {
-  right: -25%;
+.uiverse-btn:hover {
+  background: var(--btn-accent);
+  border-color: var(--btn-accent);
+  box-shadow: var(--card-shadow);
+  transform: translateY(-1px);
 }
 
-.animated-button:hover .arr-2 {
-  left: 14px;
+.uiverse-btn:hover p {
+  left: 42%;
+  color: #fff;
 }
 
-.animated-button:hover .text {
-  transform: translateX(10px);
-}
-
-.animated-button:active {
-  scale: 0.97;
-}
-
-.animated-button:hover .circle {
-  width: 250px;
-  height: 250px;
+.uiverse-btn:hover svg {
   opacity: 1;
+  right: 18px;
+  fill: #fff;
 }
 
-/* 复制链接按钮 - 浅深适配: 用 accent 的 10% 底色 */
-.animated-button-copy {
-  border: 1.5px solid rgba(var(--accent-rgb), 0.32);
-  background: rgba(var(--accent-rgb), 0.10);
-  color: var(--text-accent);
-  box-shadow: var(--soft-shadow);
+.uiverse-btn:active {
+  transform: translateY(0) scale(0.98);
 }
 
-.animated-button-copy svg {
-  fill: var(--text-accent);
-}
+/* 兼容旧类名以防残留 */
+.copy-link-btn, .import-btn { display: none; }
 
-.animated-button-copy .circle {
-  background-color: var(--text-accent);
-}
-
-.animated-button-copy:hover {
-  color: var(--text-bright);
-  background: var(--text-accent);
-  border-color: var(--text-accent);
-  box-shadow: var(--accent-shadow);
-}
-
-.animated-button-copy:hover svg {
-  fill: var(--text-bright);
-}
-
-.animated-button-copy:active {
-  transform: translateY(0px) scale(0.98);
-  box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.24);
-}
-
-/* 导入按钮 - sub-accent 自适应 */
-.animated-button-import {
-  border: 1.5px solid rgba(var(--sub-accent-rgb), 0.34);
-  background: rgba(var(--sub-accent-rgb), 0.10);
-  color: var(--text-sub-accent);
-  box-shadow: var(--soft-shadow);
-}
-
-.animated-button-import svg {
-  fill: var(--text-sub-accent);
-}
-
-.animated-button-import .circle {
-  background-color: var(--text-sub-accent);
-}
-
-.animated-button-import:hover {
-  color: var(--text-bright);
-  background: var(--text-sub-accent);
-  border-color: var(--text-sub-accent);
-  box-shadow: var(--sub-accent-shadow);
-}
-
-.animated-button-import:hover svg {
-  fill: var(--text-bright);
-}
-
-.animated-button-import:active {
-  transform: translateY(0px) scale(0.98);
-  box-shadow: 0 0 0 3px rgba(var(--sub-accent-rgb), 0.24);
-}
 @media (max-width: 768px) {
   .subscription-card {
     padding: 18px;
@@ -1390,37 +1292,20 @@ h2 {
     gap: 10px;
   }
 
-  .animated-button {
+  .uiverse-btn {
     width: 100%;
-    max-width: none;
-    min-width: 0;
-    height: 48px;
+    height: 46px;
     font-size: 14px;
-    padding: 12px 20px;
   }
-
   .time-info {
     gap: 8px;
   }
 }
 
 @media (max-width: 480px) {
-  .animated-button {
+  .uiverse-btn {
     height: 44px;
     font-size: 13px;
-  }
-
-  .animated-button .text {
-    font-size: 13px;
-  }
-
-  .animated-button svg {
-    width: 18px;
-  }
-
-  .animated-button:hover .circle {
-    width: 200px;
-    height: 200px;
   }
 }
 
@@ -1534,4 +1419,5 @@ h2 {
   0% { left: -100%; }
   100% { left: 100%; }
 }
+
 </style>

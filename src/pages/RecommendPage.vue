@@ -118,10 +118,11 @@ const filteredProviders = computed(() => {
 <style scoped>
 .recommend-page {
   width: 100%;
-  max-width: var(--page-max-w);
+  max-width: 100%;
   margin: 0 auto;
+  padding: 0;
+  box-sizing: border-box;
 }
-
 .page-header {
   text-align: center;
   margin-bottom: var(--spacing-xl);
@@ -270,11 +271,11 @@ const filteredProviders = computed(() => {
   gap: var(--spacing-md);
   background: var(--background-secondary);
   border: 1px solid var(--border-primary);
-  border-radius: clamp(14px, 1.4vw, 18px);
+  border-radius: var(--card-radius);
   padding: var(--spacing-lg);
   text-decoration: none;
   color: var(--text-primary);
-  transition: all var(--transition-normal);
+  transition: all 0.5s;
   box-shadow: var(--soft-shadow);
   position: relative;
   overflow: hidden;
@@ -283,26 +284,61 @@ const filteredProviders = computed(() => {
 .provider-card::before {
   content: '';
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: var(--sub-gradient);
-  opacity: 0;
-  transition: opacity var(--transition-normal);
+  width: 48px;
+  height: 48px;
+  right: 4px;
+  top: 4px;
+  background: var(--orb-violet);
+  border-radius: 9999px;
+  filter: blur(12px);
+  opacity: var(--orb-opacity);
   z-index: 0;
+  transition: all 0.5s;
+}
+
+.provider-card::after {
+  content: '';
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  right: 32px;
+  top: 12px;
+  background: var(--orb-rose);
+  border-radius: 9999px;
+  filter: blur(16px);
+  opacity: calc(var(--orb-opacity) * 0.9);
+  z-index: 0;
+  transition: all 0.5s;
 }
 
 .provider-card:hover {
   transform: translateY(-4px);
   box-shadow: var(--card-shadow);
-  border-color: rgba(var(--accent-rgb), 0.18);
+  border-color: rgb(var(--orb-rose-rgb));
+  color: rgb(var(--orb-rose-rgb));
 }
 
 .provider-card:hover::before {
-  opacity: 0.06;
+  right: 48px;
+  top: auto;
+  bottom: -32px;
+  filter: blur(14px);
+  box-shadow: 20px 20px 20px 30px #a21caf;
 }
 
+.provider-card:hover::after {
+  right: -32px;
+  filter: blur(18px);
+}
+
+.provider-card:hover .card-icon {
+  color: rgb(var(--orb-rose-rgb));
+  border-color: rgba(var(--orb-rose-rgb), 0.3);
+}
+
+.provider-card:hover .provider-name {
+  color: rgb(var(--orb-rose-rgb));
+}
 .card-icon {
   display: flex;
   align-items: center;

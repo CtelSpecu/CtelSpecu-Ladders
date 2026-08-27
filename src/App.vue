@@ -37,7 +37,7 @@
           href="#"
           :class="{ active: currentTab === 'freevpn' }"
           @click.prevent="navigate('freevpn')"
-        >其他类型</a>
+        >免费推荐</a>
         <a
           href="https://subcoverter.ctelspecu.hxcn.top"
           target="_blank"
@@ -169,7 +169,7 @@
       <div v-else-if="currentTab === 'recommend'" class="recommend-layout fade-in-up">
         <RecommendPage />
       </div>
-      <!-- 其他类型页面 -->
+      <!-- 免费推荐页面 -->
       <div v-else-if="currentTab === 'freevpn'" class="freevpn-layout slide-in-left">
         <FreeVpnPage />
       </div>
@@ -322,14 +322,14 @@ onMounted(() => {
    Dials: VARIANCE 7 / MOTION 5 / DENSITY 3.5 - generous, asymmetrical calm.
 */
 
-/* 主页样式 - 扩宽至 1280, 流体边距, 更从容的节奏 */
+/* 主页样式 - 与导航栏等宽 */
 .home-page {
   width: 100%;
-  max-width: 1280px;
+  max-width: var(--page-max-w);
   margin: 0 auto;
-  padding: clamp(20px, 3vw, 40px) var(--page-gutter);
+  padding: clamp(20px, 3vw, 40px) 0;
+  box-sizing: border-box;
 }
-
 .home-header {
   text-align: center;
   margin-bottom: clamp(24px, 3vw, 36px);
@@ -393,50 +393,71 @@ onMounted(() => {
   align-items: center;
   gap: var(--spacing-md);
   cursor: pointer;
-  transition: all var(--transition-spring);
+  transition: all 0.5s cubic-bezier(0.4,0,0.2,1);
   position: relative;
   overflow: hidden;
   text-decoration: none;
-  color: inherit;
+  color: var(--text-primary);
   box-shadow: var(--soft-shadow);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
 }
 
 .nav-card::before {
   content: '';
   position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: var(--main-gradient);
-  opacity: 0;
-  transition: opacity var(--transition-normal);
+  width: 48px;
+  height: 48px;
+  right: 4px;
+  top: 4px;
+  background: var(--orb-violet);
+  border-radius: 9999px;
+  filter: blur(12px);
+  opacity: var(--orb-opacity);
+  z-index: 0;
+  transition: all 0.5s cubic-bezier(0.4,0,0.2,1);
 }
 
 .nav-card::after {
   content: '';
   position: absolute;
-  inset: 0;
-  background: var(--sub-gradient);
-  opacity: 0;
-  transition: opacity var(--transition-normal);
-  pointer-events: none;
+  width: 80px;
+  height: 80px;
+  right: 32px;
+  top: 12px;
+  background: var(--orb-rose);
+  border-radius: 9999px;
+  filter: blur(16px);
+  opacity: calc(var(--orb-opacity) * 0.9);
+  z-index: 0;
+  transition: all 0.5s cubic-bezier(0.4,0,0.2,1);
 }
 
 .nav-card:hover {
-  transform: translateY(-6px);
+  transform: translateY(-4px);
   box-shadow: var(--card-shadow);
-  border-color: rgba(var(--accent-rgb), 0.28);
+  border-color: rgba(var(--orb-rose-rgb), 0.55);
+  color: rgb(var(--orb-rose-rgb));
 }
 
 .nav-card:hover::before {
-  opacity: 1;
+  right: 48px;
+  top: auto;
+  bottom: -32px;
+  filter: blur(14px);
+  box-shadow: 20px 20px 20px 30px #a21caf;
 }
 
 .nav-card:hover::after {
-  opacity: 0.06;
+  right: -32px;
+  filter: blur(18px);
+}
+
+.nav-card:hover .card-content h3 {
+  color: rgb(var(--orb-rose-rgb));
+}
+
+.nav-card > * {
+  position: relative;
+  z-index: 2;
 }
 
 .nav-card:active {
@@ -455,11 +476,15 @@ onMounted(() => {
   border-radius: 14px;
   border: 1px solid var(--border-secondary);
   color: var(--text-accent);
+  position: relative;
+  z-index: 2;
 }
 
 .card-content {
   flex: 1;
   min-width: 0;
+  position: relative;
+  z-index: 2;
 }
 
 .card-content h3 {
@@ -485,7 +510,7 @@ onMounted(() => {
 .card-arrow {
   font-size: 1.15rem;
   color: var(--text-quaternary);
-  transition: all var(--transition-normal);
+  transition: all 0.5s;
   flex-shrink: 0;
   width: 32px;
   height: 32px;
@@ -495,6 +520,8 @@ onMounted(() => {
   border-radius: var(--radius-pill);
   background: var(--background-tertiary);
   border: 1px solid transparent;
+  position: relative;
+  z-index: 2;
 }
 
 .nav-card:hover .card-arrow {
@@ -508,6 +535,34 @@ onMounted(() => {
   font-size: 0.95rem;
 }
 
+.home-tips {
+  background: var(--background-secondary);
+  border: 1px solid var(--border-primary);
+  border-radius: var(--radius-lg);
+  padding: clamp(14px, 1.6vw, 18px) clamp(16px, 2vw, 22px);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  box-shadow: var(--soft-shadow);
+  position: relative;
+  overflow: hidden;
+}
+
+.home-tips::before {
+  content: '';
+  position: absolute;
+  width: 48px;
+  height: 48px;
+  right: 4px;
+  top: 4px;
+  background: var(--orb-violet);
+  border-radius: 9999px;
+  filter: blur(14px);
+  opacity: calc(var(--orb-opacity) * 0.45);
+  z-index: 0;
+}
+
+.home-tips > * { position: relative; z-index: 1; }
 .home-tips {
   background: var(--background-secondary);
   border: 1px solid var(--border-primary);
@@ -617,7 +672,7 @@ onMounted(() => {
   background: transparent;
   position: relative;
   font-family: Inter, system-ui, -apple-system, sans-serif;
-  padding: clamp(12px, 2vw, 24px) clamp(12px, 1.6vw, 20px);
+  padding: clamp(10px, 1.5vw, 18px) var(--page-gutter);
   color: var(--text-primary);
 }
 
@@ -670,14 +725,14 @@ onMounted(() => {
   box-shadow: var(--accent-shadow);
 }
 
-/* 页面容器 - 核心扩宽：1200 -> 1440, 流体边距 */
+/* 页面容器 - 与导航栏等宽，间距减半 */
 .page-container {
   max-width: var(--page-max-w);
   margin: 0 auto;
   width: 100%;
-  padding: 0 var(--page-gutter);
+  padding: 0;
+  box-sizing: border-box;
 }
-
 /* Aurora Enhanced Navigation Bar - 宽度同步扩至 1440 */
 .nav-bar {
   background: var(--background-glass);
@@ -807,26 +862,35 @@ onMounted(() => {
   margin-top: var(--spacing-md);
 }
 
-/* Page Header */
+/* Page Header - 统一订阅与其他页面 */
 .page-header {
   display: flex;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: center;
+  text-align: center;
   margin-bottom: clamp(18px, 2vw, 28px);
-  padding-bottom: 14px;
-  border-bottom: 1px solid var(--border-primary);
+  padding-bottom: 0;
+  border-bottom: none;
   position: relative;
 }
 
-.page-header::after {
-  content: '';
-  position: absolute;
-  bottom: -1px;
-  left: 0;
-  width: 88px;
-  height: 2px;
+.page-header::after { display: none; }
+
+.page-title {
+  margin: 0;
+  font-size: clamp(26px, 2.6vw, 32px);
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  line-height: 1.2;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
   background: var(--main-gradient);
-  border-radius: 2px;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  padding-bottom: 2px;
 }
 
 /* Subscription Layout - 去拥挤关键：380 基底, 自适应 2-3 列, 更大 gap */
@@ -989,12 +1053,34 @@ onMounted(() => {
 
 .theme-toggle-container {
   position: fixed;
-  top: clamp(12px, 2vw, 20px);
-  right: clamp(12px, 2vw, 20px);
+  top: clamp(8px, 1.2vw, 14px);
+  right: clamp(8px, 1.2vw, 14px);
   z-index: 1000;
+  width: 50px;
+  height: 50px;
   display: flex;
-  justify-content: flex-end;
-  align-items: flex-start;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none;
+}
+
+.theme-toggle-container > * {
+  pointer-events: auto;
+}
+
+@media (max-width: 768px) {
+  .theme-toggle-container {
+    width: 40px;
+    height: 40px;
+    top: 8px;
+    right: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .theme-toggle-container {
+    width: 36px;
+    height: 36px;
+  }
 }
 </style>
-

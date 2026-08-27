@@ -55,12 +55,11 @@
 <style scoped>
 .guide-layout {
   width: 100%;
-  max-width: var(--page-max-w);
+  max-width: 100%;
   margin: 0 auto;
-  padding: 0 clamp(8px, 1.2vw, 16px);
+  padding: 0;
   box-sizing: border-box;
 }
-
 .page-header {
   text-align: center;
   margin-bottom: clamp(18px, 2.4vw, 28px);
@@ -134,8 +133,8 @@
 
 .os-card:hover {
   transform: translateY(-3px);
-  border-color: rgba(var(--accent-rgb), 0.22);
-  box-shadow: var(--card-shadow);
+  border-color: var(--text-accent);
+  box-shadow: var(--accent-shadow);
 }
 
 .os-card.active {
@@ -143,7 +142,6 @@
   box-shadow: var(--sub-accent-shadow);
   background: var(--background-secondary);
 }
-
 .os-icon {
   font-size: 1.3em;
   color: var(--text-accent);

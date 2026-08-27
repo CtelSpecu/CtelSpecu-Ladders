@@ -131,19 +131,23 @@
   --spacing-2xl: 3rem;
   --spacing-3xl: 4rem;
   
-  /* Layout - taste: generous horizontal rhythm */
+  /* Layout - unified width, nav gutter halved */
   --page-max-w: 1440px;
-  --page-gutter: clamp(16px, 2.8vw, 32px);
-  --section-gap: clamp(20px, 2.4vw, 28px);
+  --page-gutter: clamp(8px, 1.4vw, 16px);
+  --nav-gutter: clamp(8px, 1.4vw, 16px);
   --card-radius: 18px;
   --card-radius-lg: 22px;
   --radius-sm: 8px;
   --radius-md: 12px;
   --radius-lg: 16px;
   --radius-pill: 999px;
-  
-  color: var(--text-primary);
-  background: var(--background-primary);
+  /* Orb accent for unified card blobs */
+  --orb-violet-rgb: 168, 85, 247;
+  --orb-rose-rgb: 253, 164, 175;
+  --orb-violet: rgb(var(--orb-violet-rgb));
+  --orb-rose: rgb(var(--orb-rose-rgb));
+  --orb-opacity: 0.92;
+  --orb-blur: 14px;
 }
 /* 浅色模式主题变量 - taste: warm neutral, not pure white, refined contrast */
 .theme-light {
@@ -200,8 +204,9 @@
   --main-gradient: linear-gradient(135deg, #0b6bff 0%, #6d28ff 36%, #d61a6c 72%, #ff6b35 100%);
   --strong-gradient: linear-gradient(45deg, #0b6bff 0%, #6d28ff 52%, #d61a6c 100%);
   --sub-gradient: linear-gradient(90deg, rgba(var(--accent-rgb), 0.14) 0%, rgba(109, 40, 255, 0.12) 50%, rgba(var(--sub-accent-rgb), 0.12) 100%);
+  --orb-opacity: 0.58;
+  --orb-blur: 14px;
 }
-/* 优化滚动性能 */
 * {
   scroll-behavior: smooth;
 }

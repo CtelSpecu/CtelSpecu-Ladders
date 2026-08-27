@@ -100,10 +100,11 @@ const switchToRecommend = () => {
 <style scoped>
 .free-node-page {
   width: 100%;
-  max-width: var(--page-max-w);
+  max-width: 100%;
   margin: 0 auto;
+  padding: 0;
+  box-sizing: border-box;
 }
-
 .page-title {
   margin: 0;
   font-size: clamp(26px, 2.6vw, 32px);
@@ -186,13 +187,12 @@ const switchToRecommend = () => {
 }
 
 .free-node-section h2 {
-  font-size: 16px;
-  font-weight: 750;
-  letter-spacing: -0.015em;
-  color: var(--text-primary);
+  font-size: var(--font-size-lg);
+  color: var(--text-accent);
   margin-bottom: var(--spacing-md);
-  padding-bottom: 10px;
-  border-bottom: 1px solid var(--border-primary);
+  padding-bottom: var(--spacing-sm);
+  border-bottom: 2px solid var(--text-accent);
+  font-weight: 600;
   display: flex;
   align-items: center;
   gap: var(--spacing-sm);
@@ -205,56 +205,90 @@ const switchToRecommend = () => {
 
 .section-description {
   color: var(--text-secondary);
-  margin-bottom: var(--spacing-md);
-  font-size: 13px;
+  margin-bottom: var(--spacing-lg);
+  font-size: var(--font-size-sm);
   line-height: 1.5;
 }
-
 .free-node-links {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 14px;
 }
 
 .free-node-link {
   display: flex;
   align-items: center;
-  gap: 10px;
-  background: var(--background-tertiary);
+  justify-content: flex-start;
+  gap: 12px;
+  background: var(--background-secondary);
   color: var(--text-primary);
   border: 1px solid var(--border-primary);
-  border-radius: var(--radius-md);
-  padding: 12px 14px;
+  border-radius: var(--card-radius);
+  padding: 16px 18px;
   text-decoration: none;
-  transition: all var(--transition-normal);
+  transition: all 0.5s;
   font-size: 14px;
-  font-weight: 550;
+  font-weight: 650;
   letter-spacing: -0.01em;
   position: relative;
   overflow: hidden;
+  text-align: left;
+  min-height: 52px;
+  width: 100%;
+  box-sizing: border-box;
+  box-shadow: var(--soft-shadow);
 }
 .free-node-link::before {
   content: '';
   position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(var(--accent-rgb), 0.08), transparent);
-  transition: left 0.5s ease;
+  width: 48px;
+  height: 48px;
+  right: 4px;
+  top: 4px;
+  background: var(--orb-violet);
+  border-radius: 9999px;
+  filter: blur(12px);
+  opacity: var(--orb-opacity);
+  z-index: 1;
+  transition: all 0.5s;
+}
+
+.free-node-link::after {
+  content: '';
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  right: 32px;
+  top: 12px;
+  background: var(--orb-rose);
+  border-radius: 9999px;
+  filter: blur(16px);
+  opacity: calc(var(--orb-opacity) * 0.9);
+  z-index: 1;
+  transition: all 0.5s;
+}
+
+.free-node-link > * { position: relative; z-index: 2; }
+
+.free-node-link:hover {
+  border-color: rgb(var(--orb-rose-rgb));
+  color: rgb(var(--orb-rose-rgb));
+  transform: translateY(-1px);
+  box-shadow: var(--card-shadow);
 }
 
 .free-node-link:hover::before {
-  left: 100%;
+  right: 48px;
+  top: auto;
+  bottom: -32px;
+  filter: blur(14px);
+  box-shadow: 20px 20px 20px 30px #a21caf;
 }
 
-.free-node-link:hover {
-  background: var(--surface-hover);
-  border-color: rgba(var(--accent-rgb), 0.22);
-  transform: translateX(3px);
-  box-shadow: var(--soft-shadow);
+.free-node-link:hover::after {
+  right: -32px;
+  filter: blur(18px);
 }
-
 .note-section {
   background: var(--background-secondary);
   border: 1px solid var(--border-primary);
@@ -263,8 +297,8 @@ const switchToRecommend = () => {
 }
 
 .note-section h2 {
-  font-size: 15px;
-  margin-bottom: 8px;
+  font-size: var(--font-size-lg);
+  margin-bottom: var(--spacing-sm);
   border-bottom: none;
   padding-bottom: 0;
   color: var(--text-sub-accent);
@@ -272,10 +306,8 @@ const switchToRecommend = () => {
 
 .section-note {
   color: var(--text-secondary);
-  line-height: 1.65;
-  font-size: 14px;
+  line-height: 1.6;
 }
-
 .inline-link {
   color: var(--text-link);
   text-decoration: none;

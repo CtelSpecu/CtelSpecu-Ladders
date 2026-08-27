@@ -2,7 +2,6 @@
   <div class="client-card">
     <div class="card-header">
       <h3 class="client-title">{{ client.name }}</h3>
-      <span v-if="isRecommended" class="recommend-badge">推荐</span>
     </div>
 
     <p v-if="client.description" class="description">{{ client.description }}</p>
@@ -47,38 +46,72 @@ const tutorialUrl = computed(() => {
   if (!props.os) return '';
   return props.client?.tutorials?.[props.os] ?? '';
 });
-
-const isRecommended = computed(() => {
-  if (!props.os) return false;
-  return (props.client?.recommended ?? []).includes(props.os);
-});
 </script>
-
 <style scoped>
 .client-card {
   background: var(--background-secondary);
   border: 1px solid var(--border-primary);
-  border-radius: 14px;
+  border-radius: var(--card-radius);
   padding: var(--spacing-lg);
   color: var(--text-primary);
   box-shadow: var(--soft-shadow);
   position: relative;
   overflow: hidden;
-  transition: all var(--transition-normal);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  transition: all 0.5s cubic-bezier(0.4,0,0.2,1);
+}
+
+.client-card::before {
+  content: '';
+  position: absolute;
+  width: 44px;
+  height: 44px;
+  right: 4px;
+  top: 4px;
+  background: var(--orb-violet);
+  border-radius: 9999px;
+  filter: blur(12px);
+  opacity: calc(var(--orb-opacity) * 0.85);
+  z-index: 0;
+  transition: all 0.5s;
+}
+
+.client-card::after {
+  content: '';
+  position: absolute;
+  width: 72px;
+  height: 72px;
+  right: 28px;
+  top: 10px;
+  background: var(--orb-rose);
+  border-radius: 9999px;
+  filter: blur(15px);
+  opacity: calc(var(--orb-opacity) * 0.75);
+  z-index: 0;
+  transition: all 0.5s;
 }
 
 .client-card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--accent-shadow);
-  border-color: var(--text-accent);
+  transform: translateY(-3px);
+  box-shadow: var(--card-shadow);
+  border-color: rgba(var(--orb-rose-rgb), 0.45);
 }
 
+.client-card:hover::before {
+  right: 40px;
+  top: auto;
+  bottom: -6px;
+  box-shadow: 16px 16px 24px 8px rgba(var(--orb-violet-rgb), 0.28);
+}
+
+.client-card:hover::after {
+  right: -24px;
+}
+
+.client-card > * { position: relative; z-index: 1; }
 .card-header {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-start;
   gap: var(--spacing-sm);
   margin-bottom: var(--spacing-sm);
 }
@@ -89,16 +122,6 @@ const isRecommended = computed(() => {
   margin: 0;
   font-weight: 600;
   text-align: left;
-}
-
-.recommend-badge {
-  background: var(--main-gradient);
-  color: var(--text-bright);
-  padding: 2px 8px;
-  border-radius: 10px;
-  font-size: var(--font-size-xs);
-  font-weight: 600;
-  flex-shrink: 0;
 }
 
 .description {

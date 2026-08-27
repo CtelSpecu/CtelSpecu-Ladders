@@ -84,12 +84,11 @@ function goToGuide() {
 <style scoped>
 .category-layout {
   width: 100%;
-  max-width: var(--page-max-w);
+  max-width: 100%;
   margin: 0 auto;
-  padding: 0 var(--page-gutter);
+  padding: 0;
   box-sizing: border-box;
 }
-
 .page-header {
   text-align: center;
   margin-bottom: clamp(18px, 2.4vw, 32px);
