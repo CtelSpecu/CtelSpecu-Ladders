@@ -53,14 +53,13 @@ import VueIcon from './VueIcon.vue'
 }
 
 .footer-content {
-  max-width: 1200px;
+  max-width: var(--page-max-w);
   margin: 0 auto;
-  padding: 0 var(--spacing-xl);
+  padding: 0 var(--page-gutter);
   display: flex;
   justify-content: center;
   align-items: center;
 }
-
 .footer-text {
   display: flex;
   align-items: center;

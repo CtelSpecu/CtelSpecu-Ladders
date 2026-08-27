@@ -100,16 +100,17 @@ const switchToRecommend = () => {
 <style scoped>
 .free-node-page {
   width: 100%;
-  max-width: 1200px;
+  max-width: var(--page-max-w);
   margin: 0 auto;
 }
 
 .page-title {
   margin: 0;
-  font-size: var(--font-size-2xl);
-  font-weight: 700;
+  font-size: clamp(26px, 2.6vw, 32px);
+  font-weight: 800;
+  letter-spacing: -0.025em;
   text-align: center;
-  margin-bottom: var(--spacing-xl);
+  margin-bottom: clamp(18px, 2vw, 28px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -117,8 +118,9 @@ const switchToRecommend = () => {
 }
 
 .title-icon {
-  font-size: 1.1em;
+  font-size: 1.05em;
   color: var(--text-accent);
+  filter: drop-shadow(0 2px 8px rgba(var(--accent-rgb), 0.18));
 }
 
 .title-text {
@@ -127,16 +129,17 @@ const switchToRecommend = () => {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  padding-bottom: 2px;
 }
 
 .free-node-grid {
   display: grid;
   grid-template-columns: 1fr;
-  gap: var(--spacing-lg);
+  gap: clamp(16px, 1.8vw, 22px);
   width: 100%;
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 1080px) {
   .free-node-grid {
     grid-template-columns: 1fr 1fr;
   }
@@ -145,17 +148,16 @@ const switchToRecommend = () => {
     grid-column: 1 / -1;
   }
 }
-
 .free-node-section {
   background: var(--background-secondary);
   border: 1px solid var(--border-primary);
-  border-radius: 16px;
-  padding: var(--spacing-xl);
+  border-radius: var(--card-radius);
+  padding: clamp(18px, 2vw, 24px);
   color: var(--text-primary);
   box-shadow: var(--soft-shadow);
   position: relative;
   overflow: hidden;
-  transition: all var(--transition-normal);
+  transition: all var(--transition-spring);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
 }
@@ -174,22 +176,23 @@ const switchToRecommend = () => {
 }
 
 .free-node-section:hover {
-  transform: translateY(-8px);
-  box-shadow: var(--accent-shadow);
-  border-color: var(--text-accent);
+  transform: translateY(-4px);
+  box-shadow: var(--card-shadow);
+  border-color: rgba(var(--accent-rgb), 0.18);
 }
 
 .free-node-section:hover::before {
-  opacity: 0.1;
+  opacity: 0.06;
 }
 
 .free-node-section h2 {
-  font-size: var(--font-size-lg);
-  color: var(--text-accent);
+  font-size: 16px;
+  font-weight: 750;
+  letter-spacing: -0.015em;
+  color: var(--text-primary);
   margin-bottom: var(--spacing-md);
-  padding-bottom: var(--spacing-sm);
-  border-bottom: 2px solid var(--text-accent);
-  font-weight: 600;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border-primary);
   display: flex;
   align-items: center;
   gap: var(--spacing-sm);
@@ -197,48 +200,39 @@ const switchToRecommend = () => {
 
 .section-icon {
   color: var(--text-accent);
+  font-size: 1.05em;
 }
 
 .section-description {
   color: var(--text-secondary);
-  margin-bottom: var(--spacing-lg);
+  margin-bottom: var(--spacing-md);
+  font-size: 13px;
+  line-height: 1.5;
 }
 
 .free-node-links {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-sm);
+  gap: 10px;
 }
 
 .free-node-link {
   display: flex;
   align-items: center;
-  gap: var(--spacing-sm);
+  gap: 10px;
   background: var(--background-tertiary);
   color: var(--text-primary);
   border: 1px solid var(--border-primary);
-  border-radius: 10px;
-  padding: var(--spacing-md) var(--spacing-lg);
+  border-radius: var(--radius-md);
+  padding: 12px 14px;
   text-decoration: none;
   transition: all var(--transition-normal);
-  font-size: var(--font-size-base);
-  font-weight: 500;
+  font-size: 14px;
+  font-weight: 550;
+  letter-spacing: -0.01em;
   position: relative;
   overflow: hidden;
 }
-
-.link-icon {
-  flex-shrink: 0;
-  font-size: 1.1em;
-}
-
-.link-text {
-  flex: 1;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
 .free-node-link::before {
   content: '';
   position: absolute;
@@ -246,7 +240,7 @@ const switchToRecommend = () => {
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.1), transparent);
+  background: linear-gradient(90deg, transparent, rgba(var(--accent-rgb), 0.08), transparent);
   transition: left 0.5s ease;
 }
 
@@ -255,22 +249,22 @@ const switchToRecommend = () => {
 }
 
 .free-node-link:hover {
-  background: var(--background-trans);
-  border-color: var(--text-accent);
-  transform: translateX(4px);
+  background: var(--surface-hover);
+  border-color: rgba(var(--accent-rgb), 0.22);
+  transform: translateX(3px);
   box-shadow: var(--soft-shadow);
 }
 
 .note-section {
-  background: var(--background-tertiary);
-  border-left: 4px solid var(--text-sub-accent);
+  background: var(--background-secondary);
   border: 1px solid var(--border-primary);
-  padding: var(--spacing-lg);
+  border-left: 3px solid var(--text-sub-accent);
+  padding: clamp(16px, 1.8vw, 20px);
 }
 
 .note-section h2 {
-  font-size: var(--font-size-lg);
-  margin-bottom: var(--spacing-sm);
+  font-size: 15px;
+  margin-bottom: 8px;
   border-bottom: none;
   padding-bottom: 0;
   color: var(--text-sub-accent);
@@ -278,13 +272,14 @@ const switchToRecommend = () => {
 
 .section-note {
   color: var(--text-secondary);
-  line-height: 1.6;
+  line-height: 1.65;
+  font-size: 14px;
 }
 
 .inline-link {
   color: var(--text-link);
   text-decoration: none;
-  font-weight: 500;
+  font-weight: 600;
   position: relative;
 }
 
@@ -312,8 +307,8 @@ const switchToRecommend = () => {
     padding: var(--spacing-lg);
   }
   .free-node-link {
-    padding: var(--spacing-sm) var(--spacing-md);
-    font-size: var(--font-size-sm);
+    padding: 10px 12px;
+    font-size: 13px;
   }
   .link-icon {
     font-size: 1em;

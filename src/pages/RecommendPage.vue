@@ -118,7 +118,7 @@ const filteredProviders = computed(() => {
 <style scoped>
 .recommend-page {
   width: 100%;
-  max-width: 1200px;
+  max-width: var(--page-max-w);
   margin: 0 auto;
 }
 
@@ -129,8 +129,9 @@ const filteredProviders = computed(() => {
 
 .page-title {
   margin: 0;
-  font-size: var(--font-size-2xl);
-  font-weight: 700;
+  font-size: clamp(26px, 2.6vw, 32px);
+  font-weight: 800;
+  letter-spacing: -0.025em;
   margin-bottom: var(--spacing-sm);
   display: flex;
   align-items: center;
@@ -139,8 +140,9 @@ const filteredProviders = computed(() => {
 }
 
 .title-icon {
-  font-size: 1.1em;
+  font-size: 1.05em;
   color: var(--text-accent);
+  filter: drop-shadow(0 2px 8px rgba(var(--accent-rgb), 0.18));
 }
 
 .title-text {
@@ -149,6 +151,7 @@ const filteredProviders = computed(() => {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  padding-bottom: 2px;
 }
 
 .page-subtitle {
@@ -184,8 +187,8 @@ const filteredProviders = computed(() => {
 }
 
 .filter-pill:hover {
-  border-color: var(--text-accent);
-  transform: translateY(-2px);
+  border-color: rgba(var(--accent-rgb), 0.22);
+  transform: translateY(-1px);
   box-shadow: var(--soft-shadow);
 }
 
@@ -203,10 +206,10 @@ const filteredProviders = computed(() => {
 .category-info {
   text-align: center;
   margin-bottom: var(--spacing-xl);
-  padding: var(--spacing-lg);
+  padding: clamp(18px, 2vw, 24px);
   background: var(--background-secondary);
   border: 1px solid var(--border-primary);
-  border-radius: 16px;
+  border-radius: var(--card-radius);
   box-shadow: var(--soft-shadow);
 }
 
@@ -257,8 +260,8 @@ const filteredProviders = computed(() => {
 
 .provider-cards {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: var(--spacing-md);
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: clamp(16px, 1.8vw, 22px);
 }
 
 .provider-card {
@@ -267,7 +270,7 @@ const filteredProviders = computed(() => {
   gap: var(--spacing-md);
   background: var(--background-secondary);
   border: 1px solid var(--border-primary);
-  border-radius: 14px;
+  border-radius: clamp(14px, 1.4vw, 18px);
   padding: var(--spacing-lg);
   text-decoration: none;
   color: var(--text-primary);
@@ -283,20 +286,21 @@ const filteredProviders = computed(() => {
   top: 0;
   left: 0;
   right: 0;
-  height: 3px;
-  background: var(--main-gradient);
+  bottom: 0;
+  background: var(--sub-gradient);
   opacity: 0;
   transition: opacity var(--transition-normal);
+  z-index: 0;
 }
 
 .provider-card:hover {
   transform: translateY(-4px);
-  box-shadow: var(--accent-shadow);
-  border-color: var(--text-accent);
+  box-shadow: var(--card-shadow);
+  border-color: rgba(var(--accent-rgb), 0.18);
 }
 
 .provider-card:hover::before {
-  opacity: 1;
+  opacity: 0.06;
 }
 
 .card-icon {
@@ -310,12 +314,16 @@ const filteredProviders = computed(() => {
   color: var(--text-accent);
   font-size: 1.25em;
   flex-shrink: 0;
-  border: 1px solid var(--border-primary);
+  border: 1px solid var(--border-secondary);
+  position: relative;
+  z-index: 1;
 }
 
 .card-content {
   flex: 1;
   min-width: 0;
+  position: relative;
+  z-index: 1;
 }
 
 .provider-name {
@@ -336,6 +344,8 @@ const filteredProviders = computed(() => {
   font-size: 0.9em;
   flex-shrink: 0;
   transition: all var(--transition-normal);
+  position: relative;
+  z-index: 1;
 }
 
 .provider-card:hover .card-arrow {

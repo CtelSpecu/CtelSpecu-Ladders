@@ -113,16 +113,17 @@ import VueIcon from '../components/VueIcon.vue';
 <style scoped>
 .free-vpn-page {
   width: 100%;
-  max-width: 1200px;
+  max-width: var(--page-max-w);
   margin: 0 auto;
 }
 
 .page-title {
   margin: 0;
-  font-size: var(--font-size-2xl);
-  font-weight: 700;
+  font-size: clamp(26px, 2.6vw, 32px);
+  font-weight: 800;
+  letter-spacing: -0.025em;
   text-align: center;
-  margin-bottom: var(--spacing-xl);
+  margin-bottom: clamp(18px, 2vw, 28px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -130,8 +131,9 @@ import VueIcon from '../components/VueIcon.vue';
 }
 
 .title-icon {
-  font-size: 1.1em;
+  font-size: 1.05em;
   color: var(--text-accent);
+  filter: drop-shadow(0 2px 8px rgba(var(--accent-rgb), 0.18));
 }
 
 .title-text {
@@ -140,6 +142,7 @@ import VueIcon from '../components/VueIcon.vue';
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  padding-bottom: 2px;
 }
 
 .section-icon {
@@ -149,20 +152,20 @@ import VueIcon from '../components/VueIcon.vue';
 .free-vpn-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: var(--spacing-lg);
+  gap: clamp(16px, 1.8vw, 22px);
   width: 100%;
 }
 
 .free-vpn-section {
   background: var(--background-secondary);
   border: 1px solid var(--border-primary);
-  border-radius: 16px;
-  padding: var(--spacing-xl);
+  border-radius: var(--card-radius);
+  padding: clamp(18px, 2vw, 24px);
   color: var(--text-primary);
   box-shadow: var(--soft-shadow);
   position: relative;
   overflow: hidden;
-  transition: all var(--transition-normal);
+  transition: all var(--transition-spring);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   min-height: 280px;
@@ -182,37 +185,38 @@ import VueIcon from '../components/VueIcon.vue';
 }
 
 .free-vpn-section:hover {
-  transform: translateY(-8px);
-  box-shadow: var(--accent-shadow);
-  border-color: var(--text-accent);
+  transform: translateY(-4px);
+  box-shadow: var(--card-shadow);
+  border-color: rgba(var(--accent-rgb), 0.18);
 }
 
 .free-vpn-section:hover::before {
-  opacity: 0.1;
+  opacity: 0.06;
 }
 
 .free-vpn-section h2 {
-  font-size: var(--font-size-lg);
-  color: var(--text-accent);
-  margin-bottom: var(--spacing-lg);
-  padding-bottom: var(--spacing-sm);
-  border-bottom: 2px solid var(--text-accent);
-  font-weight: 600;
+  font-size: 16px;
+  font-weight: 750;
+  letter-spacing: -0.015em;
+  color: var(--text-primary);
+  margin-bottom: var(--spacing-md);
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border-primary);
   display: flex;
   align-items: center;
   gap: var(--spacing-sm);
 }
-
 .free-vpn-btn-group {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-md);
+  gap: 12px;
   width: 100%;
 }
 
 .vpn-item {
   width: 100%;
 }
+
 
 .free-vpn-btn {
   display: flex;

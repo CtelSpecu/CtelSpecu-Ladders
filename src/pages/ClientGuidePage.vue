@@ -55,20 +55,23 @@
 <style scoped>
 .guide-layout {
   width: 100%;
-  max-width: 1200px;
+  max-width: var(--page-max-w);
   margin: 0 auto;
+  padding: 0 clamp(8px, 1.2vw, 16px);
+  box-sizing: border-box;
 }
 
 .page-header {
   text-align: center;
-  margin-bottom: var(--spacing-xl);
+  margin-bottom: clamp(18px, 2.4vw, 28px);
 }
 
 .page-title {
-  margin: 0;
-  font-size: var(--font-size-2xl);
-  font-weight: 700;
-  margin-bottom: var(--spacing-sm);
+  margin: 0 0 var(--spacing-sm);
+  font-size: clamp(26px, 3vw, 34px);
+  font-weight: 800;
+  letter-spacing: -0.025em;
+  line-height: 1.15;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -78,6 +81,7 @@
 .title-icon {
   font-size: 1.1em;
   color: var(--text-accent);
+  filter: drop-shadow(0 2px 8px rgba(var(--accent-rgb), 0.18));
 }
 
 .title-text {
@@ -86,26 +90,28 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  padding-bottom: 2px;
 }
 
 .page-subtitle {
   color: var(--text-secondary);
-  font-size: var(--font-size-base);
+  font-size: 15px;
   margin: 0;
+  line-height: 1.5;
 }
 
 .guide-content {
-  padding: 0 var(--spacing-md);
+  padding: 0;
 }
 
 .os-section {
-  margin-bottom: var(--spacing-xl);
+  margin-bottom: clamp(20px, 2.2vw, 28px);
 }
 
 .os-grid {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  gap: var(--spacing-md);
+  gap: clamp(10px, 1.4vw, 14px);
 }
 
 .os-card {
@@ -114,13 +120,13 @@
   align-items: center;
   justify-content: center;
   gap: var(--spacing-sm);
-  padding: var(--spacing-lg);
-  border-radius: 16px;
+  padding: clamp(14px, 1.6vw, 18px) 10px;
+  border-radius: var(--card-radius);
   border: 1px solid var(--border-primary);
   background: var(--background-secondary);
   color: var(--text-primary);
   cursor: pointer;
-  transition: all var(--transition-normal);
+  transition: all var(--transition-spring);
   box-shadow: var(--soft-shadow);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
@@ -128,69 +134,74 @@
 
 .os-card:hover {
   transform: translateY(-3px);
-  border-color: var(--text-accent);
-  box-shadow: var(--accent-shadow);
+  border-color: rgba(var(--accent-rgb), 0.22);
+  box-shadow: var(--card-shadow);
 }
 
 .os-card.active {
   border-color: var(--text-sub-accent);
   box-shadow: var(--sub-accent-shadow);
+  background: var(--background-secondary);
 }
 
 .os-icon {
-  font-size: 1.4em;
+  font-size: 1.3em;
   color: var(--text-accent);
 }
 
 .os-label {
-  font-size: var(--font-size-sm);
-  font-weight: 600;
+  font-size: 13px;
+  font-weight: 650;
+  letter-spacing: -0.01em;
 }
 
 .guide-section {
-  margin-bottom: var(--spacing-xl);
+  margin-bottom: clamp(22px, 2.4vw, 32px);
 }
 
 .section-title {
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   justify-content: space-between;
   gap: var(--spacing-md);
-  margin-bottom: var(--spacing-lg);
-  padding-bottom: var(--spacing-sm);
-  border-bottom: 2px solid var(--border-primary);
+  margin-bottom: 16px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border-primary);
 }
 
 .guide-section h2 {
   display: flex;
   align-items: center;
-  font-size: var(--font-size-lg);
+  gap: 8px;
+  font-size: 16px;
+  font-weight: 750;
+  letter-spacing: -0.015em;
   color: var(--text-primary);
   margin: 0;
-  font-weight: 600;
 }
 
 .link-button {
   border: 1px solid var(--border-primary);
   background: var(--background-tertiary);
   color: var(--text-primary);
-  border-radius: 12px;
+  border-radius: var(--radius-md);
   padding: 10px 14px;
   cursor: pointer;
   transition: all var(--transition-normal);
   display: inline-flex;
   align-items: center;
   gap: var(--spacing-sm);
-  font-weight: 600;
+  font-weight: 650;
+  font-size: 13px;
   white-space: nowrap;
 }
 
 .link-button:hover {
-  transform: translateY(-2px);
-  border-color: var(--text-accent);
+  transform: translateY(-1px);
+  border-color: rgba(var(--accent-rgb), 0.28);
   box-shadow: var(--soft-shadow);
-  color: var(--text-bright);
-  background: var(--background-trans);
+  color: var(--text-primary);
+  background: var(--surface-hover);
 }
 
 .link-icon {
@@ -200,7 +211,7 @@
 .client-cards {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: var(--spacing-md);
+  gap: clamp(14px, 1.7vw, 18px);
   width: 100%;
 }
 
@@ -216,7 +227,7 @@
 
 @media (max-width: 768px) {
   .guide-content {
-    padding: 0 var(--spacing-sm);
+    padding: 0;
   }
 
   .os-grid {
@@ -237,7 +248,6 @@
     justify-content: space-between;
   }
 }
-
 @media (max-width: 480px) {
   .page-title {
     font-size: var(--font-size-xl);

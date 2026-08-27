@@ -715,23 +715,23 @@ const importToClient = (client) => {
 .subscription-card {
   background: var(--background-secondary);
   border: 1px solid var(--border-primary);
-  border-radius: 16px;
-  padding: var(--spacing-xl);
-  margin: var(--spacing-md) 0;
+  border-radius: var(--card-radius-lg);
+  padding: clamp(18px, 2vw, 26px);
+  margin: 0;
   color: var(--text-primary);
   box-shadow: var(--soft-shadow);
-  transition: all var(--transition-normal);
+  transition: all var(--transition-spring);
   position: relative;
   overflow: hidden;
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  animation: card-appear 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+  backdrop-filter: blur(14px) saturate(1.05);
+  -webkit-backdrop-filter: blur(14px) saturate(1.05);
+  animation: card-appear 0.7s cubic-bezier(0.23, 1, 0.32, 1);
 }
 
 @keyframes card-appear {
   from {
     opacity: 0;
-    transform: translateY(30px) scale(0.95);
+    transform: translateY(18px) scale(0.98);
   }
   to {
     opacity: 1;
@@ -753,61 +753,65 @@ const importToClient = (client) => {
 }
 
 .subscription-card:hover {
-  transform: translateY(-8px) scale(1.02);
-  box-shadow: var(--accent-shadow);
-  border-color: var(--text-accent);
+  transform: translateY(-6px);
+  box-shadow: var(--card-shadow);
+  border-color: rgba(var(--accent-rgb), 0.22);
 }
 
 .subscription-card:hover::before {
-  opacity: 0.1;
+  opacity: 0.07;
 }
 
 .rating-container {
   display: flex;
   align-items: center;
   gap: var(--spacing-md);
-  margin-bottom: var(--spacing-lg);
+  margin-bottom: var(--spacing-md);
 }
 
 .stars {
   display: flex;
-  gap: var(--spacing-xs);
+  gap: 4px;
 }
 
 .star {
-  font-size: var(--font-size-lg);
+  font-size: 15px;
   color: var(--text-quaternary);
   transition: all var(--transition-normal);
   cursor: pointer;
+  line-height: 1;
 }
 
 .star.active {
   color: var(--text-accent);
-  text-shadow: 0 0 10px rgba(0, 212, 255, 0.5);
+  text-shadow: var(--glow-primary);
 }
 
 .star:hover {
-  transform: scale(1.2);
+  transform: scale(1.18);
 }
 
 .rating-text {
-  font-size: var(--font-size-sm);
-  font-weight: 600;
+  font-size: 12px;
+  font-weight: 650;
+  letter-spacing: -0.01em;
   color: var(--text-secondary);
 }
 
 h2 {
-  font-size: var(--font-size-2xl);
-  font-weight: 700;
-  margin: 0 0 var(--spacing-xl) 0;
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+  margin: 0 0 var(--spacing-md) 0;
   color: var(--text-primary);
 }
 
 .traffic-info {
   background: var(--background-tertiary);
-  border-radius: 12px;
-  padding: var(--spacing-lg);
-  margin: var(--spacing-lg) 0;
+  border-radius: var(--radius-lg);
+  padding: 18px 16px;
+  margin: 16px 0;
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border: 1px solid var(--border-secondary);
@@ -825,9 +829,8 @@ h2 {
   display: flex;
   align-items: center;
   gap: 10px;
-  margin-bottom: 5px;
+  margin-bottom: 6px;
 }
-
 .retry-controls {
   display: flex;
   align-items: center;
@@ -835,18 +838,18 @@ h2 {
 }
 
 .retry-btn {
-  background: var(--background-tertiary);
-  border: 1px solid var(--border-secondary);
-  border-radius: 8px;
-  padding: 4px 8px;
+  background: var(--background-secondary);
+  border: 1px solid var(--border-primary);
+  border-radius: var(--radius-pill);
+  padding: 5px 10px;
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 5px;
   cursor: pointer;
   transition: all var(--transition-normal);
   color: var(--text-secondary);
   font-size: 11px;
-  font-weight: 500;
+  font-weight: 600;
   white-space: nowrap;
   backdrop-filter: blur(5px);
 }
@@ -856,49 +859,51 @@ h2 {
 }
 
 .retry-btn.manual-retry {
-  background: rgba(255, 193, 7, 0.1);
-  border: 1px solid rgba(255, 193, 7, 0.3);
-  color: var(--text-accent);
+  background: rgba(var(--warning-rgb), 0.10);
+  border: 1px solid rgba(var(--warning-rgb), 0.26);
+  color: var(--text-warning);
 }
 
 .retry-btn.manual-retry:hover {
-  background: rgba(255, 193, 7, 0.2);
-  border-color: var(--text-accent);
-  transform: translateY(-2px);
+  background: rgba(var(--warning-rgb), 0.16);
+  border-color: rgba(var(--warning-rgb), 0.36);
+  transform: translateY(-1px);
   box-shadow: var(--soft-shadow);
 }
 
 .retry-btn.force-refresh {
-  background: rgba(40, 167, 69, 0.1);
-  border: 1px solid rgba(40, 167, 69, 0.3);
-  color: #4ade80;
+  background: rgba(var(--success-rgb), 0.10);
+  border: 1px solid rgba(var(--success-rgb), 0.24);
+  color: var(--text-success);
 }
 
 .retry-btn.force-refresh:hover {
-  background: rgba(40, 167, 69, 0.2);
-  border-color: #4ade80;
-  transform: translateY(-2px);
+  background: rgba(var(--success-rgb), 0.16);
+  border-color: rgba(var(--success-rgb), 0.34);
+  transform: translateY(-1px);
   box-shadow: var(--soft-shadow);
 }
 
 .retry-btn:active {
-  transform: scale(0.95);
+  transform: scale(0.97);
 }
 
 .auto-retry-indicator {
   display: flex;
   align-items: center;
-  gap: 4px;
-  font-size: 10px;
-  color: rgba(255, 255, 255, 0.7);
-  padding: 2px 6px;
-  background: rgba(108, 117, 125, 0.2);
-  border-radius: 8px;
-  border: 1px solid rgba(108, 117, 125, 0.3);
+  gap: 5px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  padding: 4px 8px;
+  background: var(--background-tertiary);
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--border-primary);
 }
 
 .auto-retry-indicator i {
   animation: spin 2s linear infinite;
+  color: var(--text-tertiary);
 }
 
 @keyframes spin {
@@ -909,114 +914,125 @@ h2 {
 .traffic-amount-large {
   display: flex;
   align-items: baseline;
-  color: rgb(149, 246, 239);
-  text-shadow: 0 0 20px rgba(78, 205, 196, 0.5);
+  justify-content: center;
+  color: var(--text-accent);
+  text-shadow: var(--glow-primary);
   line-height: 1;
-  margin: 10px 0;
+  margin: 8px 0;
+  letter-spacing: -0.02em;
 }
-
 .remaining-traffic {
-  font-size: 48px;
+  font-size: clamp(36px, 3.2vw, 46px);
   font-weight: 900;
+  letter-spacing: -0.03em;
 }
 
 .remaining-traffic.expired {
-  color: #ff4757 !important;
-  text-shadow: 0 0 20px rgba(255, 71, 87, 0.5) !important;
+  color: var(--text-error) !important;
+  text-shadow: 0 0 18px rgba(var(--error-rgb), 0.42) !important;
 }
 
 .remaining-traffic.failed {
-  color: #6b7280 !important;
-  text-shadow: 0 0 20px rgba(107, 114, 128, 0.3) !important;
+  color: var(--text-quaternary) !important;
+  text-shadow: none !important;
 }
 
 .total-traffic {
-  font-size: 23px;
-  font-weight: 700;
-  opacity: 0.85;
-  margin-left: 2px;
+  font-size: 20px;
+  font-weight: 750;
+  color: var(--text-secondary);
+  margin-left: 4px;
 }
 
 .traffic-unit {
-  font-size: 18px;
-  font-weight: 600;
-  opacity: 0.8;
+  font-size: 15px;
+  font-weight: 650;
+  color: var(--text-tertiary);
+  margin-left: 2px;
 }
 
 .traffic-footer {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 10px;
+  margin-top: 8px;
 }
 
 .traffic-source {
   display: flex;
   align-items: center;
-  gap: 5px;
-  font-size: 12px;
-  font-weight: 600;
-  opacity: 0.9;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 650;
+  letter-spacing: 0.04em;
+  color: var(--text-tertiary);
 }
 
 .source-icon {
-  font-size: 14px;
+  font-size: 13px;
+  color: var(--text-tertiary);
 }
 
 .source-text {
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.05em;
 }
 
 .reset-info {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 15px;
-  padding: 20px;
-  margin: 20px 0;
-  backdrop-filter: blur(10px);
+  background: var(--background-tertiary);
+  border: 1px solid var(--border-secondary);
+  border-radius: var(--radius-lg);
+  padding: 16px 18px;
+  margin: 16px 0;
+  backdrop-filter: blur(8px);
 }
 
 .reset-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 15px;
+  margin-bottom: 12px;
 }
 
 .reset-label {
-  font-weight: 600;
-  font-size: 16px;
+  font-weight: 650;
+  font-size: 13px;
+  color: var(--text-secondary);
+  letter-spacing: -0.01em;
 }
 
 .reset-text {
   font-weight: 700;
-  font-size: 14px;
-  opacity: 0.9;
+  font-size: 13px;
+  color: var(--text-primary);
 }
 
 .traffic-label {
-  font-weight: 600;
-  font-size: 16px;
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--text-secondary);
+  letter-spacing: -0.01em;
 }
 
 .traffic-amount {
   font-weight: 700;
-  font-size: 14px;
-  opacity: 0.9;
+  font-size: 13px;
+  color: var(--text-primary);
 }
 
 .progress-bar {
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 10px;
+  background: var(--background-trans);
+  border: 1px solid var(--border-secondary);
+  border-radius: var(--radius-pill);
   height: 8px;
   overflow: hidden;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
 
 .progress-fill {
   height: 100%;
-  background: linear-gradient(90deg, #00ff88, #00ccff);
-  border-radius: 10px;
+  background: linear-gradient(90deg, #00d38f 0%, var(--text-accent) 100%);
+  border-radius: var(--radius-pill);
   transition: width 0.8s ease;
   position: relative;
 }
@@ -1028,7 +1044,7 @@ h2 {
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.28), transparent);
   animation: progress-shine 2s infinite;
 }
 
@@ -1038,17 +1054,18 @@ h2 {
 }
 
 .progress-text {
-  font-size: 12px;
+  font-size: 11px;
   text-align: center;
-  opacity: 0.8;
+  color: var(--text-tertiary);
   font-weight: 600;
+  letter-spacing: -0.01em;
 }
 
 .time-info {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 15px;
-  margin: 25px 0;
+  gap: 10px;
+  margin: 18px 0;
 }
 
 .time-item {
@@ -1057,8 +1074,8 @@ h2 {
   align-items: center;
   background: var(--background-tertiary);
   border: 1px solid var(--border-secondary);
-  padding: var(--spacing-md);
-  border-radius: 12px;
+  padding: 12px 14px;
+  border-radius: var(--radius-md);
   backdrop-filter: blur(5px);
   transition: all var(--transition-normal);
   position: relative;
@@ -1072,7 +1089,7 @@ h2 {
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.1), transparent);
+  background: linear-gradient(90deg, transparent, rgba(var(--accent-rgb), 0.08), transparent);
   transition: left 0.5s ease;
 }
 
@@ -1081,15 +1098,16 @@ h2 {
 }
 
 .time-item:hover {
-  background: var(--background-trans);
-  border-color: var(--text-accent);
-  transform: translateX(8px);
+  background: var(--surface-hover);
+  border-color: rgba(var(--accent-rgb), 0.20);
+  transform: translateX(4px);
   box-shadow: var(--soft-shadow);
 }
 
 .time-label {
   font-weight: 600;
-  font-size: 14px;
+  font-size: 13px;
+  color: var(--text-secondary);
   display: flex;
   align-items: center;
   gap: 8px;
@@ -1098,47 +1116,50 @@ h2 {
 .time-label i {
   width: 16px;
   text-align: center;
-  opacity: 0.9;
+  color: var(--text-tertiary);
 }
 
 .time-value {
   font-weight: 700;
-  font-size: 14px;
-  opacity: 0.9;
+  font-size: 13px;
+  color: var(--text-primary);
 }
 
 .subscription-link-area {
-  margin: 25px 0;
+  margin: 18px 0;
 }
 
 .link-header {
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-bottom: 10px;
-  font-size: 14px;
-  font-weight: 600;
-  opacity: 0.9;
+  margin-bottom: 8px;
+  font-size: 12px;
+  font-weight: 650;
+  letter-spacing: 0.02em;
+  color: var(--text-secondary);
+  text-transform: uppercase;
 }
 
 .link-header i {
-  color: #4ecdc4;
+  color: var(--text-accent);
 }
 
 .subscription-link-area textarea {
   width: 100%;
-  min-height: 120px;
-  max-height: 200px;
-  background: var(--background-trans);
-  border: 2px solid var(--border-primary);
-  border-radius: 12px;
-  padding: 15px;
+  min-height: 88px;
+  max-height: 160px;
+  background: var(--background-tertiary);
+  border: 1px solid var(--border-primary);
+  border-radius: var(--radius-md);
+  padding: 12px 14px;
   color: var(--text-primary);
-  font-family: 'Courier New', monospace;
+  font-family: ui-monospace, 'Cascadia Code', 'Courier New', monospace;
   font-size: 12px;
+  line-height: 1.5;
   resize: vertical;
   backdrop-filter: blur(10px);
-  transition: all 0.3s ease;
+  transition: all var(--transition-normal);
   word-wrap: break-word;
   word-break: break-all;
   overflow-wrap: break-word;
@@ -1149,34 +1170,34 @@ h2 {
 
 .subscription-link-area textarea:focus {
   outline: none;
-  border-color: rgba(255, 255, 255, 0.5);
-  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(var(--accent-rgb), 0.42);
+  background: var(--background-secondary);
+  box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.14);
 }
 
 .subscription-link-area textarea::placeholder {
-  color: rgba(255, 255, 255, 0.6);
+  color: var(--text-tertiary);
 }
 
 .import-buttons {
   display: flex;
-  gap: 15px;
+  gap: 12px;
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
 }
-
 .copy-link-btn, .import-btn {
   flex: 1;
   min-width: 140px;
   padding: 15px 25px;
   border: none;
-  border-radius: 12px;
+  border-radius: var(--radius-md);
   font-weight: 700;
-  font-size: 14px;
+  font-size: 13px;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all var(--transition-normal);
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 0.04em;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1187,32 +1208,30 @@ h2 {
   font-size: 16px;
 }
 
-/* 基础动画按钮样式 */
+/* 基础动画按钮样式 - 统一半径与过渡 */
 .animated-button {
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 4px;
-  padding: 16px 36px;
-  border: 4px solid;
-  border-color: transparent;
-  font-size: 16px;
+  padding: 16px 28px;
+  border: 2px solid transparent;
+  font-size: 14px;
   background: var(--main-gradient);
   color: var(--text-bright);
-  border-radius: 12px;
-  font-weight: 600;
+  border-radius: var(--radius-md);
+  font-weight: 700;
+  letter-spacing: 0.03em;
   cursor: pointer;
   overflow: hidden;
-  transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+  transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
   flex: 1;
   min-width: 140px;
-  max-width: 200px;
-  height: 56px;
+  max-width: 220px;
+  height: 52px;
   box-sizing: border-box;
   box-shadow: var(--accent-shadow);
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
 }
 
 .animated-button::before {
@@ -1222,7 +1241,7 @@ h2 {
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.18), transparent);
   transition: left 0.5s ease;
 }
 
@@ -1232,13 +1251,13 @@ h2 {
 
 .animated-button svg {
   position: absolute;
-  width: 24px;
+  width: 22px;
   z-index: 9;
-  transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+  transition: all 0.7s cubic-bezier(0.23, 1, 0.32, 1);
 }
 
 .animated-button .arr-1 {
-  right: 16px;
+  right: 14px;
 }
 
 .animated-button .arr-2 {
@@ -1254,15 +1273,15 @@ h2 {
   height: 20px;
   border-radius: 50%;
   opacity: 0;
-  transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+  transition: all 0.7s cubic-bezier(0.23, 1, 0.32, 1);
   z-index: 0;
 }
 
 .animated-button .text {
   position: relative;
   z-index: 2;
-  transform: translateX(-12px);
-  transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+  transform: translateX(-10px);
+  transition: all 0.7s cubic-bezier(0.23, 1, 0.32, 1);
   text-align: center;
   white-space: nowrap;
 }
@@ -1271,8 +1290,7 @@ h2 {
   background: var(--strong-gradient);
   transform: translateY(-2px);
   box-shadow: var(--sub-accent-shadow);
-  box-shadow: 0 0 0 12px transparent;
-  border-radius: 12px;
+  border-radius: var(--radius-md);
 }
 
 .animated-button:hover .arr-1 {
@@ -1280,15 +1298,15 @@ h2 {
 }
 
 .animated-button:hover .arr-2 {
-  left: 16px;
+  left: 14px;
 }
 
 .animated-button:hover .text {
-  transform: translateX(12px);
+  transform: translateX(10px);
 }
 
 .animated-button:active {
-  scale: 0.95;
+  scale: 0.97;
 }
 
 .animated-button:hover .circle {
@@ -1297,11 +1315,12 @@ h2 {
   opacity: 1;
 }
 
-/* 复制链接按钮样式 - Aurora主题 */
+/* 复制链接按钮 - 浅深适配: 用 accent 的 10% 底色 */
 .animated-button-copy {
-  border: 2px solid var(--text-accent);
-  background: rgba(0, 212, 255, 0.1);
-  box-shadow: var(--accent-shadow);
+  border: 1.5px solid rgba(var(--accent-rgb), 0.32);
+  background: rgba(var(--accent-rgb), 0.10);
+  color: var(--text-accent);
+  box-shadow: var(--soft-shadow);
 }
 
 .animated-button-copy svg {
@@ -1314,9 +1333,9 @@ h2 {
 
 .animated-button-copy:hover {
   color: var(--text-bright);
-  background: rgba(0, 212, 255, 0.2);
+  background: var(--text-accent);
   border-color: var(--text-accent);
-  box-shadow: var(--sub-accent-shadow);
+  box-shadow: var(--accent-shadow);
 }
 
 .animated-button-copy:hover svg {
@@ -1325,14 +1344,15 @@ h2 {
 
 .animated-button-copy:active {
   transform: translateY(0px) scale(0.98);
-  box-shadow: 0 0 0 4px var(--text-accent);
+  box-shadow: 0 0 0 3px rgba(var(--accent-rgb), 0.24);
 }
 
-/* 导入按钮样式 - Aurora主题 */
+/* 导入按钮 - sub-accent 自适应 */
 .animated-button-import {
-  border: 2px solid var(--text-sub-accent);
-  background: rgba(255, 0, 110, 0.1);
-  box-shadow: var(--accent-shadow);
+  border: 1.5px solid rgba(var(--sub-accent-rgb), 0.34);
+  background: rgba(var(--sub-accent-rgb), 0.10);
+  color: var(--text-sub-accent);
+  box-shadow: var(--soft-shadow);
 }
 
 .animated-button-import svg {
@@ -1345,7 +1365,7 @@ h2 {
 
 .animated-button-import:hover {
   color: var(--text-bright);
-  background: rgba(255, 0, 110, 0.2);
+  background: var(--text-sub-accent);
   border-color: var(--text-sub-accent);
   box-shadow: var(--sub-accent-shadow);
 }
@@ -1356,55 +1376,46 @@ h2 {
 
 .animated-button-import:active {
   transform: translateY(0px) scale(0.98);
-  box-shadow: 0 0 0 4px var(--text-sub-accent);
+  box-shadow: 0 0 0 3px rgba(var(--sub-accent-rgb), 0.24);
 }
-
 @media (max-width: 768px) {
   .subscription-card {
-    padding: 20px;
-    margin: 15px 0;
+    padding: 18px;
+    margin: 0;
   }
 
   .import-buttons {
     flex-direction: column;
-    align-items: center;
-    gap: 12px;
+    align-items: stretch;
+    gap: 10px;
   }
 
   .animated-button {
     width: 100%;
-    max-width: 280px;
-    min-width: 200px;
-    height: 52px;
-    font-size: 15px;
-    padding: 14px 32px;
-  }
-
-  .copy-link-btn, .import-btn {
-    min-width: auto;
+    max-width: none;
+    min-width: 0;
+    height: 48px;
+    font-size: 14px;
+    padding: 12px 20px;
   }
 
   .time-info {
-    gap: 10px;
+    gap: 8px;
   }
 }
 
 @media (max-width: 480px) {
   .animated-button {
-    width: 100%;
-    max-width: 240px;
-    min-width: 180px;
-    height: 48px;
-    font-size: 14px;
-    padding: 12px 28px;
+    height: 44px;
+    font-size: 13px;
   }
 
   .animated-button .text {
-    font-size: 14px;
+    font-size: 13px;
   }
 
   .animated-button svg {
-    width: 20px;
+    width: 18px;
   }
 
   .animated-button:hover .circle {
@@ -1413,37 +1424,37 @@ h2 {
   }
 }
 
-/* 加载指示器样式 */
+/* 加载指示器 */
 .traffic-amount-container {
   position: relative;
-  min-height: 2.5em;
+  min-height: 2.2em;
   display: flex;
   align-items: center;
+  justify-content: center;
 }
 
 .loading-indicator {
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 1.8em;
-  font-weight: 600;
-  color: var(--text-bright);
-  opacity: 0.8;
+  gap: 10px;
+  font-size: 15px;
+  font-weight: 650;
+  color: var(--text-secondary);
 }
 
-/* Windows风格加载动画 */
+/* Spinner - 自适应颜色 */
 .windows-loading-spinner {
   box-sizing: border-box;
-  width: 3rem;
-  height: 3rem;
+  width: 2.2rem;
+  height: 2.2rem;
   padding: 2px;
   overflow: visible;
 }
 
 .windows-loading-spinner > circle {
-  stroke: #fff;
+  stroke: var(--text-accent);
   fill: none;
-  stroke-width: 2px;
+  stroke-width: 2.4px;
   stroke-linecap: round;
   transform-origin: 50% 50%;
   transition: all 0.2s ease-in-out 0s;
@@ -1468,13 +1479,14 @@ h2 {
 }
 
 .loading-text {
-  font-size: 0.7em;
-  opacity: 0.9;
+  font-size: 13px;
+  color: var(--text-tertiary);
+  font-weight: 600;
 }
 
-/* 流量进度条样式 */
+/* 流量进度条 - 去白膜 */
 .traffic-progress {
-  margin: 12px 0 8px;
+  margin: 10px 0 6px;
 }
 
 .progress-bar-container {
@@ -1483,18 +1495,20 @@ h2 {
 
 .progress-bar-bg {
   height: 8px;
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 10px;
+  background: var(--background-trans);
+  border: 1px solid var(--border-secondary);
+  border-radius: var(--radius-pill);
   overflow: hidden;
   position: relative;
 }
 
 .progress-bar-fill {
   height: 100%;
-  border-radius: 10px;
+  border-radius: var(--radius-pill);
   transition: width 0.8s ease-in-out, background 0.8s ease-in-out;
   position: relative;
   overflow: hidden;
+  background: linear-gradient(90deg, #00cc88 0%, var(--text-accent) 100%);
 }
 
 .progress-bar-fill::after {
@@ -1504,16 +1518,16 @@ h2 {
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.26), transparent);
   animation: progress-shine 2s infinite;
 }
 
 .progress-text {
   font-size: 11px;
   text-align: center;
-  margin-top: 4px;
-  opacity: 0.8;
-  font-weight: 500;
+  margin-top: 6px;
+  color: var(--text-tertiary);
+  font-weight: 600;
 }
 
 @keyframes progress-shine {

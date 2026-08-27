@@ -316,24 +316,32 @@ onMounted(() => {
 </script>
 
 <style scoped>
-/* 主页样式 */
+/* ===== Taste Design Read =====
+   Reading this as: utility hub for proxy users (Chinese), calm tech / aurora dark-tech
+   language, premium but not loud, leaning toward glassmorphism + refined neutrals.
+   Dials: VARIANCE 7 / MOTION 5 / DENSITY 3.5 - generous, asymmetrical calm.
+*/
+
+/* 主页样式 - 扩宽至 1280, 流体边距, 更从容的节奏 */
 .home-page {
   width: 100%;
-  max-width: 1000px;
+  max-width: 1280px;
   margin: 0 auto;
-  padding: var(--spacing-xl);
+  padding: clamp(20px, 3vw, 40px) var(--page-gutter);
 }
 
 .home-header {
   text-align: center;
-  margin-bottom: var(--spacing-xl);
+  margin-bottom: clamp(24px, 3vw, 36px);
 }
 
 .home-title {
   margin: 0;
-  font-size: 2.5rem;
-  font-weight: 700;
-  margin-bottom: var(--spacing-md);
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+  margin-bottom: var(--spacing-sm);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -341,8 +349,9 @@ onMounted(() => {
 }
 
 .home-title .title-icon {
-  font-size: 1.2em;
+  font-size: 1.15em;
   animation: float 3s ease-in-out infinite;
+  filter: drop-shadow(0 4px 14px rgba(var(--accent-rgb), 0.28));
 }
 
 .home-title .title-text {
@@ -350,6 +359,7 @@ onMounted(() => {
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  padding-bottom: 4px;
 }
 
 @keyframes float {
@@ -359,31 +369,38 @@ onMounted(() => {
 
 .home-subtitle {
   color: var(--text-secondary);
-  font-size: var(--font-size-lg);
+  font-size: clamp(15px, 1.7vw, 18px);
   margin: 0;
+  letter-spacing: -0.01em;
+  max-width: 48ch;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.6;
 }
 
 .nav-cards {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: var(--spacing-md);
-  margin-bottom: var(--spacing-xl);
+  gap: clamp(14px, 1.8vw, 20px);
+  margin-bottom: clamp(24px, 3vw, 36px);
 }
-
 .nav-card {
   background: var(--background-secondary);
   border: 1px solid var(--border-primary);
-  border-radius: 16px;
-  padding: var(--spacing-lg);
+  border-radius: var(--card-radius);
+  padding: clamp(16px, 1.7vw, 22px) clamp(16px, 1.8vw, 20px);
   display: flex;
   align-items: center;
   gap: var(--spacing-md);
   cursor: pointer;
-  transition: all var(--transition-normal);
+  transition: all var(--transition-spring);
   position: relative;
   overflow: hidden;
   text-decoration: none;
   color: inherit;
+  box-shadow: var(--soft-shadow);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
 }
 
 .nav-card::before {
@@ -398,22 +415,36 @@ onMounted(() => {
   transition: opacity var(--transition-normal);
 }
 
+.nav-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--sub-gradient);
+  opacity: 0;
+  transition: opacity var(--transition-normal);
+  pointer-events: none;
+}
+
 .nav-card:hover {
   transform: translateY(-6px);
-  box-shadow: var(--accent-shadow);
-  border-color: var(--text-accent);
+  box-shadow: var(--card-shadow);
+  border-color: rgba(var(--accent-rgb), 0.28);
 }
 
 .nav-card:hover::before {
   opacity: 1;
 }
 
+.nav-card:hover::after {
+  opacity: 0.06;
+}
+
 .nav-card:active {
-  transform: translateY(-2px);
+  transform: translateY(-2px) scale(0.99);
 }
 
 .card-icon {
-  font-size: 2.5rem;
+  font-size: 1.6rem;
   flex-shrink: 0;
   width: 56px;
   height: 56px;
@@ -422,6 +453,8 @@ onMounted(() => {
   justify-content: center;
   background: var(--background-tertiary);
   border-radius: 14px;
+  border: 1px solid var(--border-secondary);
+  color: var(--text-accent);
 }
 
 .card-content {
@@ -430,72 +463,90 @@ onMounted(() => {
 }
 
 .card-content h3 {
-  margin: 0 0 var(--spacing-xs) 0;
+  margin: 0 0 4px 0;
   font-size: var(--font-size-lg);
-  font-weight: 600;
+  font-weight: 700;
+  letter-spacing: -0.015em;
   color: var(--text-primary);
+  line-height: 1.2;
 }
 
 .card-content p {
   margin: 0;
   font-size: var(--font-size-sm);
   color: var(--text-secondary);
-  line-height: 1.45;
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .card-arrow {
-  font-size: var(--font-size-xl);
-  color: var(--text-tertiary);
+  font-size: 1.15rem;
+  color: var(--text-quaternary);
   transition: all var(--transition-normal);
   flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-pill);
+  background: var(--background-tertiary);
+  border: 1px solid transparent;
 }
 
 .nav-card:hover .card-arrow {
   color: var(--text-accent);
-  transform: translateX(4px);
+  transform: translateX(2px);
+  background: rgba(var(--accent-rgb), 0.10);
+  border-color: rgba(var(--accent-rgb), 0.18);
 }
 
 .nav-card.external .card-arrow {
-  font-size: var(--font-size-lg);
+  font-size: 0.95rem;
 }
 
 .home-tips {
   background: var(--background-secondary);
   border: 1px solid var(--border-primary);
-  border-radius: 12px;
-  padding: var(--spacing-md);
+  border-radius: var(--radius-lg);
+  padding: clamp(14px, 1.6vw, 18px) clamp(16px, 2vw, 22px);
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-sm);
+  gap: 10px;
+  box-shadow: var(--soft-shadow);
 }
 
 .tip-item {
   display: flex;
   align-items: center;
   gap: var(--spacing-sm);
-  padding: var(--spacing-xs) 0;
+  padding: 4px 0;
 }
 
 .tip-icon {
-  font-size: var(--font-size-lg);
+  font-size: 1.05rem;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-sm);
+  background: var(--background-tertiary);
+  border: 1px solid var(--border-secondary);
+  flex-shrink: 0;
 }
 
 .tip-text {
   color: var(--text-secondary);
   font-size: var(--font-size-sm);
+  line-height: 1.5;
 }
-
 @media (max-width: 768px) {
   .home-page {
-    padding: var(--spacing-lg);
-  }
-  
-  .home-title {
-    font-size: 1.8rem;
-  }
-  
-  .home-subtitle {
-    font-size: var(--font-size-base);
+    padding: var(--spacing-lg) var(--page-gutter);
   }
   
   .nav-cards {
@@ -504,11 +555,10 @@ onMounted(() => {
   }
   
   .nav-card {
-    padding: var(--spacing-lg);
+    padding: var(--spacing-md);
   }
   
   .card-icon {
-    font-size: 2rem;
     width: 50px;
     height: 50px;
   }
@@ -535,14 +585,9 @@ onMounted(() => {
   }
   
   .card-icon {
-    font-size: 1.5rem;
     width: 44px;
     height: 44px;
     border-radius: 10px;
-  }
-  
-  .home-tips {
-    padding: var(--spacing-md);
   }
   
   .tip-item {
@@ -552,13 +597,28 @@ onMounted(() => {
   }
 }
 
+/* 横屏优化：高度受限时减少纵向留白，宽度已通过 clamp 自适应 */
+@media (orientation: landscape) and (max-height: 560px) {
+  .home-page {
+    padding-top: 14px;
+    padding-bottom: 14px;
+  }
+  .home-header {
+    margin-bottom: 16px;
+  }
+  .nav-cards {
+    gap: 12px;
+  }
+}
+
 .app-container {
   min-height: 100vh;
+  min-height: 100dvh;
   background: transparent;
   position: relative;
-  font-family: sans-serif;
-  padding: 20px;
-  color: var(--text-normal);
+  font-family: Inter, system-ui, -apple-system, sans-serif;
+  padding: clamp(12px, 2vw, 24px) clamp(12px, 1.6vw, 20px);
+  color: var(--text-primary);
 }
 
 .app-container::before {
@@ -569,8 +629,9 @@ onMounted(() => {
   width: 100%;
   height: 100%;
   background: 
-    radial-gradient(circle at 25% 75%, rgba(15, 182, 214, 0.08) 0%, transparent 50%),
-    radial-gradient(circle at 75% 25%, rgba(244, 86, 157, 0.06) 0%, transparent 50%);
+    radial-gradient(circle at 22% 18%, rgba(var(--accent-rgb), 0.10) 0%, transparent 42%),
+    radial-gradient(circle at 84% 26%, rgba(var(--sub-accent-rgb), 0.08) 0%, transparent 44%),
+    radial-gradient(circle at 50% 88%, rgba(var(--accent-rgb), 0.06) 0%, transparent 40%);
   pointer-events: none;
   z-index: -1;
 }
@@ -598,7 +659,7 @@ onMounted(() => {
   font-size: 1.1em;
   padding: 8px 28px;
   border-radius: 6px;
-  color: var(--text-normal);
+  color: var(--text-primary);
   cursor: pointer;
   transition: all 0.18s ease;
 }
@@ -609,37 +670,34 @@ onMounted(() => {
   box-shadow: var(--accent-shadow);
 }
 
+/* 页面容器 - 核心扩宽：1200 -> 1440, 流体边距 */
 .page-container {
-  max-width: 1200px;
+  max-width: var(--page-max-w);
   margin: 0 auto;
   width: 100%;
+  padding: 0 var(--page-gutter);
 }
 
-/* 页面容器 */
-.page-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  width: 100%;
-  padding: 0 16px;
-}
-
-/* Aurora Enhanced Navigation Bar */
+/* Aurora Enhanced Navigation Bar - 宽度同步扩至 1440 */
 .nav-bar {
   background: var(--background-glass);
   border: 1px solid var(--border-primary);
   box-shadow: var(--soft-shadow);
-  padding: var(--spacing-md) var(--spacing-lg);
-  margin-bottom: var(--spacing-xl);
-  border-radius: 12px;
+  padding: 12px clamp(14px, 1.6vw, 20px);
+  margin-bottom: clamp(18px, 2.2vw, 28px);
+  border-radius: var(--radius-lg);
   position: sticky;
-  top: var(--spacing-md);
+  top: clamp(10px, 1.5vw, 16px);
   z-index: 100;
   overflow: hidden;
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px) saturate(1.15);
+  -webkit-backdrop-filter: blur(20px) saturate(1.15);
   display: flex;
   justify-content: center;
   align-items: center;
+  max-width: var(--page-max-w);
+  margin-left: auto;
+  margin-right: auto;
   will-change: transform, filter;
   transform: translateZ(0);
 }
@@ -662,44 +720,48 @@ onMounted(() => {
 
 
 .nav-links {
-  max-width: 1200px;
+  max-width: var(--page-max-w);
   margin: 0 auto;
   display: flex;
-  gap: var(--spacing-sm);
+  gap: 6px 8px;
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
 }
 
 .nav-links a {
-  padding: var(--spacing-sm) var(--spacing-lg);
+  padding: 9px 16px;
   color: var(--text-secondary);
   text-decoration: none;
-  font-size: var(--font-size-sm);
+  font-size: 14px;
   position: relative;
-  font-weight: 500;
-  border-radius: 8px;
+  font-weight: 550;
+  letter-spacing: -0.01em;
+  border-radius: var(--radius-pill);
   transition: all var(--transition-normal);
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 38px;
+  min-height: 36px;
   border: 1px solid transparent;
   text-align: center;
   line-height: 1.2;
   white-space: nowrap;
+  background: transparent;
 }
 
 .nav-links a:hover {
   color: var(--text-primary);
-  background: var(--background-tertiary);
+  background: var(--surface-hover);
+  border-color: var(--border-secondary);
 }
 
 .nav-links a.active {
   color: var(--text-accent);
-  background: rgba(0, 212, 255, 0.1);
-  border-color: var(--text-accent);
-  font-weight: 600;
+  background: rgba(var(--accent-rgb), 0.12);
+  border-color: rgba(var(--accent-rgb), 0.28);
+  font-weight: 650;
+  box-shadow: 0 2px 10px rgba(var(--accent-rgb), 0.14);
 }
 
 .nav-links a.active::after {
@@ -708,108 +770,120 @@ onMounted(() => {
   bottom: 6px;
   left: 50%;
   transform: translateX(-50%);
-  width: 20px;
+  width: 18px;
   height: 2px;
   background: var(--text-accent);
   border-radius: 1px;
 }
 
-/* Aurora Enhanced Page Layouts */
+/* Page Layouts - 全部扩宽 + 更透气 */
 .guide-layout, .recommend-layout, .freenode-layout {
   width: 100%;
   animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-  padding: var(--spacing-lg);
-  border-radius: 16px;
+  padding: clamp(18px, 2.2vw, 28px);
+  border-radius: var(--card-radius-lg);
   margin-bottom: var(--spacing-xl);
   background: var(--background-glass);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px) saturate(1.08);
+  -webkit-backdrop-filter: blur(20px) saturate(1.08);
   border: 1px solid var(--border-primary);
+  box-shadow: var(--soft-shadow);
 }
 
-/* Aurora Enhanced Subscription Page */
+/* Subscription Page - 核心：更宽容器 + 去挤 */
 .subscription-page {
   width: 100%;
-  padding: var(--spacing-xl);
+  padding: clamp(18px, 2.4vw, 32px);
   background: var(--background-glass);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px) saturate(1.08);
+  -webkit-backdrop-filter: blur(20px) saturate(1.08);
   border: 1px solid var(--border-primary);
-  border-radius: 16px;
+  border-radius: var(--card-radius-lg);
   margin-bottom: var(--spacing-xl);
+  box-shadow: var(--soft-shadow);
 }
 
 .client-list-container {
   margin-top: var(--spacing-md);
 }
 
-/* Aurora Enhanced Page Header */
+/* Page Header */
 .page-header {
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  margin-bottom: var(--spacing-xl);
-  padding-bottom: var(--spacing-lg);
-  border-bottom: 2px solid var(--text-accent);
+  margin-bottom: clamp(18px, 2vw, 28px);
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border-primary);
   position: relative;
 }
 
 .page-header::after {
   content: '';
   position: absolute;
-  bottom: -2px;
+  bottom: -1px;
   left: 0;
-  right: 0;
+  width: 88px;
   height: 2px;
   background: var(--main-gradient);
   border-radius: 2px;
 }
 
-/* Aurora Enhanced Subscription Layout */
+/* Subscription Layout - 去拥挤关键：380 基底, 自适应 2-3 列, 更大 gap */
 .subscription-layout {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: var(--spacing-xl);
+  grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+  gap: clamp(18px, 2vw, 24px);
   width: 100%;
-  padding: var(--spacing-md);
+  padding: 4px;
 }
-
-/* Aurora Enhanced Tutorial Layout */
+@media (min-width: 1480px) {
+  .subscription-layout {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+@media (max-width: 860px) {
+  .subscription-layout {
+    grid-template-columns: 1fr;
+  }
+}
+/* Tutorial Layout */
 .tutorial-layout {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-xl);
-  padding: var(--spacing-xl);
+  gap: clamp(18px, 2vw, 24px);
+  padding: clamp(18px, 2.2vw, 28px);
   background: var(--background-glass);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px) saturate(1.08);
+  -webkit-backdrop-filter: blur(20px) saturate(1.08);
   border: 1px solid var(--border-primary);
-  border-radius: 16px;
+  border-radius: var(--card-radius-lg);
+  box-shadow: var(--soft-shadow);
 }
 
 .tutorial-layout .top-row {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: var(--spacing-xl);
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: clamp(18px, 2vw, 24px);
 }
 
 .tutorial-layout .bottom-row {
   width: 100%;
 }
 
-/* Aurora Enhanced Card Styles */
+/* Card - unified radius + taste shadow */
 .card {
   background: var(--background-secondary);
   border: 1px solid var(--border-primary);
-  border-radius: 16px;
-  padding: var(--spacing-xl);
+  border-radius: var(--card-radius);
+  padding: clamp(18px, 2vw, 28px);
   box-shadow: var(--soft-shadow);
   display: flex;
   flex-direction: column;
   color: var(--text-primary);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  transition: all var(--transition-normal);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: all var(--transition-spring);
   position: relative;
   overflow: hidden;
 }
@@ -828,13 +902,13 @@ onMounted(() => {
 }
 
 .card:hover {
-  transform: translateY(-8px);
-  box-shadow: var(--accent-shadow);
-  border-color: var(--text-accent);
+  transform: translateY(-6px);
+  box-shadow: var(--card-shadow);
+  border-color: rgba(var(--accent-rgb), 0.22);
 }
 
 .card:hover::before {
-  opacity: 0.1;
+  opacity: 0.08;
 }
 
 .card h2 {
@@ -843,32 +917,31 @@ onMounted(() => {
   color: var(--text-accent);
   text-align: center;
   font-size: var(--font-size-xl);
-  font-weight: 600;
+  font-weight: 700;
+  letter-spacing: -0.015em;
 }
 
-/* Aurora Enhanced Mobile Responsive Design */
+/* Mobile - 横屏宽度已扩，移动端保持单列但边距更克制 */
 @media (max-width: 768px) {
   .nav-bar {
-    padding: var(--spacing-sm) var(--spacing-md);
+    padding: 10px 12px;
     margin-bottom: var(--spacing-lg);
-    border-radius: 10px;
+    border-radius: var(--radius-lg);
+    top: 8px;
   }
 
   .nav-links {
-    gap: var(--spacing-xs);
-    flex-wrap: wrap;
-    justify-content: center;
+    gap: 6px;
   }
 
   .nav-links a {
-    font-size: var(--font-size-xs);
-    padding: var(--spacing-xs) var(--spacing-sm);
+    font-size: 13px;
+    padding: 7px 12px;
     min-height: 32px;
-    border-radius: 6px;
   }
 
   .guide-layout, .recommend-layout, .freenode-layout {
-    padding: var(--spacing-md);
+    padding: var(--spacing-lg);
     margin-bottom: var(--spacing-lg);
   }
 
@@ -880,7 +953,7 @@ onMounted(() => {
   .subscription-layout {
     grid-template-columns: 1fr;
     gap: var(--spacing-lg);
-    padding: var(--spacing-sm);
+    padding: 2px;
   }
   
   .page-title {
@@ -898,18 +971,9 @@ onMounted(() => {
 }
 
 @media (max-width: 480px) {
-  .app-container {
-    padding: var(--spacing-md);
-  }
-
-  .page-container {
-    padding: 0 var(--spacing-sm);
-  }
-
   .nav-bar {
-    padding: var(--spacing-xs) var(--spacing-sm);
+    padding: 8px 10px;
     margin-bottom: var(--spacing-md);
-    border-radius: 8px;
   }
 
   .nav-links {
@@ -917,83 +981,20 @@ onMounted(() => {
   }
 
   .nav-links a {
-    font-size: 11px;
-    padding: 6px 8px;
-    min-height: 28px;
-    border-radius: 4px;
+    font-size: 12px;
+    padding: 6px 10px;
+    min-height: 30px;
   }
-
-  .guide-layout, .recommend-layout, .freenode-layout {
-    padding: var(--spacing-md);
-  }
-
-  .subscription-page {
-    padding: var(--spacing-md);
-  }
-
-  .subscription-layout {
-    grid-template-columns: 1fr;
-    gap: var(--spacing-md);
-  }
-
-  .tutorial-layout {
-    padding: var(--spacing-md);
-    gap: var(--spacing-md);
-  }
-
-  .page-title {
-    font-size: var(--font-size-lg);
-  }
-
-  .card {
-    padding: var(--spacing-lg);
-  }
-
-  .card h2 {
-    font-size: var(--font-size-lg);
-  }
-}
-
-/* Aurora Enhanced App Container */
-.app-container {
-  min-height: 100vh;
-  background: transparent;
-  position: relative;
-  font-family: sans-serif;
-  padding: var(--spacing-xl);
-  color: var(--text-primary);
-  display: flex;
-  flex-direction: column;
 }
 
 .theme-toggle-container {
   position: fixed;
-  top: var(--spacing-xl);
-  right: var(--spacing-xl);
+  top: clamp(12px, 2vw, 20px);
+  right: clamp(12px, 2vw, 20px);
   z-index: 1000;
   display: flex;
   justify-content: flex-end;
   align-items: flex-start;
 }
-
-.app-container::before {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: 
-    radial-gradient(circle at 25% 75%, rgba(0, 212, 255, 0.08) 0%, transparent 50%),
-    radial-gradient(circle at 75% 25%, rgba(124, 58, 237, 0.06) 0%, transparent 50%);
-  pointer-events: none;
-  z-index: -1;
-}
-
-.page-container {
-  max-width: 1200px;
-  margin: 0 auto;
-  width: 100%;
-  padding: 0 var(--spacing-xl);
-}
 </style>
+
