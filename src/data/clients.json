@@ -1,0 +1,408 @@
+{
+  "clients": [
+    {
+      "id": "clash-verge-rev",
+      "name": "Clash Verge Rev",
+      "category": "clash",
+      "description": "桌面三端，现代 GUI（Tauri），功能全面",
+      "platforms": [
+        "windows",
+        "macos",
+        "linux"
+      ],
+      "recommended": [
+        "windows",
+        "macos",
+        "linux"
+      ],
+      "downloads": [
+        {
+          "label": "GitHub",
+          "url": "https://github.com/Clash-Verge-rev/clash-verge-rev/releases"
+        },
+        {
+          "label": "中文网",
+          "url": "https://clashcn.com/clash-verge-rev-official"
+        },
+        {
+          "label": "镜像",
+          "url": "https://getclashvergerev.org/download.html"
+        }
+      ],
+      "tutorials": {
+        "windows": "https://8mkhkm.mikasadocs.com/tutorials/windows/clash-verge/",
+        "macos": "https://8mkhkm.mikasadocs.com/tutorials/macos/clash-verge/",
+        "linux": "https://8mkhkm.mikasadocs.com/tutorials/linux/clash-verge/"
+      }
+    },
+    {
+      "id": "clash",
+      "name": "Clash",
+      "category": "clash",
+      "description": "Apple 原生全平台客户端（iPhone / iPad / Mac / Apple TV），基于 Mihomo / Hako，免费开源",
+      "platforms": [
+        "ios",
+        "macos"
+      ],
+      "recommended": [
+        "ios",
+        "macos"
+      ],
+      "downloads": [
+        {
+          "label": "官网",
+          "url": "https://clash.md/zh/"
+        },
+        {
+          "label": "App Store",
+          "url": "https://apps.apple.com/us/app/clash-rule-based-proxy-utility/id6794257189"
+        },
+        {
+          "label": "TestFlight",
+          "url": "https://testflight.apple.com/join/QJWrVrxT"
+        },
+        {
+          "label": "GitHub",
+          "url": "https://github.com/TokenPLS/Hako-Client"
+        }
+      ]
+    },
+    {
+      "id": "clash-nyanpasu",
+      "name": "Clash Nyanpasu",
+      "category": "clash",
+      "description": "桌面三端，基于 Tauri 的 Clash MD3 GUI",
+      "platforms": [
+        "windows",
+        "macos",
+        "linux"
+      ],
+      "downloads": [
+        {
+          "label": "GitHub",
+          "url": "https://github.com/LibNyanpasu/clash-nyanpasu"
+        },
+        {
+          "label": "官网",
+          "url": "https://nyanpasu.elaina.moe/"
+        }
+      ]
+    },
+    {
+      "id": "clash-mac",
+      "name": "Clash Mac",
+      "category": "clash",
+      "description": "为 macOS 打造的原生代理体验",
+      "platforms": [
+        "macos"
+      ],
+      "recommended": [
+        "macos"
+      ],
+      "downloads": [
+        {
+          "label": "GitHub",
+          "url": "https://github.com/666OS/ClashMac"
+        },
+        {
+          "label": "官网",
+          "url": "https://clashmac.app/"
+        }
+      ]
+    },
+    {
+      "id": "mihomo-android",
+      "name": "Mihomo（Android）",
+      "category": "clash",
+      "description": "Clash Meta for Android（Mihomo）",
+      "platforms": [
+        "android"
+      ],
+      "recommended": [
+        "android"
+      ],
+      "downloads": [
+        {
+          "label": "GitHub",
+          "url": "https://github.com/MetaCubeX/ClashMetaForAndroid"
+        }
+      ],
+      "tutorials": {
+        "android": "https://8mkhkm.mikasadocs.com/tutorials/android/cmfa/"
+      }
+    },
+    {
+      "id": "mihomo-desktop",
+      "name": "Mihomo（桌面）",
+      "category": "clash",
+      "description": "一个简易的 Mihomo 桌面客户端（Pandora Box）",
+      "platforms": [
+        "windows",
+        "macos",
+        "linux"
+      ],
+      "downloads": [
+        {
+          "label": "GitHub",
+          "url": "https://github.com/snakem982/Pandora-Box"
+        },
+        {
+          "label": "Mihomo 官网",
+          "url": "https://wiki.metacubex.one/"
+        },
+        {
+          "label": "Mihomo 下载",
+          "url": "https://wiki.metacubex.one/startup/"
+        }
+      ]
+    },
+    {
+      "id": "sparkle",
+      "name": "Sparkle",
+      "category": "clash",
+      "description": "Another Mihomo GUI. (🛠building...)",
+      "platforms": [
+        "windows",
+        "macos",
+        "linux"
+      ],
+      "recommended": [
+        "windows",
+        "macos",
+        "linux"
+      ],
+      "downloads": [
+        {
+          "label": "GitHub",
+          "url": "https://github.com/xishang0128/sparkle/releases"
+        }
+      ]
+    },
+    {
+      "id": "flclash",
+      "name": "FlClash",
+      "category": "clash",
+      "description": "基于 Flutter 的多平台 Clash Meta 客户端，Material You 设计，简洁易用",
+      "platforms": [
+        "windows",
+        "macos",
+        "linux",
+        "android"
+      ],
+      "recommended": [
+        "windows",
+        "macos",
+        "linux",
+        "android"
+      ],
+      "downloads": [
+        {
+          "label": "GitHub",
+          "url": "https://github.com/chen08209/FlClash/releases"
+        }
+      ]
+    },
+    {
+      "id": "clash-party",
+      "name": "Clash Party",
+      "category": "clash",
+      "description": "基于 Mihomo 的桌面客户端，现代化界面",
+      "platforms": [
+        "windows",
+        "macos",
+        "linux"
+      ],
+      "recommended": [
+        "windows",
+        "macos",
+        "linux"
+      ],
+      "downloads": [
+        {
+          "label": "GitHub",
+          "url": "https://github.com/mihomo-party-org/clash-party/releases"
+        }
+      ],
+      "tutorials": {
+        "windows": "https://clashparty.org/docs/handson",
+        "macos": "https://clashparty.org/docs/handson",
+        "linux": "https://clashparty.org/docs/handson"
+      }
+    },
+    {
+      "id": "v2rayn",
+      "name": "v2rayN",
+      "category": "v2ray",
+      "description": "桌面三端 GUI，支持 Xray、sing-box 等核心",
+      "platforms": [
+        "windows",
+        "macos",
+        "linux"
+      ],
+      "recommended": [
+        "windows"
+      ],
+      "downloads": [
+        {
+          "label": "GitHub",
+          "url": "https://github.com/2dust/v2rayN/releases"
+        }
+      ],
+      "tutorials": {
+        "windows": "https://8mkhkm.mikasadocs.com/tutorials/windows/v2rayN7/",
+        "linux": "https://8mkhkm.mikasadocs.com/tutorials/linux/v2rayN7/",
+        "macos": "https://8mkhkm.mikasadocs.com/tutorials/macos/v2rayN7/"
+      }
+    },
+    {
+      "id": "v2rayng",
+      "name": "v2rayNG",
+      "category": "v2ray",
+      "description": "Android 客户端，支持 Xray 核心与 v2fly 核心",
+      "platforms": [
+        "android"
+      ],
+      "recommended": [
+        "android"
+      ],
+      "downloads": [
+        {
+          "label": "GitHub",
+          "url": "https://github.com/2dust/v2rayNG"
+        }
+      ],
+      "tutorials": {
+        "android": "https://8mkhkm.mikasadocs.com/tutorials/android/v2rayNG/"
+      }
+    },
+    {
+      "id": "v2raya",
+      "name": "v2rayA",
+      "category": "v2ray",
+      "description": "Web GUI（Linux），支持 VMess/VLESS/SS/SSR/Trojan/TUIC 等",
+      "platforms": [
+        "linux"
+      ],
+      "recommended": [
+        "linux"
+      ],
+      "downloads": [
+        {
+          "label": "GitHub",
+          "url": "https://github.com/v2rayA/v2rayA"
+        }
+      ],
+      "tutorials": {
+        "linux": "https://v2raya.org"
+      }
+    },
+    {
+      "id": "shadowrocket",
+      "name": "Shadowrocket",
+      "category": "v2ray",
+      "description": "iOS 客户端（App Store）",
+      "platforms": [
+        "ios"
+      ],
+      "recommended": [
+        "ios"
+      ],
+      "downloads": [
+        {
+          "label": "App Store",
+          "url": "https://apps.apple.com/us/app/shadowrocket/id932747118"
+        }
+      ],
+      "tutorials": {
+        "ios": "https://8mkhkm.mikasadocs.com/tutorials/ios/shadowrocket/"
+      }
+    },
+    {
+      "id": "stash",
+      "name": "Stash",
+      "category": "v2ray",
+      "description": "iOS 客户端（规则增强）",
+      "platforms": [
+        "ios"
+      ],
+      "downloads": [
+        {
+          "label": "App Store",
+          "url": "https://apps.apple.com/us/app/stash-rule-based-proxy/id1596063349"
+        }
+      ],
+      "tutorials": {
+        "ios": "https://stash.wiki"
+      }
+    },
+    {
+      "id": "v2box-pro",
+      "name": "V2Box Pro",
+      "category": "v2ray",
+      "description": "iOS 多协议代理客户端，支持 Shadowsocks / V2Ray / VMess / VLESS / Trojan / Hysteria2 / WireGuard / SSH / PingTunnel / DNSTT，Reality / Vision / uTLS",
+      "platforms": [
+        "ios"
+      ],
+      "downloads": [
+        {
+          "label": "App Store",
+          "url": "https://apps.apple.com/us/app/v2box-pro-v2ray-client/id6756966178"
+        }
+      ]
+    },
+    {
+      "id": "loon",
+      "name": "Loon",
+      "category": "v2ray",
+      "description": "Apple 生态全平台网络工具（iOS / macOS / tvOS），支持 SS / SSR / VMess / VLESS / Trojan / Hysteria2 / WireGuard 等，规则分流 / MITM / JS 脚本，iCloud 同步（付费 $7.99）",
+      "platforms": [
+        "ios",
+        "macos"
+      ],
+      "downloads": [
+        {
+          "label": "官网",
+          "url": "https://loonapp.org/"
+        },
+        {
+          "label": "App Store",
+          "url": "https://apps.apple.com/in/app/loon/id1373567447"
+        }
+      ]
+    }
+  ],
+  "recommendedByOs": {
+    "windows": [
+      "clash-verge-rev",
+      "v2rayn",
+      "flclash",
+      "clash-party",
+      "sparkle"
+    ],
+    "macos": [
+      "clash",
+      "clash-mac",
+      "clash-verge-rev",
+      "flclash",
+      "clash-party",
+      "sparkle"
+    ],
+    "linux": [
+      "clash-verge-rev",
+      "v2raya",
+      "flclash",
+      "clash-party",
+      "sparkle"
+    ],
+    "ios": [
+      "clash",
+      "shadowrocket",
+      "stash"
+    ],
+    "android": [
+      "mihomo-android",
+      "v2rayng",
+      "flclash"
+    ]
+  }
+}
