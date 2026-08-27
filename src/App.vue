@@ -39,7 +39,7 @@
           @click.prevent="navigate('freevpn')"
         >其他类型</a>
         <a
-          href="https://sub.ctelspecu.hxcn.top"
+          href="https://subcoverter.ctelspecu.hxcn.top"
           target="_blank"
         >订阅转换</a>
       </div>
@@ -103,7 +103,7 @@
             <div class="card-arrow"><VueIcon icon="arrow-right" aria-label="进入" /></div>
           </div>
           
-          <a class="nav-card external" href="https://sub.ctelspecu.hxcn.top" target="_blank">
+          <a class="nav-card external" href="https://subcoverter.ctelspecu.hxcn.top" target="_blank">
             <div class="card-icon"><VueIcon icon="arrows-rotate" aria-label="订阅转换" /></div>
             <div class="card-content">
               <h3>订阅转换</h3>
