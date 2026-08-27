@@ -51,7 +51,7 @@
           </div>
 
           <div class="bento-card__regions">
-            <div class="marquee" :aria-label="provider.regions.join('、')">
+            <div class="marquee" :aria-label="provider.regions.map(displayRegion).join('、')">
               <div class="marquee__track">
                 <span
                   v-for="(region, rIdx) in duplicatedRegions(provider.regions)"
@@ -60,7 +60,6 @@
                 >
                   <span class="marquee__flag">
                     <img
-                      v-if="isoFor(region)"
                       :src="flagSrc(region)"
                       :srcset="flagSrcSet(region)"
                       :alt="region"
@@ -71,9 +70,8 @@
                       class="flag-img"
                       @error="onFlagError"
                     />
-                    <span v-else class="flag-fallback">🌐</span>
                   </span>
-                  <span class="marquee__name">{{ region }}</span>
+                  <span class="marquee__name">{{ displayRegion(region) }}</span>
                 </span>
               </div>
             </div>
@@ -98,87 +96,79 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import VueIcon from '../components/VueIcon.vue';
 import providersData from '../data/providers.json';
 
-const providers = providersData;
-
-const isoMap = {
-  '香港': 'hk',
-  '日本': 'jp',
-  '新加坡': 'sg',
-  '韩国': 'kr',
-  '美国': 'us',
-  '英国': 'gb',
-  '马来': 'my',
-  '马来西亚': 'my',
-  '西班牙': 'es',
-  '泰国': 'th',
-  '印度': 'in',
-  '澳大利亚': 'au',
-  '德国': 'de',
-  '加拿大': 'ca',
-  '俄罗斯': 'ru',
-  '巴西': 'br',
-  '阿联酋': 'ae',
-  '法国': 'fr',
-  '菲律宾': 'ph',
-  '越南': 'vn',
-  '南非': 'za',
-  '墨西哥': 'mx',
-  '荷兰': 'nl',
-  '瑞典': 'se',
-  '芬兰': 'fi',
-  '挪威': 'no',
-  '丹麦': 'dk',
-  '爱尔兰': 'ie',
-  '罗马尼亚': 'ro',
-  '沙特': 'sa',
-  '土耳其': 'tr',
-  '意大利': 'it',
-  '瑞士': 'ch',
-  '希腊': 'gr',
-};
-
-function isoFor(region) {
-  return isoMap[region] || null;
+interface Billing {
+  type: string
+  label: string
+  price: number
+  traffic: string
 }
 
-function flagSrc(region) {
-  const iso = isoFor(region);
-  if (!iso) return '';
-  return `https://flagcdn.com/w20/${iso}.png`;
+interface Provider {
+  name: string
+  displayName: string
+  url: string
+  billing: Billing[]
+  badges: string[]
+  regions: string[]
 }
 
-function flagSrcSet(region) {
-  const iso = isoFor(region);
-  if (!iso) return '';
-  return `https://flagcdn.com/w40/${iso}.png 2x`;
+const providers = providersData as Provider[];
+
+// ISO 3166-1 alpha-2 直用于存储，展示时通过 Intl 本地化为中文
+const regionNames = (() => {
+  try {
+    return new Intl.DisplayNames(['zh-CN'], { type: 'region' })
+  } catch {
+    return null
+  }
+})()
+
+function displayRegion(iso: string): string {
+  if (regionNames) {
+    try {
+      const name = regionNames.of(iso.toUpperCase())
+      if (name) return name
+    } catch {}
+  }
+  return iso.toUpperCase()
 }
 
-function onFlagError(e) {
-  const target = e.target;
-  if (target) target.style.display = 'none';
+function flagSrc(iso: string): string {
+  if (!iso) return ''
+  return `https://flagcdn.com/w20/${iso.toLowerCase()}.png`
 }
 
-function lowestBilling(provider) {
-  if (!provider.billing || provider.billing.length === 0) return null;
-  return [...provider.billing].sort((a, b) => a.price - b.price)[0];
+function flagSrcSet(iso: string): string {
+  if (!iso) return ''
+  return `https://flagcdn.com/w40/${iso.toLowerCase()}.png 2x`
 }
 
-function billingClass(type) {
-  if (type.includes('按量')) return 'billing-pill--traffic';
-  return 'billing-pill--cycle';
+function onFlagError(e: Event): void {
+  const target = e.target as HTMLElement
+  if (target) target.style.display = 'none'
 }
 
-function badgeVariant(badge) {
-  if (['纯净IP', '家宽', 'BGP', 'BPG'].includes(badge)) return 'badge--accent';
-  return '';
+function lowestBilling(provider: Provider): Billing | null {
+  if (!provider.billing || provider.billing.length === 0) return null
+  return [...provider.billing].sort((a, b) => a.price - b.price)[0]
 }
 
-function duplicatedRegions(regions) {
-  return [...regions, ...regions];
+function billingClass(type: string): string {
+  if (type.includes('按量')) return 'billing-pill--traffic'
+  return 'billing-pill--cycle'
+}
+
+function badgeVariant(badge: string): string {
+  if (['纯净IP', '家宽', 'BGP', 'BPG'].includes(badge)) return 'badge--accent'
+  return ''
+}
+
+function duplicatedRegions(regions: string[]): string[] {
+  return [...regions, ...regions]
 }
 </script>
 
@@ -556,7 +546,7 @@ function duplicatedRegions(regions) {
   align-items: center;
   gap: 0;
   will-change: transform;
-  animation: marquee-scroll 28s linear infinite;
+  animation: marquee-scroll 56s linear infinite;
 }
 
 .bento-card:hover .marquee__track {
@@ -719,7 +709,7 @@ function duplicatedRegions(regions) {
     margin-right: -18px;
   }
   .marquee__track {
-    animation-duration: 22s;
+    animation-duration: 44s;
   }
 }
 

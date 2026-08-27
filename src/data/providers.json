@@ -4,61 +4,292 @@
     "displayName": "Mikasa",
     "url": "https://0b.mikasaaff.com/A9ti5mtf",
     "billing": [
-      { "type": "月度订阅", "label": "11.25/100G", "price": 11.25, "traffic": "100G" }
+      {
+        "type": "月度订阅",
+        "label": "11.25/100G",
+        "price": 11.25,
+        "traffic": "100G"
+      }
     ],
-    "badges": ["纯净IP", "高速", "稳定", "家宽", "中转"],
-    "regions": ["香港", "日本", "新加坡", "韩国", "美国", "英国", "马来", "西班牙", "泰国", "印度", "澳大利亚", "德国", "加拿大", "俄罗斯", "巴西", "阿联酋", "法国", "菲律宾", "越南", "南非", "墨西哥", "荷兰", "瑞典", "芬兰", "挪威", "丹麦", "爱尔兰", "罗马尼亚"]
+    "badges": [
+      "纯净IP",
+      "高速",
+      "稳定",
+      "家宽",
+      "中转"
+    ],
+    "regions": [
+      "hk",
+      "jp",
+      "sg",
+      "kr",
+      "ph",
+      "us",
+      "gb",
+      "my",
+      "es",
+      "th",
+      "in",
+      "au",
+      "ca",
+      "de",
+      "ru",
+      "ar",
+      "tr",
+      "ua",
+      "vn",
+      "br",
+      "id",
+      "pe",
+      "lk",
+      "kz",
+      "pk",
+      "il",
+      "uz",
+      "np",
+      "ae",
+      "sa",
+      "nz",
+      "it",
+      "bg",
+      "at",
+      "fr",
+      "by",
+      "ie",
+      "ro",
+      "is",
+      "lv",
+      "dk",
+      "no",
+      "fi",
+      "se",
+      "nl",
+      "mx",
+      "ec",
+      "co",
+      "cr",
+      "cl",
+      "za",
+      "ng",
+      "eg",
+      "ag",
+      "pa",
+      "aq",
+      "ch",
+      "sm",
+      "fo",
+      "lu",
+      "pt",
+      "gr",
+      "gi",
+      "hu",
+      "al",
+      "hr",
+      "mk",
+      "si",
+      "rs",
+      "cy",
+      "cz",
+      "sk",
+      "lt",
+      "md",
+      "ee",
+      "kg",
+      "az",
+      "zw",
+      "gq",
+      "qa",
+      "ml",
+      "bh",
+      "om",
+      "am",
+      "ma",
+      "bd",
+      "la",
+      "mm",
+      "kh",
+      "tl",
+      "sb",
+      "bn",
+      "mo",
+      "bo",
+      "pl",
+      "be",
+      "iq",
+      "gt",
+      "uy",
+      "ge"
+    ]
   },
   {
     "name": "CuteCloud",
     "displayName": "CuteCloud 最萌の云",
     "url": "https://www.cutecloud.net/#/register?code=WUHcCLFn",
     "billing": [
-      { "type": "月度订阅", "label": "10/100G", "price": 10, "traffic": "100G" },
-      { "type": "按量计费", "label": "66/300G", "price": 66, "traffic": "300G" }
+      {
+        "type": "月度订阅",
+        "label": "10/100G",
+        "price": 10,
+        "traffic": "100G"
+      },
+      {
+        "type": "按量计费",
+        "label": "66/300G",
+        "price": 66,
+        "traffic": "300G"
+      }
     ],
-    "badges": ["纯净IP", "高速", "稳定", "直连", "中转"],
-    "regions": ["香港", "日本", "新加坡", "韩国", "美国", "英国", "马来", "泰国", "加拿大", "俄罗斯", "沙特", "法国", "菲律宾"]
+    "badges": [
+      "纯净IP",
+      "高速",
+      "稳定",
+      "直连",
+      "中转"
+    ],
+    "regions": [
+      "hk",
+      "jp",
+      "sg",
+      "kr",
+      "us",
+      "gb",
+      "my",
+      "th",
+      "ca",
+      "ru",
+      "sa",
+      "fr",
+      "ph"
+    ]
   },
   {
     "name": "CokeCloud",
     "displayName": "𝘾𝙤𝙠𝙚𝘾𝙡𝙤𝙪𝙙 可乐云",
     "url": "https://cokecloud.cyou/#/register?code=wvIsDmnG",
     "billing": [
-      { "type": "月度订阅", "label": "9.9/300G", "price": 9.9, "traffic": "300G" }
+      {
+        "type": "月度订阅",
+        "label": "9.9/300G",
+        "price": 9.9,
+        "traffic": "300G"
+      }
     ],
-    "badges": ["高速", "性价比", "BPG"],
-    "regions": ["香港", "日本", "新加坡", "韩国", "美国", "英国", "马来", "菲律宾", "越南", "印度", "泰国", "土耳其"]
+    "badges": [
+      "高速",
+      "性价比",
+      "BPG"
+    ],
+    "regions": [
+      "hk",
+      "sg",
+      "jp",
+      "us",
+      "kr",
+      "my",
+      "ph",
+      "id",
+      "tr",
+      "th",
+      "vn",
+      "au",
+      "in",
+      "gb"
+    ]
   },
   {
     "name": "赔钱机场",
     "displayName": "赔钱机场",
     "url": "https://xn--cp3a08l.com/register?code=shgKW2Jh&cover=sfw",
     "billing": [
-      { "type": "月度订阅", "label": "5.99/1T", "price": 5.99, "traffic": "1T" },
-      { "type": "按量计费", "label": "18.9/1T", "price": 18.9, "traffic": "1T" }
+      {
+        "type": "月度订阅",
+        "label": "5.99/1T",
+        "price": 5.99,
+        "traffic": "1T"
+      },
+      {
+        "type": "按量计费",
+        "label": "18.9/1T",
+        "price": 18.9,
+        "traffic": "1T"
+      }
     ],
-    "badges": ["高速", "性价比", "大流量"],
-    "regions": ["香港", "日本", "新加坡", "美国"]
+    "badges": [
+      "高速",
+      "性价比",
+      "大流量"
+    ],
+    "regions": [
+      "hk",
+      "jp",
+      "sg",
+      "us"
+    ]
   },
   {
     "name": "魔戒",
     "displayName": "魔戒",
     "url": "https://mojie.kim/register?aff=r3JESYAG",
     "billing": [
-      { "type": "按量计费", "label": "19.9/130G", "price": 19.9, "traffic": "130G" }
+      {
+        "type": "按量计费",
+        "label": "19.9/130G",
+        "price": 19.9,
+        "traffic": "130G"
+      }
     ],
-    "badges": ["高速", "稳定"],
-    "regions": ["香港", "日本", "新加坡", "韩国", "美国", "英国"]
+    "badges": [
+      "高速",
+      "稳定"
+    ],
+    "regions": [
+      "kr",
+      "jp",
+      "sg",
+      "hk",
+      "in",
+      "us",
+      "ca",
+      "fr",
+      "de",
+      "gb",
+      "vn",
+      "ru",
+      "ua",
+      "tr",
+      "ng"
+    ]
   },
   {
     "name": "丛雨云",
     "displayName": "丛雨云",
     "url": "https://congyu.moe/auth/register?invite=118b41f092",
     "billing": [
-      { "type": "长期订阅", "label": "19.8/100G", "price": 19.8, "traffic": "100G" }
+      {
+        "type": "长期订阅",
+        "label": "19.8/100G",
+        "price": 19.8,
+        "traffic": "100G"
+      }
     ],
-    "badges": ["高速", "稳定", "性价比", "大流量"],
-    "regions": ["香港", "日本", "新加坡", "韩国", "美国", "英国", "加拿大", "意大利", "瑞士", "希腊", "土耳其"]
+    "badges": [
+      "高速",
+      "稳定",
+      "性价比",
+      "大流量"
+    ],
+    "regions": [
+      "hk",
+      "jp",
+      "sg",
+      "kr",
+      "us",
+      "gb",
+      "ca",
+      "it",
+      "ch",
+      "gr",
+      "tr"
+    ]
   }
 ]
