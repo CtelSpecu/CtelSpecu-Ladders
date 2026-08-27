@@ -8,7 +8,7 @@
 
     <div v-if="client.platforms?.length" class="platform-badges">
       <span v-for="os in client.platforms" :key="os" class="platform-badge">
-        {{ osMeta[os]?.label ?? os }}
+        {{ (osMeta as any)[os]?.label ?? os }}
       </span>
     </div>
 
@@ -33,9 +33,9 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { computed } from 'vue';
-import { osMeta } from '../data/clients.js';
+import { osMeta } from '../data/clients';
 
 const props = defineProps({
   client: { type: Object, required: true },

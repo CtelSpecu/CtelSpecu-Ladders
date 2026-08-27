@@ -55,23 +55,23 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { computed, inject, ref } from 'vue';
 import ClientCard from '../components/ClientCard.vue';
 import VueIcon from '../components/VueIcon.vue';
-import { CLIENT_CATEGORY, getClientsByCategory, OS, osMeta, categoryMeta } from '../data/clients.js';
+import { CLIENT_CATEGORY, getClientsByCategory, OS, osMeta, categoryMeta } from '../data/clients';
 
-const navigate = inject('navigate', null);
+const navigate = inject('navigate', null) as any;
 
 const osOptions = [OS.windows, OS.macos, OS.linux, OS.ios, OS.android];
 const selectedOs = ref('');
 
 const categories = computed(() => [CLIENT_CATEGORY.clash, CLIENT_CATEGORY.v2ray]);
 
-function filteredClientsByCategory(category) {
-  const list = getClientsByCategory(category);
+function filteredClientsByCategory(category: string): any[] {
+  const list = getClientsByCategory(category as any);
   if (!selectedOs.value) return list;
-  return list.filter((client) => (client.platforms ?? []).includes(selectedOs.value));
+  return list.filter((client) => (client.platforms ?? []).includes(selectedOs.value as any));
 }
 
 function goToGuide() {

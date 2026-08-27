@@ -185,40 +185,34 @@
   </div>
 </template>
 
-<script setup>
-import { ref, provide, onMounted, defineAsyncComponent } from 'vue';
-import SubscriptionCard from './components/SubscriptionCard.vue';
-import NotificationContainer from './components/NotificationContainer.vue';
-import UpdateModal from './components/UpdateModal.vue';
-import ThemeToggle from './components/ThemeToggle.vue';
-import AppFooter from './components/AppFooter.vue';
-import VueIcon from './components/VueIcon.vue';
-// 懒加载页面组件以提高初始加载性能
-const ClientGuidePage = defineAsyncComponent(() => import('./pages/ClientGuidePage.vue'));
-const ClientCategoryPage = defineAsyncComponent(() => import('./pages/ClientCategoryPage.vue'));
-const FreeNodePage = defineAsyncComponent(() => import('./pages/FreeNodePage.vue'));
-const RecommendPage = defineAsyncComponent(() => import('./pages/RecommendPage.vue'));
-const FreeVpnPage = defineAsyncComponent(() => import('./pages/FreeVpnPage.vue'));
-import { useSubscriptions } from './composables/useSubscriptions.js';
-import { useTheme } from './composables/useTheme.js';
+<script setup lang="ts">
+import { ref, provide, onMounted, defineAsyncComponent } from 'vue'
+import SubscriptionCard from './components/SubscriptionCard.vue'
+import NotificationContainer from './components/NotificationContainer.vue'
+import UpdateModal from './components/UpdateModal.vue'
+import ThemeToggle from './components/ThemeToggle.vue'
+import AppFooter from './components/AppFooter.vue'
+import VueIcon from './components/VueIcon.vue'
+const ClientGuidePage = defineAsyncComponent(() => import('./pages/ClientGuidePage.vue'))
+const ClientCategoryPage = defineAsyncComponent(() => import('./pages/ClientCategoryPage.vue'))
+const FreeNodePage = defineAsyncComponent(() => import('./pages/FreeNodePage.vue'))
+const RecommendPage = defineAsyncComponent(() => import('./pages/RecommendPage.vue'))
+const FreeVpnPage = defineAsyncComponent(() => import('./pages/FreeVpnPage.vue'))
+import { useSubscriptions } from './composables/useSubscriptions'
+import { useTheme } from './composables/useTheme'
 
-const currentTab = ref('home');
-const guideOs = ref('');
+interface NavigateParams {
+  os?: string
+}
 
-// 使用主题管理composable
-const { 
-  isDark,
-  toggleTheme,
-  setTheme
-} = useTheme();
+const currentTab = ref<string>('home')
+const guideOs = ref<string>('')
 
-// 使用订阅管理composable
-const { 
-  subscriptions
-} = useSubscriptions();
+const { isDark, toggleTheme, setTheme } = useTheme()
 
-// 提供给子组件的切换页面函数
-const TAB_PATH = {
+const { subscriptions } = useSubscriptions()
+
+const TAB_PATH: Record<string, string> = {
   home: '',
   sub: 'subscriptions',
   guide: 'clients',
@@ -226,93 +220,88 @@ const TAB_PATH = {
   freenode: 'free-nodes',
   recommend: 'recommend',
   freevpn: 'other',
-};
-
-const PATH_TAB = Object.entries(TAB_PATH).reduce((acc, [tab, path]) => {
-  acc[path] = tab;
-  return acc;
-}, {});
-
-function buildHash(tab, params = {}) {
-  const path = TAB_PATH[tab] ?? '';
-  const query = new URLSearchParams();
-  if (tab === 'guide' && params.os) query.set('os', params.os);
-  const qs = query.toString();
-  return `#/${path}${qs ? `?${qs}` : ''}`;
 }
 
-function parseHash() {
-  const raw = window.location.hash || '#/';
-  const cleaned = raw.replace(/^#\/?/, '');
-  const [pathPart, queryPart] = cleaned.split('?');
-  const path = (pathPart || '').replace(/\/+$/, '');
-  const tab = PATH_TAB[path] ?? 'home';
-  const params = new URLSearchParams(queryPart || '');
-  return { tab, os: params.get('os') || '' };
+const PATH_TAB: Record<string, string> = Object.entries(TAB_PATH).reduce(
+  (acc, [tab, path]) => {
+    acc[path as string] = tab as string
+    return acc
+  },
+  {} as Record<string, string>,
+)
+
+function buildHash(tab: string, params: NavigateParams = {}): string {
+  const path = TAB_PATH[tab] ?? ''
+  const query = new URLSearchParams()
+  if (tab === 'guide' && params.os) query.set('os', params.os)
+  const qs = query.toString()
+  return `#/${path}${qs ? `?${qs}` : ''}`
 }
 
-function trackUmami(tab, params = {}) {
-  const umami = window.umami;
-  if (!umami) return;
+function parseHash(): { tab: string; os: string } {
+  const raw = window.location.hash || '#/'
+  const cleaned = raw.replace(/^#\/?/, '')
+  const [pathPart, queryPart] = cleaned.split('?')
+  const path = (pathPart || '').replace(/\/+$/, '')
+  const tab = (PATH_TAB[path] ?? 'home') as string
+  const params = new URLSearchParams(queryPart || '')
+  return { tab, os: params.get('os') || '' }
+}
 
-  const urlPath = `/${TAB_PATH[tab] ?? ''}`;
-  const url = tab === 'guide' && params.os ? `${urlPath}?os=${params.os}` : urlPath;
-
+function trackUmami(tab: string, params: NavigateParams = {}): void {
+  const umami = (window as unknown as { umami?: { trackView?: (url: string) => void; track?: (event: string, data: unknown) => void } }).umami
+  if (!umami) return
+  const urlPath = `/${TAB_PATH[tab] ?? ''}`
+  const url = tab === 'guide' && params.os ? `${urlPath}?os=${params.os}` : urlPath
   try {
     if (typeof umami.trackView === 'function') {
-      umami.trackView(url);
-      return;
+      umami.trackView(url)
+      return
     }
     if (typeof umami.track === 'function') {
-      umami.track('navigate', { url, tab, ...(params.os ? { os: params.os } : {}) });
+      umami.track('navigate', { url, tab, ...(params.os ? { os: params.os } : {}) })
     }
   } catch {
     // ignore
   }
 }
 
-function navigate(tab, params = {}) {
+function navigate(tab: string, params: NavigateParams = {}): void {
   if (tab === 'guide') {
-    guideOs.value = params.os || guideOs.value || '';
+    guideOs.value = params.os || guideOs.value || ''
   } else {
-    guideOs.value = '';
+    guideOs.value = ''
   }
-
-  currentTab.value = tab;
-  const hash = buildHash(tab, params);
-  history.pushState({ tab, ...params }, '', hash);
-  trackUmami(tab, params);
+  currentTab.value = tab
+  const hash = buildHash(tab, params)
+  history.pushState({ tab, ...params }, '', hash)
+  trackUmami(tab, params)
 }
 
-const setCurrentTab = (tab) => navigate(tab);
+const setCurrentTab = (tab: string): void => navigate(tab)
 
-// 处理来自订阅卡片的导航事件
-const handleNavigation = (page) => {
-  navigate(page);
-};
+const handleNavigation = (page: string): void => {
+  navigate(page)
+}
 
-// 通过provide提供给子组件
-provide('setCurrentTab', setCurrentTab);
-provide('navigate', navigate);
+provide('setCurrentTab', setCurrentTab)
+provide('navigate', navigate)
 
-// 组件挂载时的初始化
 onMounted(() => {
-  console.log('订阅数据已加载:', subscriptions.value);
-
-  const { tab, os } = parseHash();
+  console.log('订阅数据已加载:', subscriptions.value)
+  const { tab, os } = parseHash()
   if (tab === 'guide' && os) {
-    guideOs.value = os;
+    guideOs.value = os
   }
-  currentTab.value = tab;
-  trackUmami(tab, tab === 'guide' ? { os } : {});
-
+  currentTab.value = tab
+  trackUmami(tab, tab === 'guide' ? { os } : {})
   window.addEventListener('popstate', () => {
-    const parsed = parseHash();
-    guideOs.value = parsed.tab === 'guide' ? parsed.os : '';
-    currentTab.value = parsed.tab;
-    trackUmami(parsed.tab, parsed.tab === 'guide' ? { os: parsed.os } : {});
-  });
-});
+    const parsed = parseHash()
+    guideOs.value = parsed.tab === 'guide' ? parsed.os : ''
+    currentTab.value = parsed.tab
+    trackUmami(parsed.tab, parsed.tab === 'guide' ? { os: parsed.os } : {})
+  })
+})
 </script>
 
 <style scoped>

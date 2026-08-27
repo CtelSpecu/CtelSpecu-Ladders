@@ -22,7 +22,7 @@
   </footer>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import VueIcon from './VueIcon.vue'
 </script>
 

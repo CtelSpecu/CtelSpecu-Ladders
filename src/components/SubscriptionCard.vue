@@ -140,53 +140,42 @@
   />
 
 </template>
-<script setup>
+<script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue';
-import { useNotification } from '../composables/useNotification.js';
-import { useSubscriptions } from '../composables/useSubscriptions.js';
+import { useNotification } from '../composables/useNotification';
+import { useSubscriptions } from '../composables/useSubscriptions';
 import SubscriptionFailedModal from './SubscriptionFailedModal.vue';
 
 const { showSuccess, showError, showInfo } = useNotification();
 const { getSubscriptionRemainingTraffic, forceRefreshTrafficData } = useSubscriptions();
 
 // 失败弹窗引用
-const subscriptionFailedModal = ref(null);
+const subscriptionFailedModal = ref<any>(null);
 
 // 导航事件处理
 const emit = defineEmits(['navigate']);
 
-const props = defineProps({
-  subscriptionName: String,
-  subscriptionLink: String,   // 用于文本框复制和导入客户端
-  yamlLink: String,          // 用于获取流量信息
-  subscriptionId: {          // 添加唯一ID来区分不同订阅
-    type: [String, Number],
-    required: true
-  },
-  rating: {
-    type: Number,
-    default: 3
-  },
-  traffic: {
-    type: Object,
-    default: () => ({
-      used: 0,
-      total: 100,
-      unit: 'GB'
-    })
-  },
-  expire: [String, Object],
-  reset: [String, Object],
-  maximumRate: {
-    type: String,
-    default: '1 Gbps'
-  }
+interface Props {
+  subscriptionName?: string
+  subscriptionLink?: string
+  yamlLink?: string
+  subscriptionId: string | number
+  rating?: number
+  traffic?: any
+  expire?: any
+  reset?: any
+  maximumRate?: string
+}
+const props = withDefaults(defineProps<Props>(), {
+  rating: 3,
+  maximumRate: '1 Gbps',
+  traffic: () => ({ used: 0, total: 100, unit: 'GB' }),
 });
 
-const subscriptionLinkTextarea = ref(null);
+const subscriptionLinkTextarea = ref<any>(null);
 
 // 使用订阅ID创建唯一的本地状态，避免串行
-const remainingTrafficData = ref({
+const remainingTrafficData = ref<any>({
   remaining: null,
   hasRealData: false,
   loading: false,
@@ -194,12 +183,12 @@ const remainingTrafficData = ref({
   lastRetry: null,
   autoRetryCount: 0,
   maxAutoRetries: 5,
-  subscriptionId: props.subscriptionId // 添加ID标识
+  subscriptionId: props.subscriptionId,
 });
 
 // 自动重试定时器 - 每个组件实例独立的定时器
-let autoRetryTimer = null;
-let visibilityChangeListener = null;
+let autoRetryTimer: any = null;
+let visibilityChangeListener: any = null;
 
 // 组件实例唯一标识，用于调试
 const componentInstanceId = `subscription-${props.subscriptionId}-${Math.random().toString(36).substr(2, 9)}`;
@@ -233,12 +222,10 @@ onUnmounted(() => {
 // 设置页面可见性监听器
 const setupVisibilityListener = () => {
   visibilityChangeListener = () => {
-    // 当页面从后台回到前台时
     if (!document.hidden) {
-      const lastRetry = remainingTrafficData.value.lastRetry;
-      const now = new Date();
+      const lastRetry: any = remainingTrafficData.value.lastRetry;
+      const now: any = new Date();
       
-      // 如果上次获取时间超过5分钟，自动刷新
       if (lastRetry && (now - lastRetry) > 5 * 60 * 1000) {
         console.log('页面重新获得焦点，自动刷新流量数据');
         updateTrafficData(false, false);

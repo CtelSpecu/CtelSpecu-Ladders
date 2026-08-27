@@ -55,7 +55,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { inject, ref, onMounted, watch } from 'vue'
 import VueIcon from './VueIcon.vue'
 

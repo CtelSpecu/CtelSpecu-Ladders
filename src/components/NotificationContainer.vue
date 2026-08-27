@@ -35,19 +35,19 @@
   </div>
 </template>
 
-<script setup>
-import { useNotification } from '../composables/useNotification.js'
+<script setup lang="ts">
+import { useNotification } from '../composables/useNotification'
 
 const { notifications, removeNotification } = useNotification()
 
-const getIconClass = (type) => {
-  const iconMap = {
+const getIconClass = (type: string): string => {
+  const iconMap: Record<string, string> = {
     success: 'fas fa-check-circle',
     error: 'fas fa-exclamation-circle',
     warning: 'fas fa-exclamation-triangle',
     info: 'fas fa-info-circle'
   }
-  return iconMap[type] || iconMap.info
+  return (iconMap[type] ?? iconMap.info)
 }
 </script>
 

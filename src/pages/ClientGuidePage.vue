@@ -253,52 +253,51 @@
 }
 </style>
 
-<script setup>
+<script setup lang="ts">
 import { computed, inject, onMounted, ref, watch } from 'vue';
 import ClientCard from '../components/ClientCard.vue';
 import VueIcon from '../components/VueIcon.vue';
-import { getRecommendedClientsForOs, OS, osMeta } from '../data/clients.js';
-import { detectOsFromUserAgent } from '../utils/platform.js';
+import { getRecommendedClientsForOs, OS, osMeta } from '../data/clients';
+import { detectOsFromUserAgent } from '../utils/platform';
 
 const props = defineProps({
   initialOs: { type: String, default: '' },
 });
 
-const navigate = inject('navigate', null);
+const navigate = inject('navigate', null) as any;
 
 const osOptions = [OS.windows, OS.macos, OS.linux, OS.ios, OS.android];
-const selectedOs = ref(OS.windows);
+const selectedOs = ref<string>(OS.windows);
 
-const recommendedClients = computed(() => getRecommendedClientsForOs(selectedOs.value));
-
-function selectOs(os) {
+const recommendedClients = computed(() => getRecommendedClientsForOs(selectedOs.value as any));
+function selectOs(os: string): void {
   selectedOs.value = os;
   if (typeof navigate === 'function') {
     navigate('guide', { os });
   }
 }
 
-function goToCategory() {
+function goToCategory(): void {
   if (typeof navigate === 'function') {
     navigate('client-category');
   }
 }
 
-function osIconVariant(os) {
+function osIconVariant(os: string): string {
   if (os === OS.windows || os === OS.macos || os === OS.linux || os === OS.android) return 'brands';
   return 'solid';
 }
 
 onMounted(() => {
-  const initial = osOptions.includes(props.initialOs) ? props.initialOs : '';
-  selectedOs.value = initial || detectOsFromUserAgent(navigator.userAgent);
+  const initial = osOptions.includes(props.initialOs as any) ? props.initialOs : '';
+  selectedOs.value = (initial || detectOsFromUserAgent(navigator.userAgent)) as any;
 });
 
 watch(
   () => props.initialOs,
   (next) => {
-    if (osOptions.includes(next) && next !== selectedOs.value) {
-      selectedOs.value = next;
+    if (osOptions.includes(next as any) && next !== selectedOs.value) {
+      selectedOs.value = next as string;
     }
   }
 );

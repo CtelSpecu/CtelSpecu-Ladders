@@ -127,8 +127,19 @@
   </div>
 </template>
 
-<script setup>
-const clientList = [
+<script setup lang="ts">
+interface SimpleClient {
+  name: string
+  url: string
+  windows?: boolean
+  macos?: boolean
+  linux?: boolean
+  ios?: boolean
+  android?: boolean
+  router?: boolean
+}
+
+const clientList: SimpleClient[] = [
   { name: 'Clash', url: 'https://clash.md/zh/', macos: true, ios: true },
   { name: 'Loon', url: 'https://loonapp.org/', macos: true, ios: true },
   { name: 'V2Box Pro', url: 'https://apps.apple.com/us/app/v2box-pro-v2ray-client/id6756966178', ios: true },
