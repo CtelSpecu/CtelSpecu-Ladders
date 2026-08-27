@@ -1,0 +1,51 @@
+{
+  "sections": [
+    {
+      "title": "全平台可用",
+      "icon": "globe",
+      "items": [
+        {
+          "name": "LetsVPN",
+          "url": "https://china-letsvpn.com/",
+          "rating": 5
+        },
+        {
+          "name": "Turbo VPN",
+          "url": "https://cn.bing.com/search?q=turbo+vpn&qs=ds&form=QBRE",
+          "rating": 4
+        },
+        {
+          "name": "PandaVPN Pro",
+          "url": "https://pandavpnpro.com/",
+          "rating": 4
+        },
+        {
+          "name": "ProtonVPN",
+          "url": "https://join.protonvpn.com/downloads",
+          "rating": 3
+        },
+        {
+          "name": "Cloudflare One (原WARP)",
+          "url": "https://developers.cloudflare.com/cloudflare-one/team-and-resources/devices/cloudflare-one-client/download/",
+          "rating": 4
+        }
+      ]
+    },
+    {
+      "title": "移动端应用",
+      "icon": "mobile-screen-button",
+      "items": [
+        {
+          "name": "PandaVPN Lite (iOS)",
+          "url": "https://apps.apple.com/us/app/pandavpn-lite-最好最快無限流量的-vpn/id1466932207?l=zh",
+          "rating": 4
+        },
+        {
+          "name": "Orbot",
+          "url": "https://orbot.app/en/download/",
+          "rating": 3
+        }
+      ]
+    }
+  ]
+}

@@ -6,96 +6,29 @@
     </h1>
     <div class="free-vpn-content">
       <div class="free-vpn-grid">
-        <section class="free-vpn-section">
-          <h2><VueIcon class="section-icon" icon="globe" aria-label="全平台可用" /> 全平台可用</h2>
+        <section
+          v-for="(section, sIdx) in sections"
+          :key="sIdx"
+          class="free-vpn-section"
+        >
+          <h2>
+            <VueIcon class="section-icon" :icon="section.icon" :aria-label="section.title" />
+            {{ section.title }}
+          </h2>
           <div class="free-vpn-btn-group">
-            <div class="vpn-item">
-              <a href="https://china-letsvpn.com/" target="_blank" class="free-vpn-btn">
-                LetsVPN
+            <div
+              v-for="item in section.items"
+              :key="item.url"
+              class="vpn-item"
+            >
+              <a :href="item.url" target="_blank" class="free-vpn-btn">
+                {{ item.name }}
                 <span class="rating">
-                  <i class="fas fa-star"></i>
-                  <i class="fas fa-star"></i>
-                  <i class="fas fa-star"></i>
-                  <i class="fas fa-star"></i>
-                  <i class="fas fa-star"></i>
-                </span>
-              </a>
-            </div>
-            <div class="vpn-item">
-              <a href="https://cn.bing.com/search?q=turbo+vpn&qs=ds&form=QBRE" target="_blank" class="free-vpn-btn">
-                Turbo VPN
-                <span class="rating">
-                  <i class="fas fa-star"></i>
-                  <i class="fas fa-star"></i>
-                  <i class="fas fa-star"></i>
-                  <i class="fas fa-star"></i>
-                  <i class="far fa-star"></i>
-                </span>
-              </a>
-            </div>
-            <div class="vpn-item">
-              <a href="https://pandavpnpro.com/" target="_blank" class="free-vpn-btn">
-                PandaVPN Pro
-                <span class="rating">
-                  <i class="fas fa-star"></i>
-                  <i class="fas fa-star"></i>
-                  <i class="fas fa-star"></i>
-                  <i class="fas fa-star"></i>
-                  <i class="far fa-star"></i>
-                </span>
-              </a>
-            </div>
-              <div class="vpn-item">
-                <a href="https://join.protonvpn.com/downloads" target="_blank" class="free-vpn-btn">
-                  ProtonVPN
-                  <span class="rating">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="far fa-star"></i>
-                    <i class="far fa-star"></i>
-                  </span>
-                </a>
-              </div>
-              <div class="vpn-item">
-                <a href="https://developers.cloudflare.com/cloudflare-one/team-and-resources/devices/cloudflare-one-client/download/" target="_blank" class="free-vpn-btn">
-                  Cloudflare One (原WARP)
-                  <span class="rating">
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="fas fa-star"></i>
-                    <i class="far fa-star"></i>
-                  </span>
-                </a>
-              </div>
-          </div>
-        </section>
-
-        <section class="free-vpn-section">
-          <h2><VueIcon class="section-icon" icon="mobile-screen-button" aria-label="移动端应用" /> 移动端应用</h2>
-          <div class="free-vpn-btn-group">
-            <div class="vpn-item">
-              <a href="https://apps.apple.com/us/app/pandavpn-lite-最好最快無限流量的-vpn/id1466932207?l=zh" target="_blank" class="free-vpn-btn">
-                PandaVPN Lite (iOS)
-                <span class="rating">
-                  <i class="fas fa-star"></i>
-                  <i class="fas fa-star"></i>
-                  <i class="fas fa-star"></i>
-                  <i class="fas fa-star"></i>
-                  <i class="far fa-star"></i>
-                </span>
-              </a>
-            </div>
-            <div class="vpn-item">
-              <a href="https://orbot.app/en/download/" target="_blank" class="free-vpn-btn">
-                Orbot
-                <span class="rating">
-                  <i class="fas fa-star"></i>
-                  <i class="fas fa-star"></i>
-                  <i class="fas fa-star"></i>
-                  <i class="far fa-star"></i>
-                  <i class="far fa-star"></i>
+                  <i
+                    v-for="i in 5"
+                    :key="i"
+                    :class="i <= item.rating ? 'fas fa-star' : 'far fa-star'"
+                  ></i>
                 </span>
               </a>
             </div>
@@ -106,8 +39,23 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import VueIcon from '../components/VueIcon.vue';
+import freeVpnsData from '../data/freeVpns.json';
+
+interface VpnItem {
+  name: string
+  url: string
+  rating: number
+}
+
+interface VpnSection {
+  title: string
+  icon: string
+  items: VpnItem[]
+}
+
+const sections = (freeVpnsData as { sections: VpnSection[] }).sections;
 </script>
 
 <style scoped>
@@ -355,6 +303,3 @@ import VueIcon from '../components/VueIcon.vue';
   }
 }
 </style>
-
-<script setup>
-</script>

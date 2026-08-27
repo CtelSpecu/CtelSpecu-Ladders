@@ -12,68 +12,26 @@
             免费节点资源有限且稳定性较差，如需更好体验可考虑付费节点（参见<a href="#" @click.prevent="switchToRecommend" class="inline-link">机场推荐</a>）。
           </p>
         </section>
-        <section class="free-node-section">
-          <h2><VueIcon class="section-icon" icon="globe" aria-label="免费节点网站" /> 免费节点网站</h2>
-          <p class="section-description">每日更新的免费节点资源</p>
+        <section
+          v-for="(section, sIdx) in sections"
+          :key="sIdx"
+          class="free-node-section"
+        >
+          <h2>
+            <VueIcon class="section-icon" :icon="section.icon" :aria-label="section.title" />
+            {{ section.title }}
+          </h2>
+          <p class="section-description">{{ section.description }}</p>
           <div class="free-node-links">
-            <a href="https://www.freeclashnode.com/free-node/" target="_blank" class="free-node-link">
-              <span class="link-icon"><VueIcon icon="link" aria-label="链接" /></span>
-              <span class="link-text">FreeClashNode - 每日更新节点</span>
-            </a>
-            <a href="https://github.com/crossxx-labs/free-proxy" target="_blank" class="free-node-link">
-              <span class="link-icon"><VueIcon icon="box" aria-label="仓库" /></span>
-              <span class="link-text">crossxx-labs - 多协议免费订阅</span>
-            </a>
-            <a href="https://nodefree.net/" target="_blank" class="free-node-link">
-              <span class="link-icon"><VueIcon icon="link" aria-label="链接" /></span>
-              <span class="link-text">NodeFree - 网络自由工具箱</span>
-            </a>
-            <a href="https://github.com/Flikify/getNode" target="_blank" class="free-node-link">
-              <span class="link-icon"><VueIcon icon="box" aria-label="仓库" /></span>
-              <span class="link-text">Flikify - 每小时更新节点</span>
-            </a>
-            <a href="https://telegeam.github.io/clashnode/" target="_blank" class="free-node-link">
-              <span class="link-icon"><VueIcon icon="link" aria-label="链接" /></span>
-              <span class="link-text">ClashNode - SSR/V2ray节点</span>
-            </a>
-            <a href="https://clashnode.cc/free-node/" target="_blank" class="free-node-link">
-              <span class="link-icon"><VueIcon icon="link" aria-label="链接" /></span>
-              <span class="link-text">ClashNode中文网 - 每天更新</span>
-            </a>
-            <a href="https://clash-free-node.github.io/" target="_blank" class="free-node-link">
-              <span class="link-icon"><VueIcon icon="link" aria-label="链接" /></span>
-              <span class="link-text">Clash免费节点 - 机场订阅</span>
-            </a>
-          </div>
-        </section>
-
-        <section class="free-node-section">
-          <h2><VueIcon class="section-icon" icon="folder-open" aria-label="GitHub资源" /> GitHub资源</h2>
-          <p class="section-description">GitHub上的开源节点项目</p>
-          <div class="free-node-links">
-            <a href="https://github.com/Pawdroid/Free-servers" target="_blank" class="free-node-link">
-              <span class="link-icon"><VueIcon icon="box" aria-label="仓库" /></span>
-              <span class="link-text">Pawdroid/Free-servers</span>
-            </a>
-            <a href="https://github.com/peasoft/NoMoreWalls" target="_blank" class="free-node-link">
-              <span class="link-icon"><VueIcon icon="box" aria-label="仓库" /></span>
-              <span class="link-text">peasoft/NoMoreWalls</span>
-            </a>
-            <a href="https://github.com/mahdibland/V2RayAggregator" target="_blank" class="free-node-link">
-              <span class="link-icon"><VueIcon icon="box" aria-label="仓库" /></span>
-              <span class="link-text">mahdibland/V2RayAggregator</span>
-            </a>
-            <a href="https://github.com/w1770946466/Auto_proxy" target="_blank" class="free-node-link">
-              <span class="link-icon"><VueIcon icon="box" aria-label="仓库" /></span>
-              <span class="link-text">w1770946466/Auto_proxy</span>
-            </a>
-            <a href="https://github.com/ermaozi/get_subscribe" target="_blank" class="free-node-link">
-              <span class="link-icon"><VueIcon icon="box" aria-label="仓库" /></span>
-              <span class="link-text">ermaozi/get_subscribe</span>
-            </a>
-            <a href="https://github.com/mfuu/v2ray" target="_blank" class="free-node-link">
-              <span class="link-icon"><VueIcon icon="box" aria-label="仓库" /></span>
-              <span class="link-text">mfuu/v2ray</span>
+            <a
+              v-for="link in section.links"
+              :key="link.url"
+              :href="link.url"
+              target="_blank"
+              class="free-node-link"
+            >
+              <span class="link-icon"><VueIcon :icon="link.icon" aria-label="链接" /></span>
+              <span class="link-text">{{ link.name }}</span>
             </a>
           </div>
         </section>
@@ -82,15 +40,31 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { inject } from 'vue';
 import VueIcon from '../components/VueIcon.vue';
+import freeNodesData from '../data/freeNodes.json';
+
+interface FreeNodeLink {
+  name: string
+  url: string
+  icon: string
+}
+
+interface FreeNodeSection {
+  title: string
+  description: string
+  icon: string
+  links: FreeNodeLink[]
+}
+
+const sections = (freeNodesData as { sections: FreeNodeSection[] }).sections;
 
 // 获取切换页面的函数
-const setCurrentTab = inject('setCurrentTab');
+const setCurrentTab = inject('setCurrentTab') as any;
 
 // 切换到推荐页面
-const switchToRecommend = () => {
+const switchToRecommend = (): void => {
   if (setCurrentTab) {
     setCurrentTab('recommend');
   }
