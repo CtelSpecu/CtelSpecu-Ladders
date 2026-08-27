@@ -1,153 +1,222 @@
 <template>
   <div class="recommend-page">
-    <div class="page-header">
-      <h1 class="page-title">
-        <VueIcon class="title-icon" icon="rocket" aria-label="机场推荐" />
-        <span class="title-text">机场推荐</span>
+    <div class="rec-header">
+      <h1 class="rec-title">
+        <VueIcon class="rec-title-icon" icon="rocket" aria-label="机场推荐" />
+        <span class="rec-title-text">机场推荐</span>
+        <span class="rec-title-count">{{ providers.length }} 家精选</span>
       </h1>
-      <p class="page-subtitle">精选优质服务商，稳定高速的网络体验</p>
+      <p class="rec-subtitle">剔除噱头，只留稳定与性价比 — 按需选择，卡片即入口</p>
     </div>
 
-    <section class="filter-section">
-      <div class="filters">
-        <button
-          v-for="cat in categories"
-          :key="cat.id"
-          type="button"
-          class="filter-pill"
-          :class="{ active: selectedCategory === cat.id }"
-          @click="selectedCategory = cat.id"
-        >
-          <VueIcon :icon="cat.icon" class="filter-icon" />
-          <span>{{ cat.label }}</span>
-        </button>
-      </div>
-    </section>
-
-    <div class="category-info">
-      <div class="category-header">
-        <VueIcon :icon="currentCategory.icon" class="category-icon" />
-        <h2>{{ currentCategory.label }}</h2>
-      </div>
-      <p class="category-desc">{{ currentCategory.description }}</p>
-      <div class="category-tags">
-        <span v-for="tag in currentCategory.tags" :key="tag" class="tag">{{ tag }}</span>
-      </div>
-    </div>
-
-    <div class="provider-cards">
+    <div class="bento-grid">
       <a
-        v-for="provider in filteredProviders"
+        v-for="(provider, idx) in providers"
         :key="provider.name"
         :href="provider.url"
         target="_blank"
         rel="noopener noreferrer"
-        class="provider-card"
+        class="bento-card group"
+        :style="{ '--enter-delay': idx * 70 + 'ms' }"
+        :aria-label="provider.displayName + ' 官网'"
       >
-        <div class="card-icon">
-          <VueIcon :icon="provider.icon" />
+        <div class="bento-card__overlay" aria-hidden="true"></div>
+        <!-- 可上移的内容组：标题+badge+Marquee（按用户要求一起上移） -->
+        <div class="bento-card__shift">
+          <div class="bento-card__head">
+            <h3 class="bento-card__title">{{ provider.displayName }}</h3>
+          </div>
+
+          <div class="bento-card__billing">
+            <span
+              v-for="b in provider.billing"
+              :key="b.label"
+              class="billing-pill"
+              :class="billingClass(b.type)"
+              :title="b.type + ' ' + b.label"
+            >
+              <span class="billing-type">{{ b.type }}</span>
+              <span class="billing-sep">·</span>
+              <span class="billing-label">￥{{ b.label }}</span>
+            </span>
+          </div>
+
+          <div class="bento-card__badges">
+            <span
+              v-for="badge in provider.badges"
+              :key="badge"
+              class="badge"
+              :class="badgeVariant(badge)"
+            >{{ badge }}</span>
+          </div>
+
+          <div class="bento-card__regions">
+            <div class="marquee" :aria-label="provider.regions.join('、')">
+              <div class="marquee__track">
+                <span
+                  v-for="(region, rIdx) in duplicatedRegions(provider.regions)"
+                  :key="region + '-' + rIdx"
+                  class="marquee__item"
+                >
+                  <span class="marquee__flag">
+                    <img
+                      v-if="isoFor(region)"
+                      :src="flagSrc(region)"
+                      :srcset="flagSrcSet(region)"
+                      :alt="region"
+                      width="20"
+                      height="15"
+                      loading="lazy"
+                      decoding="async"
+                      class="flag-img"
+                      @error="onFlagError"
+                    />
+                    <span v-else class="flag-fallback">🌐</span>
+                  </span>
+                  <span class="marquee__name">{{ region }}</span>
+                </span>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="card-content">
-          <h3 class="provider-name">{{ provider.name }}</h3>
-          <p v-if="provider.description" class="provider-desc">{{ provider.description }}</p>
+
+        <div class="bento-card__foot" aria-hidden="true">
+          <div class="foot-price" v-if="lowestBilling(provider)">
+            <span class="foot-price-currency">￥</span><span class="foot-price-num">{{ lowestBilling(provider).price }}</span><span class="foot-price-unit">/{{ lowestBilling(provider).traffic }}</span><span class="foot-price-from">起</span>
+          </div>
+          <div class="foot-cta">
+            <span class="cta-text">访问官网</span>
+            <VueIcon icon="arrow-right" class="cta-icon" />
+          </div>
         </div>
-        <VueIcon icon="arrow-right" class="card-arrow" />
       </a>
     </div>
+
+    <p class="rec-footnote">
+      价格随套餐与活动浮动，以官网为准。建议先按量小额试用，再转周期订阅。
+    </p>
   </div>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
 import VueIcon from '../components/VueIcon.vue';
+import providersData from '../data/providers.json';
 
-const categories = [
-  {
-    id: 'premium',
-    label: '优质高速',
-    icon: 'bolt',
-    description: '高速、稳定、IP纯净，适合经常使用的用户',
-    tags: ['高速', '稳定', 'IP纯净'],
-  },
-  {
-    id: 'budget',
-    label: '量大管饱',
-    icon: 'database',
-    description: '高性价比、大流量，适合下载大量文件的用户',
-    tags: ['高性价比', '大流量'],
-  },
-  {
-    id: 'periodic',
-    label: '按量购买',
-    icon: 'clock',
-    description: '购买固定流量，适合不常用代理的用户',
-    tags: ['按需购买', '灵活'],
-  },
-];
+const providers = providersData;
 
-const providers = [
-  // 优质高速 (按推荐顺序)
-  { name: 'Mikasa', url: 'https://a.mikasass.pro/signup?referralCode=A9ti5mtf', icon: 'bolt', category: 'premium', order: 1 },
-  { name: 'CuteCloud', url: 'https://www.cutecloud.net/register?code=WUHcCLFn', icon: 'heart', category: 'premium', order: 3 },
-  { name: '狗狗加速', url: 'https://down.dginv.click/#/register?code=ammg9FA2', icon: 'dog', category: 'premium', order: 4 },
-  { name: 'XSUS', url: 'https://xs-us.xyz/register?code=9usLmdvb', icon: 'plane', category: 'premium', order: 5 },
-  // 量大管饱 (按推荐顺序)
-  { name: 'CokeCloud', url: 'https://cokecloud.cyou/#/register?code=wvIsDmnG', icon: 'mug-hot', category: 'budget', order: 1 },
-  { name: '快游戏云加速', url: 'https://www.qingzeyy.top/#/register?code=KENq3MAR', icon: 'gamepad', category: 'budget', order: 2 },
-  { name: '一元机场', url: 'https://1元机场.com/#/', icon: 'dollar-sign', category: 'budget', order: 3 },
-  // 按量购买 (按推荐顺序)
-  { name: '萌云', url: 'https://www.cutecloud.net/register?code=WUHcCLFn', icon: 'heart', category: 'periodic', order: 1, description: '支持按流量购买' },
-  { name: '丛雨云', url: 'https://congyu.moe/auth/register?invite=02fbcb72b9', icon: 'cloud', category: 'periodic', order: 3, description: '按量购买' },
-  { name: '魔戒', url: 'https://mojie.kim/register?aff=r3JESYAG', icon: 'ring', category: 'periodic', order: 2 },
+const isoMap = {
+  '香港': 'hk',
+  '日本': 'jp',
+  '新加坡': 'sg',
+  '韩国': 'kr',
+  '美国': 'us',
+  '英国': 'gb',
+  '马来': 'my',
+  '马来西亚': 'my',
+  '西班牙': 'es',
+  '泰国': 'th',
+  '印度': 'in',
+  '澳大利亚': 'au',
+  '德国': 'de',
+  '加拿大': 'ca',
+  '俄罗斯': 'ru',
+  '巴西': 'br',
+  '阿联酋': 'ae',
+  '法国': 'fr',
+  '菲律宾': 'ph',
+  '越南': 'vn',
+  '南非': 'za',
+  '墨西哥': 'mx',
+  '荷兰': 'nl',
+  '瑞典': 'se',
+  '芬兰': 'fi',
+  '挪威': 'no',
+  '丹麦': 'dk',
+  '爱尔兰': 'ie',
+  '罗马尼亚': 'ro',
+  '沙特': 'sa',
+  '土耳其': 'tr',
+  '意大利': 'it',
+  '瑞士': 'ch',
+  '希腊': 'gr',
+};
 
-];
+function isoFor(region) {
+  return isoMap[region] || null;
+}
 
-const selectedCategory = ref('premium');
+function flagSrc(region) {
+  const iso = isoFor(region);
+  if (!iso) return '';
+  return `https://flagcdn.com/w20/${iso}.png`;
+}
 
-const currentCategory = computed(() => {
-  return categories.find(c => c.id === selectedCategory.value) || categories[0];
-});
+function flagSrcSet(region) {
+  const iso = isoFor(region);
+  if (!iso) return '';
+  return `https://flagcdn.com/w40/${iso}.png 2x`;
+}
 
-const filteredProviders = computed(() => {
-  return providers
-    .filter(p => p.category === selectedCategory.value)
-    .sort((a, b) => a.order - b.order);
-});
+function onFlagError(e) {
+  const target = e.target;
+  if (target) target.style.display = 'none';
+}
+
+function lowestBilling(provider) {
+  if (!provider.billing || provider.billing.length === 0) return null;
+  return [...provider.billing].sort((a, b) => a.price - b.price)[0];
+}
+
+function billingClass(type) {
+  if (type.includes('按量')) return 'billing-pill--traffic';
+  return 'billing-pill--cycle';
+}
+
+function badgeVariant(badge) {
+  if (['纯净IP', '家宽', 'BGP', 'BPG'].includes(badge)) return 'badge--accent';
+  return '';
+}
+
+function duplicatedRegions(regions) {
+  return [...regions, ...regions];
+}
 </script>
 
 <style scoped>
 .recommend-page {
   width: 100%;
-  max-width: 100%;
+  max-width: var(--page-max-w);
   margin: 0 auto;
-  padding: 0;
+  padding: 0 var(--page-gutter);
   box-sizing: border-box;
 }
-.page-header {
+
+/* ---- Header ---- */
+.rec-header {
   text-align: center;
-  margin-bottom: var(--spacing-xl);
+  margin-bottom: clamp(22px, 3vw, 36px);
 }
 
-.page-title {
+.rec-title {
   margin: 0;
-  font-size: clamp(26px, 2.6vw, 32px);
-  font-weight: 800;
-  letter-spacing: -0.025em;
-  margin-bottom: var(--spacing-sm);
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: var(--spacing-sm);
+  flex-wrap: wrap;
+  gap: 10px 12px;
+  font-size: clamp(26px, 2.8vw, 34px);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
 }
 
-.title-icon {
-  font-size: 1.05em;
+.rec-title-icon {
+  font-size: 0.95em;
   color: var(--text-accent);
-  filter: drop-shadow(0 2px 8px rgba(var(--accent-rgb), 0.18));
+  filter: drop-shadow(0 2px 10px rgba(var(--accent-rgb), 0.22));
 }
 
-.title-text {
-  color: var(--text-title-h1);
+.rec-title-text {
   background: var(--main-gradient);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -155,262 +224,537 @@ const filteredProviders = computed(() => {
   padding-bottom: 2px;
 }
 
-.page-subtitle {
-  color: var(--text-secondary);
-  font-size: var(--font-size-base);
-  margin: 0;
-}
-
-.filter-section {
-  margin-bottom: var(--spacing-xl);
-}
-
-.filters {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: var(--spacing-sm);
-}
-
-.filter-pill {
+.rec-title-count {
   display: inline-flex;
   align-items: center;
-  gap: var(--spacing-xs);
-  border: 1px solid var(--border-primary);
-  background: var(--background-secondary);
-  color: var(--text-primary);
+  padding: 4px 10px;
   border-radius: 999px;
-  padding: 10px 18px;
-  cursor: pointer;
-  transition: all var(--transition-normal);
-  font-weight: 600;
-  font-size: var(--font-size-sm);
-}
-
-.filter-pill:hover {
-  border-color: rgba(var(--accent-rgb), 0.22);
-  transform: translateY(-1px);
-  box-shadow: var(--soft-shadow);
-}
-
-.filter-pill.active {
-  background: var(--main-gradient);
-  color: var(--text-bright);
-  border-color: transparent;
-  box-shadow: var(--accent-shadow);
-}
-
-.filter-icon {
-  font-size: 1em;
-}
-
-.category-info {
-  text-align: center;
-  margin-bottom: var(--spacing-xl);
-  padding: clamp(18px, 2vw, 24px);
+  font-size: 12px;
+  font-weight: 650;
+  letter-spacing: 0.02em;
+  color: var(--text-tertiary);
   background: var(--background-secondary);
   border: 1px solid var(--border-primary);
-  border-radius: var(--card-radius);
   box-shadow: var(--soft-shadow);
 }
 
-.category-header {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--spacing-sm);
-  margin-bottom: var(--spacing-sm);
-}
-
-.category-icon {
-  font-size: 1.5em;
-  color: var(--text-accent);
-}
-
-.category-info h2 {
-  margin: 0;
-  font-size: var(--font-size-lg);
-  color: var(--text-primary);
-  font-weight: 700;
-}
-
-.category-desc {
-  margin: 0 0 var(--spacing-md);
+.rec-subtitle {
+  margin: 10px 0 0;
   color: var(--text-secondary);
-  font-size: var(--font-size-sm);
+  font-size: clamp(13.5px, 1.4vw, 15px);
+  line-height: 1.6;
+  letter-spacing: 0.01em;
 }
 
-.category-tags {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: var(--spacing-sm);
-}
-
-.tag {
-  display: inline-flex;
-  align-items: center;
-  background: var(--background-tertiary);
-  color: var(--text-accent);
-  padding: var(--spacing-xs) var(--spacing-md);
-  border-radius: 20px;
-  font-size: var(--font-size-sm);
-  font-weight: 500;
-  border: 1px solid var(--border-primary);
-}
-
-.provider-cards {
+/* ---- Bento Grid — magicui: grid w-full auto-rows-[22rem] grid-cols-3 gap-4 ---- */
+.bento-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  gap: clamp(16px, 1.8vw, 22px);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+  align-items: stretch;
 }
 
-.provider-card {
+@media (max-width: 1100px) {
+  .bento-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .bento-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---- Card — Uiverse fuzzy-rabbit-3 + magicui BentoCard, fully token-based for light/dark ---- */
+.bento-card {
+  position: relative;
   display: flex;
-  align-items: center;
-  gap: var(--spacing-md);
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 268px;
+  padding: 20px 20px 0 20px;
   background: var(--background-secondary);
   border: 1px solid var(--border-primary);
-  border-radius: var(--card-radius);
-  padding: var(--spacing-lg);
-  text-decoration: none;
+  border-radius: 12px;
   color: var(--text-primary);
-  transition: all 0.5s;
-  box-shadow: var(--soft-shadow);
-  position: relative;
   overflow: hidden;
+  text-decoration: none !important;
+  isolation: isolate;
+  transform: translateZ(0);
+  box-shadow: var(--soft-shadow);
+  transition:
+    transform 500ms cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 500ms cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 500ms cubic-bezier(0.4, 0, 0.2, 1),
+    color 500ms cubic-bezier(0.4, 0, 0.2, 1);
+  animation: bento-enter 560ms cubic-bezier(0.23, 1, 0.32, 1) both;
+  animation-delay: var(--enter-delay, 0ms);
+  will-change: transform;
 }
 
-.provider-card::before {
+/* light/dark via tokens already, but keep magicui dark inset for depth */
+.bento-card {
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.03),
+    0 2px 4px rgba(0, 0, 0, 0.05),
+    0 12px 24px rgba(0, 0, 0, 0.05),
+    var(--soft-shadow);
+}
+
+:global(.theme-light) .bento-card {
+  box-shadow:
+    0 0 0 1px rgba(0, 0, 0, 0.03),
+    0 2px 4px rgba(0, 0, 0, 0.05),
+    0 12px 24px rgba(0, 0, 0, 0.05);
+}
+
+@media (prefers-color-scheme: dark) {
+  .bento-card {
+    box-shadow:
+      0 -20px 80px -20px rgba(255, 255, 255, 0.08) inset,
+      var(--soft-shadow);
+  }
+}
+
+.bento-card,
+.bento-card:hover,
+.bento-card:focus-visible {
+  text-decoration: none !important;
+}
+
+.bento-card::before,
+.bento-card::after {
+  text-decoration: none !important;
+}
+
+/* Orb blobs — pixel-perfect Uiverse, behind content */
+.bento-card::before,
+.bento-card::after {
   content: '';
   position: absolute;
+  border-radius: 9999px;
+  pointer-events: none;
+  z-index: 0;
+  transition:
+    right 500ms cubic-bezier(0.4, 0, 0.2, 1),
+    top 500ms cubic-bezier(0.4, 0, 0.2, 1),
+    bottom 500ms cubic-bezier(0.4, 0, 0.2, 1),
+    filter 500ms cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 500ms cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 500ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.bento-card::before {
   width: 48px;
   height: 48px;
   right: 4px;
   top: 4px;
-  background: var(--orb-violet);
-  border-radius: 9999px;
-  filter: blur(12px);
-  opacity: var(--orb-opacity);
-  z-index: 0;
-  transition: all 0.5s;
+  background: #8b5cf6;
+  filter: blur(16px);
+  opacity: var(--orb-opacity, 0.92);
 }
 
-.provider-card::after {
-  content: '';
-  position: absolute;
+.bento-card::after {
   width: 80px;
   height: 80px;
   right: 32px;
   top: 12px;
-  background: var(--orb-rose);
-  border-radius: 9999px;
+  background: #fda4af;
   filter: blur(16px);
-  opacity: calc(var(--orb-opacity) * 0.9);
-  z-index: 0;
-  transition: all 0.5s;
+  opacity: calc(var(--orb-opacity, 0.92) * 0.9);
 }
 
-.provider-card:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--card-shadow);
-  border-color: rgb(var(--orb-rose-rgb));
-  color: rgb(var(--orb-rose-rgb));
+.bento-card:hover {
+  border-color: #fda4af;
 }
 
-.provider-card:hover::before {
+.bento-card:hover::before {
   right: 48px;
   top: auto;
   bottom: -32px;
-  filter: blur(14px);
+  filter: blur(8px);
   box-shadow: 20px 20px 20px 30px #a21caf;
 }
 
-.provider-card:hover::after {
+.bento-card:hover::after {
   right: -32px;
-  filter: blur(18px);
 }
 
-.provider-card:hover .card-icon {
-  color: rgb(var(--orb-rose-rgb));
-  border-color: rgba(var(--orb-rose-rgb), 0.3);
-}
-
-.provider-card:hover .provider-name {
-  color: rgb(var(--orb-rose-rgb));
-}
-.card-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 48px;
-  height: 48px;
-  background: var(--background-tertiary);
-  border-radius: 12px;
-  color: var(--text-accent);
-  font-size: 1.25em;
-  flex-shrink: 0;
-  border: 1px solid var(--border-secondary);
-  position: relative;
+/* magicui overlay — token-aware */
+.bento-card__overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
   z-index: 1;
+  background: transparent;
+  transition: background 300ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.card-content {
+.bento-card:hover .bento-card__overlay {
+  background: var(--surface-hover);
+}
+
+.bento-card:focus-visible {
+  outline: 2px solid rgba(var(--accent-rgb), 0.55);
+  outline-offset: 2px;
+  border-color: rgba(var(--accent-rgb), 0.45);
+}
+
+@keyframes bento-enter {
+  from { opacity: 0; transform: translateY(14px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* ---- Shiftable content — title+badge+Marquee一起上移，整体下移使hover后与原非hover齐平 ---- */
+.bento-card__shift {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
   flex: 1;
   min-width: 0;
-  position: relative;
-  z-index: 1;
+  transform: translateY(28px);
+  transition: transform 300ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.provider-name {
+.bento-card:hover .bento-card__shift {
+  transform: translateY(18px);
+}
+
+@media (max-width: 1023px) {
+  .bento-card__shift {
+    transform: translateY(28px);
+  }
+  .bento-card:hover .bento-card__shift,
+  .bento-card:focus-within .bento-card__shift {
+    transform: translateY(18px);
+  }
+}
+
+.bento-card__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  min-width: 0;
+}
+
+/* Title — 非hover单色，hover红蓝渐变 270deg */
+.bento-card__title {
   margin: 0;
-  font-size: var(--font-size-base);
-  font-weight: 600;
+  font-size: clamp(16.5px, 1.55vw, 19px);
+  font-weight: 850;
+  letter-spacing: -0.025em;
+  line-height: 1.25;
   color: var(--text-primary);
+  min-width: 0;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+  text-wrap: balance;
+  transition: color 500ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.provider-desc {
-  margin: var(--spacing-xs) 0 0;
-  font-size: var(--font-size-sm);
+.bento-card:hover .bento-card__title {
+  background: linear-gradient(270deg, #ef4444 0%, #3b82f6 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ---- Billing pills ---- */
+.bento-card__billing {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+}
+
+.billing-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.01em;
+  border: 1px solid var(--border-primary);
+  background: var(--background-trans);
+  color: var(--text-secondary);
+  backdrop-filter: blur(6px);
+}
+
+.billing-type { font-weight: 750; letter-spacing: 0.02em; }
+.billing-sep { opacity: 0.45; }
+
+.billing-pill--cycle {
+  background: rgba(var(--accent-rgb), 0.08);
+  border-color: rgba(var(--accent-rgb), 0.18);
+  color: var(--text-accent);
+}
+
+.billing-pill--traffic {
+  background: rgba(var(--sub-accent-rgb), 0.07);
+  border-color: rgba(var(--sub-accent-rgb), 0.16);
+  color: var(--text-sub-accent);
+}
+
+/* ---- Badges ---- */
+.bento-card__badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  min-height: 26px;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 5.5px 9px;
+  border-radius: 999px;
+  font-size: 11.5px;
+  font-weight: 620;
+  line-height: 1;
+  letter-spacing: 0.015em;
+  border: 1px solid var(--border-primary);
+  background: var(--background-secondary);
   color: var(--text-secondary);
 }
 
-.card-arrow {
-  color: var(--text-tertiary);
-  font-size: 0.9em;
-  flex-shrink: 0;
-  transition: all var(--transition-normal);
+.badge--accent {
+  background: rgba(var(--orb-violet-rgb, 139, 92, 246), 0.10);
+  border-color: rgba(var(--orb-violet-rgb, 139, 92, 246), 0.18);
+  color: rgb(var(--orb-violet-rgb, 139, 92, 246));
+}
+
+/* ---- Regions marquee ---- */
+.bento-card__regions {
   position: relative;
-  z-index: 1;
+  z-index: 2;
+  margin-top: 10px;
+  margin-left: -20px;
+  margin-right: -20px;
+  border-top: 1px solid var(--border-secondary);
+  background: linear-gradient(90deg, transparent 0%, var(--surface-hover) 22%, var(--surface-hover) 78%, transparent 100%);
+  padding: 11px 0;
+  overflow: hidden;
 }
 
-.provider-card:hover .card-arrow {
-  color: var(--text-accent);
-  transform: translateX(4px);
+.marquee {
+  overflow: hidden;
+  width: 100%;
+  mask-image: linear-gradient(90deg, transparent 0%, black 7%, black 93%, transparent 100%);
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, black 7%, black 93%, transparent 100%);
 }
 
-@media (max-width: 768px) {
-  .filters {
-    flex-direction: column;
-    align-items: stretch;
+.marquee__track {
+  display: flex;
+  width: max-content;
+  align-items: center;
+  gap: 0;
+  will-change: transform;
+  animation: marquee-scroll 28s linear infinite;
+}
+
+.bento-card:hover .marquee__track {
+  animation-play-state: paused;
+}
+
+.marquee__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 14px;
+  flex-shrink: 0;
+  white-space: nowrap;
+  border-right: 1px solid var(--border-secondary);
+  line-height: 1;
+}
+
+.marquee__flag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 15px;
+  flex-shrink: 0;
+  border-radius: 2px;
+  overflow: hidden;
+  background: var(--background-tertiary);
+  box-shadow: 0 0 0 1px var(--border-secondary);
+}
+
+.flag-img {
+  width: 20px;
+  height: 15px;
+  object-fit: cover;
+  display: block;
+  border-radius: 2px;
+}
+
+.marquee__name {
+  font-size: 12.4px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  color: var(--text-secondary);
+}
+
+@keyframes marquee-scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* ---- Foot ---- */
+.bento-card__foot {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 12px;
+  padding-bottom: 14px;
+  opacity: 0;
+  transform: translateY(10px);
+  transition:
+    opacity 300ms cubic-bezier(0.4, 0, 0.2, 1),
+    transform 300ms cubic-bezier(0.4, 0, 0.2, 1);
+  pointer-events: none;
+}
+
+.bento-card:hover .bento-card__foot,
+.bento-card:focus-within .bento-card__foot {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.foot-price {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 2px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: var(--background-tertiary);
+  border: 1px solid var(--border-primary);
+  box-shadow: var(--soft-shadow);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.foot-price-currency {
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--text-tertiary);
+  margin-right: 1px;
+}
+
+.foot-price-num {
+  font-size: 14px;
+  font-weight: 850;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  line-height: 1;
+}
+
+.foot-price-unit {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--text-tertiary);
+}
+
+.foot-price-from {
+  margin-left: 5px;
+  font-size: 10px;
+  font-weight: 750;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-quaternary);
+  background: var(--background-secondary);
+  border: 1px solid var(--border-secondary);
+  padding: 2px 6px;
+  border-radius: 999px;
+}
+
+.foot-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: auto;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  color: var(--text-tertiary);
+  white-space: nowrap;
+  transition: color 500ms cubic-bezier(0.4, 0, 0.2, 1), gap 500ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.bento-card:hover .foot-cta {
+  color: #fda4af;
+  gap: 10px;
+}
+
+.cta-icon {
+  font-size: 11px;
+  transition: transform 500ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.bento-card:hover .cta-icon {
+  transform: translateX(3px);
+}
+
+@media (max-width: 640px) {
+  .bento-card {
+    min-height: 254px;
+    padding: 18px 18px 0 18px;
   }
+  .bento-card__regions {
+    margin-left: -18px;
+    margin-right: -18px;
+  }
+  .marquee__track {
+    animation-duration: 22s;
+  }
+}
 
-  .filter-pill {
+@media (prefers-reduced-motion: reduce) {
+  .bento-card,
+  .bento-card::before,
+  .bento-card::after,
+  .bento-card__shift,
+  .bento-card__foot,
+  .foot-cta,
+  .cta-icon {
+    transition: none !important;
+    animation: none !important;
+  }
+  .marquee__track {
+    animation: none;
+    transform: none !important;
+    flex-wrap: wrap;
+    width: 100%;
     justify-content: center;
   }
-
-  .provider-cards {
-    grid-template-columns: 1fr;
+  .bento-card__foot {
+    opacity: 1;
+    transform: none;
   }
-
-  .provider-card {
-    padding: var(--spacing-md);
+  .bento-card__shift {
+    transform: none !important;
   }
+}
 
-  .card-icon {
-    width: 40px;
-    height: 40px;
-    font-size: 1.1em;
-  }
+.rec-footnote {
+  margin: 22px 0 0;
+  text-align: center;
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: var(--text-quaternary);
 }
 </style>
