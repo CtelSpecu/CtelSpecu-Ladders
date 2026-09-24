@@ -291,5 +291,58 @@
       "gr",
       "tr"
     ]
+  },
+  {
+    "name": "XSUS",
+    "displayName": "XSUS",
+    "url": "https://xsus.cloud/register?code=9usLmdvb",
+    "billing": [
+      {
+        "type": "月度订阅",
+        "label": "12/168G",
+        "price": 12,
+        "traffic": "168G"
+      },
+      {
+        "type": "按量计费",
+        "label": "65/188G",
+        "price": 65,
+        "traffic": "188G"
+      }
+    ],
+    "badges": [
+      "家宽",
+      "中转"
+    ],
+    "regions": [
+      "hk",
+      "mo",
+      "sg",
+      "jp",
+      "us",
+      "my",
+      "kr",
+      "th",
+      "vn",
+      "ph",
+      "kh",
+      "id",
+      "in",
+      "au",
+      "de",
+      "it",
+      "fr",
+      "ch",
+      "ua",
+      "tr",
+      "gb",
+      "is",
+      "ca",
+      "no",
+      "br",
+      "mx",
+      "ng",
+      "ar"
+    ]
   }
 ]
