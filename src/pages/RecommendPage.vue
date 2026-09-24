@@ -137,14 +137,15 @@ function displayRegion(iso: string): string {
   return iso.toUpperCase()
 }
 
+// 国旗随仓库内置（public/flags，由 scripts/fetch-flags.mjs 生成），不走第三方 CDN
 function flagSrc(iso: string): string {
   if (!iso) return ''
-  return `https://flagcdn.com/w20/${iso.toLowerCase()}.png`
+  return `/flags/${iso.toLowerCase()}.png`
 }
 
 function flagSrcSet(iso: string): string {
   if (!iso) return ''
-  return `https://flagcdn.com/w40/${iso.toLowerCase()}.png 2x`
+  return `/flags/${iso.toLowerCase()}@2x.png 2x`
 }
 
 function onFlagError(e: Event): void {
