@@ -2,19 +2,22 @@ import { useEffect, useState } from 'react'
 import { createFileRoute } from '@tanstack/react-router'
 import { ArrowUpRight, Bookmark, Globe } from 'lucide-react'
 
-import { loadTutorials, type Tutorial } from '@/lib/tutorials'
+import { getLocalTutorials, loadTutorials, type Tutorial } from '@/lib/tutorials'
 
 export const Route = createFileRoute('/tutorials')({
   component: TutorialsPage,
 })
 
 function TutorialsPage() {
-  const [items, setItems] = useState<Tutorial[] | null>(null)
+  // 首屏直接用随包发布的本地数据，不等待 sitemap
+  const [items, setItems] = useState<Tutorial[]>(() => getLocalTutorials())
 
   useEffect(() => {
     let alive = true
+    // 后台补齐线上新增文章；失败就保持本地列表
     void loadTutorials().then((list) => {
-      if (alive) setItems(list)
+      if (!alive || list.length === 0) return
+      setItems((prev) => (sameList(prev, list) ? prev : list))
     })
     return () => {
       alive = false
@@ -31,28 +34,23 @@ function TutorialsPage() {
           技术教程
         </h1>
         <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-muted-foreground">
-          同步自 ctelspecu 技术博客，覆盖协议原理、分流规则、订阅选购与客户端配置。
+          同步自星空之镜技术博客，覆盖协议原理、分流规则、订阅选购与客户端配置。
         </p>
       </header>
 
       <div className="mt-8 grid gap-4 sm:grid-cols-2">
-        {items === null
-          ? Array.from({ length: 6 }, (_, index) => (
-              <div
-                key={index}
-                className="h-40 animate-pulse rounded-2xl border border-border bg-muted/40"
-              />
-            ))
-          : items.map((tutorial) => <TutorialCard key={tutorial.slug} tutorial={tutorial} />)}
+        {items.map((tutorial) => (
+          <TutorialCard key={tutorial.slug} tutorial={tutorial} />
+        ))}
       </div>
 
-      {items !== null ? (
-        <p className="mt-8 text-center text-xs text-muted-foreground">
-          共 {items.length} 篇 · 列表来自线上 sitemap，标题由站点同步
-        </p>
-      ) : null}
     </section>
   )
+}
+
+function sameList(a: Tutorial[], b: Tutorial[]) {
+  if (a.length !== b.length) return false
+  return a.every((item, index) => item.slug === b[index].slug && item.updated === b[index].updated)
 }
 
 function TutorialCard({ tutorial }: { tutorial: Tutorial }) {
@@ -61,7 +59,7 @@ function TutorialCard({ tutorial }: { tutorial: Tutorial }) {
       href={tutorial.url}
       target="_blank"
       rel="noopener noreferrer"
-      className="group flex flex-col rounded-2xl border border-border bg-card p-5 transition-all duration-[var(--duration-standard)] hover:-translate-y-0.5 hover:border-primary/35 hover:shadow-[var(--shadow-lift)]"
+      className="group flex flex-col rounded-2xl border border-border bg-card p-5 transition-colors duration-[var(--duration-fast)] hover:border-primary/45"
     >
       <div className="flex items-center justify-between gap-3 text-xs text-muted-foreground">
         <span className="flex min-w-0 items-center gap-2">

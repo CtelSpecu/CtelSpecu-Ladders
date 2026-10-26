@@ -100,9 +100,20 @@ function byUpdatedDesc(a: Tutorial, b: Tutorial) {
   return String(b.updated ?? '').localeCompare(String(a.updated ?? ''))
 }
 
+/** 本地数据同步转成渲染结构：首屏直接用它，不发网络请求。 */
+export function getLocalTutorials(): Tutorial[] {
+  return localTutorials
+    .map<Tutorial>((entry) => ({
+      ...entry,
+      url: entry.url ?? `${SITE_ORIGIN}/post/${entry.slug}`,
+      synced: true,
+    }))
+    .sort(byUpdatedDesc)
+}
+
 /**
- * 以线上 sitemap 为准渲染全部教程，标题/摘要/标签来自 data/tutorials.json。
- * sitemap 拉取失败时退回本地数据，页面不会空白。
+ * 以线上 sitemap 补齐「本地还没有」的文章（例如刚发布、尚未同步标题的）。
+ * 失败时退回本地列表；页面首屏不等这个请求。
  */
 export async function loadTutorials(): Promise<Tutorial[]> {
   const local = new Map(localTutorials.map((entry) => [entry.slug, entry]))
