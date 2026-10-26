@@ -171,6 +171,10 @@ bun run sync:tutorials # 见第 1 节，退出码必须为 0
 生产环境：**Cloudflare，域名根路径** `https://ladders.ctelspecu.hxcn.top/`。
 Vite `base` 必须是 `/`；任何静态资源引用都要走 `import.meta.env.BASE_URL`，不要写死项目子路径。
 
+**构建环境必须 Node ≥ 20.19**（Vite 8 的 rolldown 用到 `node:util.styleText`）。
+仓库用 `.node-version` / `.nvmrc` 锁定 22；若 Pages 仍回落到 18，去项目的
+Environment variables 里显式设 `NODE_VERSION=22`。
+
 构建产物里已包含两个 Cloudflare 约定文件（源码在 `public/`，随构建复制到 `dist/`）：
 
 | 文件 | 作用 |
