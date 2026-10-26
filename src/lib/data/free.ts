@@ -19,7 +19,15 @@ const vpnsSchema = z.object({
     z.object({
       title: z.string(),
       icon: z.string(),
-      items: z.array(z.object({ name: z.string(), url: z.url(), rating: z.number() })),
+      items: z.array(
+        z.object({
+          name: z.string(),
+          url: z.url(),
+          rating: z.number(),
+          /** public/logos/vpn 下的文件名，缺省时卡片用占位图标 */
+          logo: z.string().optional(),
+        }),
+      ),
     }),
   ),
 })

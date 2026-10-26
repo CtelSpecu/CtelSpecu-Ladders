@@ -94,7 +94,8 @@
   /* green-700：作为小号文字时过 AA（白底 4.9） */
   --success: oklch(0.527 0.154 150.069);
   --success-foreground: oklch(0.985 0 0);
-  --warning: oklch(0.769 0.188 70.08);
+  /* amber-800：warning 文字放在 warning/10 底色上仍过 AA（约 5.5:1） */
+  --warning: oklch(0.476 0.103 61.91);
   --warning-foreground: oklch(0.21 0.006 285.885);
   --info: oklch(0.623 0.214 259.815);
   --info-foreground: oklch(0.985 0 0);

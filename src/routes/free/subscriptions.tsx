@@ -3,6 +3,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { Copy, Download, RefreshCw } from 'lucide-react'
 
 import { StarRating } from '@/components/cards/star-rating'
+import { WarningNote } from '@/components/warning-note'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import type { SubscriptionView } from '@/lib/data/subscriptions'
@@ -47,10 +48,10 @@ function SharedSubscriptionsPage() {
       {sorted.map((item) => (
         <SubscriptionPanel key={item.id} item={item} onRefresh={() => refresh(item)} />
       ))}
-      <p className="rounded-xl border border-dashed border-border p-4 text-sm leading-relaxed text-muted-foreground lg:col-span-2">
-        共享订阅由他人提供，随时可能失效或限速。流量来自订阅接口返回的 `subscription-userinfo` 响应头，
-        对方不返回时无法显示，可点卡片右下角刷新重试。介意隐私与稳定请自行购买。
-      </p>
+      <WarningNote className="lg:col-span-2">
+        共享订阅由他人提供，随时可能失效或限速。流量来自订阅接口返回的 `subscription-userinfo`
+        响应头，对方不返回时无法显示，可点卡片右下角刷新重试。介意隐私与稳定请自行购买。
+      </WarningNote>
     </div>
   )
 }
@@ -78,7 +79,7 @@ function SubscriptionPanel({ item, onRefresh }: { item: SubscriptionView; onRefr
   }
 
   return (
-    <article className="flex flex-col rounded-2xl border border-border bg-card shadow-[var(--shadow-soft)]">
+    <article className="flex flex-col rounded-2xl border border-border bg-card">
       <header className="flex items-start justify-between gap-3 border-b border-border px-5 py-4">
         <div className="min-w-0">
           <h2 className="truncate text-base font-semibold">{item.name}</h2>

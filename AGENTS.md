@@ -4,6 +4,12 @@
 
 `spec.md` 是唯一需求真相源；`DESIGN.md` 记录的是**旧 Vue 版本**的设计系统，仅作历史参考，**不要照它实现**。
 
+> **内容红线：不得出现台湾节点/地区。**
+> 机场地区列表、节点展示、任何新增数据源都必须排除 `tw`。
+> 代码层面的强制点：`src/lib/data/providers.ts` 在 zod 解析后过滤 `EXCLUDED_REGIONS`，
+> 即使上游数据重新带回 `tw` 也不会渲染。新增地区相关功能时同样走这个过滤，
+> 不要只在界面上隐藏。
+
 ---
 
 ## 1. 强制流程：推送前同步教程索引
@@ -53,8 +59,8 @@ CHROMIUM_PATH=/usr/bin/chromium-browser bun run sync:tutorials
 | 文件 | 内容 | 维护方式 |
 |---|---|---|
 | `data/tutorials.json` | 教程 slug → 标题 / 摘要 / 标签 / 日期 | 脚本生成 + 人工修正 |
-| `src/data/clients.json` | 客户端（分类、平台、下载、教程链接） | 手工 |
-| `src/data/providers.json` | 机场（计费、特性、地区 ISO 码） | 手工 |
+| `src/data/clients.json` | 客户端（分类、平台、下载、教程链接、logo） | 手工；logo 来自 huarun.win，**下载链接只指向官方仓库/官网，不用聚合站跳转** |
+| `src/data/providers.json` | 机场（计费、特性、地区 ISO 码、logo） | 手工；logo 来自各机场官网 |
 | `src/data/freeNodes.json` | 免费订阅链接分组 | 手工 |
 | `src/data/freeVpns.json` | 免费 VPN 分组与评分 | 手工 |
 | `public/subscriptions.json` | 共享订阅清单（运行时 fetch） | 手工 |
@@ -195,3 +201,108 @@ bunx vite preview --port 5181     # 逐页点一遍深链，确认刷新不 404
 
 - **共享订阅的实时流量目前拿不到**：订阅端点直接访问返回 403，`allorigins` 代理返回 522，唯一 200 的订阅体为空、没有 `subscription-userinfo` 响应头。代码路径已保留（拿得到就会显示），页面会明确标注「流量不可用」。要真正启用，需要一个能带自定义 UA 并回传响应头的服务端代理（例如同域 Cloudflare Worker），然后改 `src/lib/data/subscriptions.ts` 里的 `PROXY`。
 - 教程页的摘要与标签为空：文章页会同时渲染多个文章容器，首段无法可靠归属，宁缺勿错。需要时手工补 `data/tutorials.json` 的 `summary`。
+
+
+---
+
+## 10. 项目结构
+
+```
+src/
+  routes/                       # TanStack Router file-based，一个文件一个路由
+    __root.tsx                  # 主题 + 引导 Provider、Navbar、Footer、全局 Dialog/Stepper
+    index.tsx                   # 主页
+    clients/index.tsx           # 客户端下载（按系统）
+    clients/categories.tsx      # 内核分类（Clash / V2Ray / 其他）+ 系统筛选
+    recommend.tsx               # 机场推荐（?billing=monthly|traffic）
+    tutorials.tsx               # 技术教程（sitemap 驱动）
+    free.tsx                    # 免费专区外壳（标题 + 滑动 Tab + Outlet）
+    free/index.tsx              # 选择页（插画 + 三张入口卡）
+    free/subscriptions.tsx      # 共享订阅
+    free/nodes.tsx              # 免费订阅
+    free/vpn.tsx                # 免费 VPN
+    onboarding.tsx              # 新手引导说明页（可重入）
+  components/
+    brand/                      # SiteIcon（站点图标）、OsIcon（8 个系统图标）
+    ui/                         # shadcn 原语（Base UI 底座，禁止魔改）
+    motion/                     # 动效组件：gooey-nav / theme-toggle / sliding-tabs / os-switcher
+    layout/                     # navbar / app-footer
+    cards/                      # client-card / star-rating
+    onboarding/                 # provider（状态机）、first-visit-dialog、stepper
+    illustrations/              # choice-illustration / welcome-illustration / hero-visual
+  lib/
+    data/                       # clients / providers / free / subscriptions（zod 校验）
+    theme.tsx                   # 主题（class + View Transitions）
+    tutorials.ts                # sitemap 拉取 + 本地标题合并
+    analytics.ts                # Umami 注入与 pageview
+    use-subscriptions.ts        # 订阅 + 流量 hook
+    motion-tokens.ts            # ArcUI 动效令牌
+    nav.ts                      # 导航与 Tab 配置（单一来源）
+    utils.ts                    # cn()
+  index.css                     # Luma 令牌、字体、语义变量
+data/tutorials.json             # 教程标题库（脚本写入）
+public/
+  flags/                        # 国家/地区旗帜（20×13，@2x）
+  logos/clients/                # 客户端图标（webp / png）
+  logos/providers/              # 机场图标（svg / png / ico）
+  logos/vpn/                    # 免费 VPN 图标
+  subscriptions.json            # 共享订阅清单（运行时 fetch）
+scripts/
+  sync-tutorials.mjs            # 教程索引同步（--refresh 全量）
+  fetch-vpn-logos.mjs           # VPN 图标抓取
+  fetch-flags.mjs               # 旗帜资源
+```
+
+### 数据流
+
+`JSON → zod（src/lib/data/*）→ 页面组件`。所有外部数据在模块顶层 `parse`，字段缺失直接抛错而不是静默降级；新增字段一律给默认值或标 `optional()`。
+
+- 客户端：`clients.json` 的 `platforms` 决定它出现在哪些系统下；`recommendedByOs` 决定排序。
+- 机场：`billing` 允许 `monthly | traffic | yearly`（对应包月 / 按流量 / 年付三个 Tab）；`regions` 是 ISO 3166-1 alpha-2，**解析层强制过滤 `tw`**。
+- 教程：sitemap 提供 URL 与 lastmod，`data/tutorials.json` 提供标题；`ignored` 数组里的 slug 不渲染。
+
+---
+
+## 11. 组件设计
+
+### 分层
+
+| 层 | 位置 | 规则 |
+|---|---|---|
+| 原语 | `components/ui/**` | shadcn 生成物，**不改**；需改外观时通过 `className` 或在外层组合 |
+| 动效 | `components/motion/**` | 一个组件一种交互，动效参数只从 `lib/motion-tokens.ts` 取 |
+| 业务卡 | `components/cards/**` | 只接收数据 + 渲染，不自己取数 |
+| 布局 | `components/layout/**` | 导航与页脚，数据来自 `lib/nav.ts` |
+| 插画 | `components/illustrations/**` | 纯 SVG，颜色只用 `var(--*)`，深浅色自动适配 |
+
+### 关键组件
+
+| 组件 | 职责 | 交互约束 |
+|---|---|---|
+| `GooeyNav` | 主导航导轨 | 未激活项共用一条 muted 轨道；激活项由 gap 推开、用 SVG「粘液颈」连接，**不共享轨道底色**；spring 200/28 |
+| `ThemeToggle` | 深浅色切换 | View Transitions `circle-blur`，700ms，从按钮位置圆形揭开；无 API 或 `prefers-reduced-motion` 时瞬时切换 |
+| `SlidingTabs` | 路由型 / 状态型 Tab | 共用一个 `layoutId` 指示器，切换时平移；支持 `to`（导航）与 `value`（回调） |
+| `OsSwitcher` | 系统选择 | 复刻 ArcUI ExpandingButtonGroup：**只有点击（选中）才展开标签**，hover 不展开；8 个系统 |
+| `FirstVisitDialog` | 首访分流 | 顶部插画；两枚按钮写入 localStorage；关闭视为老手 |
+| `OnboardingStepper` | 5 步引导 | 桌面右下角悬浮、移动端顶部可折叠；线性前进、可回看、可最小化；跨路由保留；第 3 步选择计费方式后跳 `/recommend?billing=` |
+| `ClientCard` | 客户端卡（Card 5） | logo + 名称 + 平台大字位 + ✓ 清单 + 贴底按钮；无规格行 |
+| `ProviderCard` | 机场卡 | 顶部图标 + 名称；地区最多两行，其余进 Dialog（`+N` 按钮） |
+| `StarRating` | 星级 | `role="img"` + `aria-label` |
+
+### 视觉约束（硬性）
+
+- **卡片不做 hover 上浮、不加 `--shadow-lift` 大阴影**；只保留 `transition-colors` 与 `hover:border-primary/45`。
+- 颜色只走语义令牌（`bg-card` / `text-muted-foreground` / `border-border` / `text-primary`）；新增色必须先改 `index.css` 的 `:root` 与 `.dark`。
+- 圆角从 `--radius` 派生；动效时长用 `--duration-*` 或 motion tokens。
+- 所有图标：系统图标用 `OsIcon`（Iconify 单路径），业务图标用 lucide，站点标识用 `SiteIcon`。
+
+
+---
+
+## 12. 内容红线（再次强调）
+
+| 规则 | 落点 |
+|---|---|
+| 不展示台湾节点 / 地区 | `src/lib/data/providers.ts` 的 `EXCLUDED_REGIONS`（`tw`），解析后过滤；渲染层不再兜底 |
+| 不编造能力描述 | 客户端描述取自 huarun.win 的官方简介；机场特性由 badges 映射，不写「全球加速」这类空话 |
+| 拿不到的数据要说明 | 共享订阅流量取 `subscription-userinfo`，接口不返回就显示「流量不可用」，不填假数字 |

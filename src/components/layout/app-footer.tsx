@@ -38,7 +38,7 @@ export function AppFooter() {
         </nav>
 
         <p className="shrink-0 text-muted-foreground">
-          © {new Date().getFullYear()} CtelSpecu · 仅供参考
+          © {new Date().getFullYear()} CtelSpecu. All rights reserved.
         </p>
       </div>
     </footer>

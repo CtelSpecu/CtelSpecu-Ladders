@@ -22,7 +22,7 @@ function FreeChooser() {
           <Link
             key={item.to}
             to={item.to as never}
-            className="group flex flex-col gap-3 rounded-2xl border border-border bg-card p-5 transition-all duration-[var(--duration-standard)] hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-[var(--shadow-lift)]"
+            className="group flex flex-col gap-3 rounded-2xl border border-border bg-card p-5 transition-colors duration-[var(--duration-fast)] hover:border-primary/45"
           >
             <span className="flex size-10 items-center justify-center rounded-full bg-primary/10 text-primary">
               <item.icon className="size-5" aria-hidden />

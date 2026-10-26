@@ -2,6 +2,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { ExternalLink, Globe, Link as LinkIcon, Server, Wifi } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 
+import { WarningNote } from '@/components/warning-note'
 import { nodeSections } from '@/lib/data/free'
 
 export const Route = createFileRoute('/free/nodes')({
@@ -17,7 +18,7 @@ const ICONS: Record<string, LucideIcon> = {
 
 function FreeNodesPage() {
   return (
-    <div className="mx-auto max-w-4xl space-y-6">
+    <div className="mx-auto grid max-w-5xl items-start gap-5 md:grid-cols-2">
       {nodeSections.map((section) => {
         const SectionIcon = ICONS[section.icon] ?? Globe
         return (
@@ -53,10 +54,10 @@ function FreeNodesPage() {
         )
       })}
 
-      <p className="rounded-xl border border-dashed border-border p-4 text-sm leading-relaxed text-muted-foreground">
+      <WarningNote className="md:col-span-2">
         免费节点由第三方维护，稳定性与隐私都无法保证，只适合临时使用。需要长期稳定请走
         「机场推荐」里的付费服务。
-      </p>
+      </WarningNote>
     </div>
   )
 }

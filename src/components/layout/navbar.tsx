@@ -10,11 +10,10 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
-import { blogUrl, freeTabs, moreNav, primaryNav } from '@/lib/nav'
+import { freeTabs, moreNav, primaryNav } from '@/lib/nav'
 import { cn } from '@/lib/utils'
 
 const gooeyItems = primaryNav.map((item) => ({ label: item.label, href: item.to }))
@@ -87,12 +86,6 @@ export function Navbar() {
                     </DropdownMenuItem>
                   ),
                 )}
-                <DropdownMenuSeparator />
-                <DropdownMenuItem
-                  render={<a href={blogUrl} target="_blank" rel="noopener noreferrer" />}
-                >
-                  技术博客 · ctelspecu.hxcn.top
-                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
 

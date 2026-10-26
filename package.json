@@ -15,7 +15,8 @@
     "test": "vitest run",
     "sync:tutorials": "node scripts/sync-tutorials.mjs",
     "deploy": "gh-pages -d dist",
-    "sync:tutorials:refresh": "node scripts/sync-tutorials.mjs --refresh"
+    "sync:tutorials:refresh": "node scripts/sync-tutorials.mjs --refresh",
+    "logos:vpn": "node scripts/fetch-vpn-logos.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.9.0",
