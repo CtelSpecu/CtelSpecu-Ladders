@@ -2,10 +2,10 @@ import { z } from 'zod'
 
 import rawClients from '@/data/clients.json'
 
-export const OS = ['windows', 'macos', 'linux', 'ios', 'android'] as const
+export const OS = ['windows', 'macos', 'linux', 'ios', 'android', 'harmony', 'openwrt'] as const
 export type Os = (typeof OS)[number]
 
-export const CLIENT_CATEGORY = ['clash', 'v2ray'] as const
+export const CLIENT_CATEGORY = ['clash', 'v2ray', 'other'] as const
 export type ClientCategory = (typeof CLIENT_CATEGORY)[number]
 
 export const osMeta: Record<Os, { label: string; short: string }> = {
@@ -14,6 +14,8 @@ export const osMeta: Record<Os, { label: string; short: string }> = {
   linux: { label: 'Linux', short: 'Linux' },
   ios: { label: 'iOS', short: 'iOS' },
   android: { label: 'Android', short: 'Android' },
+  harmony: { label: 'HarmonyOS', short: '鸿蒙' },
+  openwrt: { label: 'OpenWrt / 梅林', short: '路由' },
 }
 
 export const categoryMeta: Record<ClientCategory, { label: string; description: string }> = {
@@ -24,6 +26,10 @@ export const categoryMeta: Record<ClientCategory, { label: string; description: 
   v2ray: {
     label: 'V2Ray / Xray',
     description: '协议生态为主的 V2Ray / Xray / sing-box 客户端',
+  },
+  other: {
+    label: '其他 / 专有协议',
+    description: '不基于 Clash / V2Ray 内核的客户端',
   },
 }
 
@@ -36,6 +42,8 @@ const clientSchema = z.object({
   recommended: z.array(z.enum(OS)).optional(),
   downloads: z.array(z.object({ label: z.string(), url: z.url() })),
   tutorials: z.record(z.string(), z.url()).optional(),
+  /** public/logos/clients 下的图标文件名 */
+  logo: z.string().optional(),
 })
 
 const clientsFileSchema = z.object({
@@ -48,6 +56,14 @@ const parsed = clientsFileSchema.parse(rawClients)
 export type Client = z.infer<typeof clientSchema>
 
 export const clients: Client[] = parsed.clients
+
+/** 某个系统下的全部客户端，维护者推荐的排前面。 */
+export function getClientsForOs(os: Os): Client[] {
+  const order = new Map((parsed.recommendedByOs[os] ?? []).map((id, index) => [id, index]))
+  return clients
+    .filter((client) => client.platforms.includes(os))
+    .sort((a, b) => (order.get(a.id) ?? Number.MAX_SAFE_INTEGER) - (order.get(b.id) ?? Number.MAX_SAFE_INTEGER))
+}
 
 export function getRecommendedClients(os: Os, limit = 2): Client[] {
   const ids = parsed.recommendedByOs[os] ?? []

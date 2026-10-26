@@ -71,7 +71,9 @@ function ClientCategoriesPage() {
                 <h2 className="text-lg font-semibold">{categoryMeta[category].label}</h2>
                 <p className="mt-1 text-sm text-muted-foreground">
                   {categoryMeta[category].description}
-                  {filter === 'all' ? '' : ` · 已筛选 ${osMeta[filter as Os].label}`}
+                  {filter === 'all'
+                    ? ` · ${getClientsByCategory(category).length} 个`
+                    : ` · 已筛选 ${osMeta[filter as Os].label}，${getClientsByCategory(category, filter as Os).length} / ${getClientsByCategory(category).length} 个`}
                 </p>
               </div>
 

@@ -1,21 +1,12 @@
-import { Apple, Monitor, Smartphone, Terminal } from 'lucide-react'
 import { motion, useReducedMotion } from 'motion/react'
-import type { LucideIcon } from 'lucide-react'
 
+import { OsIcon } from '@/components/brand/os-icon'
 import { OS, osMeta, type Os } from '@/lib/data/clients'
 import { cn } from '@/lib/utils'
 
-const OS_ICONS: Record<Os, LucideIcon> = {
-  windows: Monitor,
-  macos: Apple,
-  linux: Terminal,
-  ios: Smartphone,
-  android: Smartphone,
-}
-
 /**
- * 系统选择按钮（ArcUI Button 的按压手感）：
- * 选中态填充 primary，未选中为描边；点击时轻微回弹。
+ * 系统选择器：复刻 ArcUI ExpandingButtonGroup 的交互，
+ * 但只由点击驱动——只有当前选中的系统展开标签，hover 不改变展开状态。
  */
 export function OsSwitcher({
   value,
@@ -32,29 +23,41 @@ export function OsSwitcher({
     <div
       role="radiogroup"
       aria-label="选择你的操作系统"
-      className={cn('flex flex-wrap items-center gap-2', className)}
+      className={cn(
+        'inline-flex max-w-full flex-wrap items-center justify-center gap-0.5 rounded-full border border-border bg-surface p-1',
+        className,
+      )}
     >
       {OS.map((os) => {
-        const Icon = OS_ICONS[os]
         const active = os === value
+
         return (
           <motion.button
             key={os}
             type="button"
             role="radio"
             aria-checked={active}
+            aria-label={osMeta[os].label}
             onClick={() => onChange(os)}
             whileTap={reduced ? undefined : { scale: 0.97 }}
-            transition={{ duration: 0.16, ease: [0.22, 1, 0.36, 1] }}
             className={cn(
-              'inline-flex h-10 items-center gap-2 rounded-4xl border px-4 text-sm font-medium transition-colors duration-[var(--duration-fast)]',
+              'inline-flex h-9 shrink-0 items-center rounded-full px-2.5 text-sm font-medium transition-colors duration-[var(--duration-fast)]',
               active
-                ? 'border-primary bg-primary text-primary-foreground shadow-[var(--shadow-soft)]'
-                : 'border-border bg-background text-muted-foreground hover:border-primary/40 hover:text-foreground',
+                ? 'bg-primary text-primary-foreground'
+                : 'text-muted-foreground hover:bg-muted hover:text-foreground',
             )}
           >
-            <Icon className="size-4" aria-hidden />
-            {osMeta[os].label}
+            <OsIcon os={os} className="size-4" />
+            <span
+              aria-hidden
+              className="grid transition-[grid-template-columns,opacity] duration-[var(--duration-standard)] ease-[var(--ease-standard)]"
+              style={{
+                gridTemplateColumns: active ? '1fr' : '0fr',
+                opacity: active ? 1 : 0,
+              }}
+            >
+              <span className="min-w-0 overflow-hidden pl-2 whitespace-nowrap">{osMeta[os].label}</span>
+            </span>
           </motion.button>
         )
       })}

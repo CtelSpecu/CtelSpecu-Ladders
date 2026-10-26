@@ -5,7 +5,7 @@ import { ArrowRight, Layers } from 'lucide-react'
 import { ClientCard } from '@/components/cards/client-card'
 import { OsSwitcher } from '@/components/motion/os-switcher'
 import { Button } from '@/components/ui/button'
-import { OS, detectOs, getRecommendedClients, osMeta, type Os } from '@/lib/data/clients'
+import { OS, detectOs, getClientsForOs, osMeta, type Os } from '@/lib/data/clients'
 
 export interface ClientsSearch {
   os?: string
@@ -29,7 +29,7 @@ function ClientsPage() {
   const [detectedOs] = useState<Os>(() => detectOs())
   const autoDetected = !isOs(osParam)
   const os: Os = isOs(osParam) ? osParam : detectedOs
-  const recommended = getRecommendedClients(os, 2)
+  const available = getClientsForOs(os)
 
   const selectOs = (next: Os) => {
     void navigate({ to: '/clients', search: { os: next }, replace: true })
@@ -54,9 +54,9 @@ function ClientsPage() {
 
       <div className="mt-10 flex flex-wrap items-end justify-between gap-3">
         <div>
-          <h2 className="text-lg font-semibold">为 {osMeta[os].label} 推荐</h2>
+          <h2 className="text-lg font-semibold">{osMeta[os].label} 可用客户端</h2>
           <p className="mt-1 text-sm text-muted-foreground">
-            推荐顺序来自维护者的实测，先装一个能用的，再折腾分流。
+            共 {available.length} 个，维护者推荐的排在前面。
           </p>
         </div>
         <Button
@@ -72,13 +72,13 @@ function ClientsPage() {
         </Button>
       </div>
 
-      <div className="mt-5 grid gap-4 sm:grid-cols-2">
-        {recommended.map((client) => (
+      <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {available.map((client) => (
           <ClientCard key={client.id} client={client} os={os} />
         ))}
       </div>
 
-      {recommended.length === 0 ? (
+      {available.length === 0 ? (
         <p className="mt-6 rounded-xl border border-dashed border-border p-6 text-center text-sm text-muted-foreground">
           这个系统暂时没有推荐项，可以到「按内核分类对比」里自己挑。
         </p>
