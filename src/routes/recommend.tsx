@@ -1,8 +1,9 @@
-import { useId, useMemo, useState } from 'react'
-import { createFileRoute } from '@tanstack/react-router'
+import { useId, useLayoutEffect, useMemo, useRef, useState } from 'react'
+import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import {
   BadgePercent,
   Cable,
+  ChevronDown,
   Database,
   ExternalLink,
   Fingerprint,
@@ -18,6 +19,13 @@ import { SlidingTabs } from '@/components/motion/sliding-tabs'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog'
+import {
   BILLING,
   billingDescription,
   billingLabel,
@@ -25,8 +33,19 @@ import {
   type BillingType,
   type ProviderForBilling,
 } from '@/lib/data/providers'
+import { cn } from '@/lib/utils'
+
+export interface RecommendSearch {
+  billing?: BillingType
+}
 
 export const Route = createFileRoute('/recommend')({
+  validateSearch: (search: Record<string, unknown>): RecommendSearch => {
+    const value = typeof search.billing === 'string' ? search.billing : ''
+    return {
+      billing: (BILLING as readonly string[]).includes(value) ? (value as BillingType) : undefined,
+    }
+  },
   component: RecommendPage,
 })
 
@@ -66,7 +85,9 @@ function flagUrl(iso: string, scale = 1) {
 const billingTabs = BILLING.map((type) => ({ value: type, label: billingLabel[type] }))
 
 function RecommendPage() {
-  const [billing, setBilling] = useState<BillingType>('monthly')
+  const { billing: billingParam } = Route.useSearch()
+  const navigate = useNavigate({ from: '/recommend' })
+  const billing: BillingType = billingParam ?? 'monthly'
   const list = useMemo(() => providersForBilling(billing), [billing])
 
   return (
@@ -79,7 +100,7 @@ function RecommendPage() {
           机场推荐
         </h1>
         <p className="mx-auto mt-3 max-w-xl text-sm leading-relaxed text-muted-foreground">
-          {billingDescription[billing]}。价格以官网为准，建议先小额试用再转长期。
+          {billingDescription[billing]}。建议先小额试用再转长期。
         </p>
       </header>
 
@@ -89,7 +110,9 @@ function RecommendPage() {
           active={billing}
           layoutId="billing-tab-indicator"
           ariaLabel="按计费方式筛选"
-          onSelect={(value) => setBilling(value as BillingType)}
+          onSelect={(value) =>
+            void navigate({ to: '/recommend', search: { billing: value as BillingType }, replace: true })
+          }
         />
       </div>
 
@@ -98,12 +121,41 @@ function RecommendPage() {
           <ProviderCard key={provider.name} provider={provider} billing={billing} />
         ))}
       </div>
-
-      <p className="mt-10 text-center text-xs leading-relaxed text-muted-foreground">
-        共 {list.length} 家支持「{billingLabel[billing]}」的机场。价格随套餐与活动浮动，以官网为准。
-      </p>
     </section>
   )
+}
+
+/**
+ * 只显示两行地区：用一份隐藏的完整列表测量换行位置，
+ * 再按测得的数量裁剪真实列表，避免「容器裁剪」与「测量」互相打架。
+ */
+function useTwoRowClamp(count: number) {
+  const probeRef = useRef<HTMLDivElement>(null)
+  const [visible, setVisible] = useState(Number.POSITIVE_INFINITY)
+
+  useLayoutEffect(() => {
+    const probe = probeRef.current
+    if (!probe) return
+
+    const measure = () => {
+      const items = Array.from(probe.children) as HTMLElement[]
+      if (items.length === 0) return
+
+      // 用实际行位（而不是「行高 × 2」）判断，避免亚像素取整把第三行算进来
+      const rowTops = [...new Set(items.map((item) => item.offsetTop))].sort((a, b) => a - b)
+      const cut = rowTops[2] ?? Number.POSITIVE_INFINITY
+      const fitting = items.filter((item) => item.offsetTop < cut).length
+      const next = Math.max(1, fitting - 1)
+      setVisible((prev) => (prev === next ? prev : next))
+    }
+
+    measure()
+    const observer = new ResizeObserver(measure)
+    observer.observe(probe)
+    return () => observer.disconnect()
+  }, [count])
+
+  return { probeRef, visible }
 }
 
 function ProviderCard({
@@ -113,15 +165,34 @@ function ProviderCard({
   provider: ProviderForBilling
   billing: BillingType
 }) {
-  const [expanded, setExpanded] = useState(false)
   const uid = useId().replace(/:/g, '')
-  const visibleRegions = expanded ? provider.regions : provider.regions.slice(0, 12)
-  const hiddenCount = provider.regions.length - visibleRegions.length
+  const { probeRef, visible } = useTwoRowClamp(provider.regions.length)
+  const [regionsOpen, setRegionsOpen] = useState(false)
+
+  const shown = provider.regions.slice(0, visible)
+  const hidden = provider.regions.length - shown.length
 
   return (
-    <article className="flex flex-col rounded-2xl border border-border bg-card p-5 shadow-[var(--shadow-soft)] transition-all duration-[var(--duration-standard)] hover:-translate-y-0.5 hover:border-primary/35 hover:shadow-[var(--shadow-lift)]">
-      <header className="flex items-start justify-between gap-3">
-        <h2 className="text-lg font-semibold tracking-tight">{provider.displayName}</h2>
+    <article className="flex flex-col rounded-2xl border border-border bg-card p-5 transition-colors duration-[var(--duration-fast)] hover:border-primary/45">
+      <header className="flex items-start gap-3">
+        {provider.logo ? (
+          <img
+            src={`${import.meta.env.BASE_URL}logos/providers/${provider.logo}`}
+            alt=""
+            width={36}
+            height={36}
+            loading="lazy"
+            decoding="async"
+            className="size-9 shrink-0 rounded-lg bg-muted object-contain"
+          />
+        ) : (
+          <span className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-muted text-sm font-semibold text-muted-foreground">
+            {provider.displayName.slice(0, 1)}
+          </span>
+        )}
+        <h2 className="min-w-0 flex-1 text-lg font-semibold tracking-tight">
+          {provider.displayName}
+        </h2>
         <Badge variant="secondary">{billingLabel[billing]}</Badge>
       </header>
 
@@ -157,37 +228,37 @@ function ProviderCard({
       </ul>
 
       <div className="mt-5 flex-1 border-t border-border pt-4">
-        <p className="text-xs font-medium text-muted-foreground">
-          节点地区 · {provider.regions.length} 个
-        </p>
-        <div className="mt-2 flex flex-wrap gap-1.5">
-          {visibleRegions.map((iso) => (
-            <span
-              key={`${uid}-${iso}`}
-              className="inline-flex items-center gap-1.5 rounded-full border border-border bg-background px-2 py-1 text-[11px] text-muted-foreground"
-            >
-              <img
-                src={flagUrl(iso)}
-                srcSet={`${flagUrl(iso, 2)} 2x`}
-                alt=""
-                width={16}
-                height={12}
-                loading="lazy"
-                decoding="async"
-                className="h-3 w-4 rounded-[2px] object-cover"
-              />
-              {regionLabel(iso)}
-            </span>
-          ))}
-          {hiddenCount > 0 ? (
+        <div className="flex items-center justify-between gap-2">
+          <p className="text-xs font-medium text-muted-foreground">
+            节点支持地区 · {provider.regions.length} 个
+          </p>
+          {hidden > 0 ? (
             <button
               type="button"
-              onClick={() => setExpanded(true)}
-              className="rounded-full border border-dashed border-border px-2 py-1 text-[11px] font-medium text-primary"
+              onClick={() => setRegionsOpen(true)}
+              className="inline-flex items-center gap-1 rounded-full border border-border px-2 py-0.5 text-[11px] font-medium text-primary transition-colors hover:border-primary/45"
             >
-              +{hiddenCount}
+              +{hidden}
+              <ChevronDown className="size-3" aria-hidden />
             </button>
           ) : null}
+        </div>
+
+        <div className="relative mt-2">
+          <div
+            ref={probeRef}
+            aria-hidden
+            className="pointer-events-none invisible absolute inset-x-0 top-0 flex flex-wrap gap-1.5"
+          >
+            {provider.regions.map((iso) => (
+              <RegionChip key={`probe-${uid}-${iso}`} iso={iso} />
+            ))}
+          </div>
+          <div className="flex flex-wrap gap-1.5">
+            {shown.map((iso) => (
+              <RegionChip key={`${uid}-${iso}`} iso={iso} />
+            ))}
+          </div>
         </div>
       </div>
 
@@ -199,6 +270,43 @@ function ProviderCard({
         访问官网
         <ExternalLink className="size-3.5" aria-hidden />
       </Button>
+
+      <Dialog open={regionsOpen} onOpenChange={setRegionsOpen}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader>
+            <DialogTitle>{provider.displayName} 支持的地区</DialogTitle>
+            <DialogDescription>共 {provider.regions.length} 个国家和地区</DialogDescription>
+          </DialogHeader>
+          <div className="mt-4 flex max-h-[50vh] flex-wrap gap-1.5 overflow-y-auto">
+            {provider.regions.map((iso) => (
+              <RegionChip key={`all-${uid}-${iso}`} iso={iso} />
+            ))}
+          </div>
+        </DialogContent>
+      </Dialog>
     </article>
+  )
+}
+
+function RegionChip({ iso, className }: { iso: string; className?: string }) {
+  return (
+    <span
+      className={cn(
+        'inline-flex items-center gap-1.5 rounded-full border border-border bg-background px-2 py-1 text-[11px] text-muted-foreground',
+        className,
+      )}
+    >
+      <img
+        src={flagUrl(iso)}
+        srcSet={`${flagUrl(iso, 2)} 2x`}
+        alt=""
+        width={16}
+        height={12}
+        loading="lazy"
+        decoding="async"
+        className="h-3 w-4 rounded-[2px] object-cover"
+      />
+      {regionLabel(iso)}
+    </span>
   )
 }

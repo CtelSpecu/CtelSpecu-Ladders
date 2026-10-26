@@ -141,7 +141,8 @@
       "gt",
       "uy",
       "ge"
-    ]
+    ],
+    "logo": "mikasa.svg"
   },
   {
     "name": "CuteCloud",
@@ -204,7 +205,8 @@
       "sa",
       "fr",
       "ph"
-    ]
+    ],
+    "logo": "cutecloud.svg"
   },
   {
     "name": "CokeCloud",
@@ -255,7 +257,8 @@
       "au",
       "in",
       "gb"
-    ]
+    ],
+    "logo": "cokecloud.png"
   },
   {
     "name": "赔钱机场",
@@ -302,7 +305,8 @@
       "jp",
       "sg",
       "us"
-    ]
+    ],
+    "logo": "peiqian.png"
   },
   {
     "name": "魔戒",
@@ -348,7 +352,8 @@
       "ua",
       "tr",
       "ng"
-    ]
+    ],
+    "logo": "mojie.ico"
   },
   {
     "name": "XSUS",
@@ -413,6 +418,44 @@
       "mx",
       "ng",
       "ar"
-    ]
+    ],
+    "logo": "xsus.png"
+  },
+  {
+    "name": "一元机场",
+    "displayName": "一元机场",
+    "url": "https://vgvg.vg/#/register?code=68cxypJo",
+    "billing": [
+      {
+        "type": "yearly",
+        "label": "12/年",
+        "price": 12,
+        "traffic": "100G"
+      }
+    ],
+    "features": [
+      {
+        "icon": "badge-percent",
+        "title": "年付 12 元起，同价位流量更多",
+        "badge": "性价比"
+      }
+    ],
+    "badges": [
+      "性价比"
+    ],
+    "regions": [
+      "us",
+      "ca",
+      "hk",
+      "sg",
+      "vn",
+      "ie",
+      "ua",
+      "ru",
+      "ch",
+      "nl",
+      "de"
+    ],
+    "logo": "yiyuan.png"
   }
 ]

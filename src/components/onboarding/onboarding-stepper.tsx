@@ -224,32 +224,39 @@ export function OnboardingStepper() {
             ) : null}
 
             {step === 3 && branch === 'paid' ? (
-              <div className="mt-3 space-y-3 text-sm text-muted-foreground">
-                <p>付费机场能保证带宽与售后，选购时重点看三件事：</p>
-                <ul className="space-y-1.5">
-                  <li>· 计费方式：包月适合长期，按流量适合偶尔用</li>
-                  <li>· 线路类型：中转更稳，直连延迟更低</li>
-                  <li>· IP 纯净度：影响流媒体与账号风控</li>
-                </ul>
+              <div className="mt-3 space-y-2 text-sm text-muted-foreground">
+                <p>按你的使用频率选一种计费方式，直接跳到对应的机场列表：</p>
+                <button
+                  type="button"
+                  onClick={() => {
+                    next()
+                    void navigate({ to: '/recommend', search: { billing: 'monthly' } })
+                  }}
+                  className="w-full rounded-xl border border-border px-3 py-2.5 text-left transition-colors hover:border-primary/45"
+                >
+                  <span className="block text-sm font-medium text-foreground">按月付费</span>
+                  <span className="mt-0.5 block text-xs">适合经常使用、流量需求大</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    next()
+                    void navigate({ to: '/recommend', search: { billing: 'traffic' } })
+                  }}
+                  className="w-full rounded-xl border border-border px-3 py-2.5 text-left transition-colors hover:border-primary/45"
+                >
+                  <span className="block text-sm font-medium text-foreground">按流量付费</span>
+                  <span className="mt-0.5 block text-xs">适合偶尔使用，用多少算多少</span>
+                </button>
                 <a
                   href={GUIDE_BUY}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-2 rounded-xl border border-border px-3 py-2 font-medium text-foreground transition-colors hover:bg-muted"
+                  className="flex items-center gap-2 rounded-xl border border-border px-3 py-2 font-medium text-foreground transition-colors hover:border-primary/45"
                 >
                   <BookOpen className="size-4 text-primary" aria-hidden />
                   阅读《订阅机制与选购指南》
                 </a>
-                <Button
-                  size="sm"
-                  className="w-full"
-                  onClick={() => {
-                    void navigate({ to: '/recommend' })
-                  }}
-                >
-                  查看机场推荐
-                  <ArrowRight className="size-3.5" aria-hidden />
-                </Button>
               </div>
             ) : null}
 
