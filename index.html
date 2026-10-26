@@ -1,15 +1,27 @@
 <!doctype html>
-<html lang="en">
+<html lang="zh-CN">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="./public/icon.jpg" />
+    <link rel="icon" type="image/svg+xml" href="/icon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="robots" content="noindex, nofollow" />
+    <meta name="description" content="星空之镜 · 客户端下载、机场推荐、共享订阅与免费节点导航。" />
     <title>梯子 - 星空之镜</title>
-    <script defer src="https://analytics.hxcn.dev/script.js" data-website-id="f323c9e1-10ca-4406-a415-3f31e2aacb16"></script>
+    <script>
+      // 首帧前定主题，避免深色模式闪白
+      try {
+        var stored = localStorage.getItem('ctelspecu:theme')
+        var dark =
+          stored === 'dark' ||
+          ((stored === null || stored === 'system') &&
+            window.matchMedia('(prefers-color-scheme: dark)').matches)
+        document.documentElement.classList.add(dark ? 'dark' : 'light')
+        document.documentElement.style.colorScheme = dark ? 'dark' : 'light'
+      } catch (e) {}
+    </script>
   </head>
   <body>
-    <div id="app"></div>
-    <script type="module" src="/src/main.ts"></script>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

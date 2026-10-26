@@ -5,10 +5,32 @@
     "url": "https://0b.mikasaaff.com/A9ti5mtf",
     "billing": [
       {
-        "type": "月度订阅",
+        "type": "monthly",
         "label": "11.25/100G",
         "price": 11.25,
         "traffic": "100G"
+      }
+    ],
+    "features": [
+      {
+        "icon": "fingerprint",
+        "title": "原生纯净 IP，风控友好",
+        "badge": "纯净IP"
+      },
+      {
+        "icon": "gauge",
+        "title": "多线高速，晚高峰依旧稳",
+        "badge": "高速"
+      },
+      {
+        "icon": "shield-check",
+        "title": "长期在线，故障恢复快",
+        "badge": "稳定"
+      },
+      {
+        "icon": "house",
+        "title": "家宽落地，流媒体更顺",
+        "badge": "家宽"
       }
     ],
     "badges": [
@@ -127,16 +149,38 @@
     "url": "https://www.cutecloud.net/#/register?code=WUHcCLFn",
     "billing": [
       {
-        "type": "月度订阅",
+        "type": "monthly",
         "label": "10/100G",
         "price": 10,
         "traffic": "100G"
       },
       {
-        "type": "按量计费",
+        "type": "traffic",
         "label": "66/300G",
         "price": 66,
         "traffic": "300G"
+      }
+    ],
+    "features": [
+      {
+        "icon": "fingerprint",
+        "title": "原生纯净 IP，风控友好",
+        "badge": "纯净IP"
+      },
+      {
+        "icon": "gauge",
+        "title": "多线高速，晚高峰依旧稳",
+        "badge": "高速"
+      },
+      {
+        "icon": "shield-check",
+        "title": "长期在线，故障恢复快",
+        "badge": "稳定"
+      },
+      {
+        "icon": "cable",
+        "title": "直连入口，延迟更低",
+        "badge": "直连"
       }
     ],
     "badges": [
@@ -168,10 +212,27 @@
     "url": "https://cokecloud.cyou/#/register?code=wvIsDmnG",
     "billing": [
       {
-        "type": "月度订阅",
+        "type": "monthly",
         "label": "9.9/300G",
         "price": 9.9,
         "traffic": "300G"
+      }
+    ],
+    "features": [
+      {
+        "icon": "gauge",
+        "title": "多线高速，晚高峰依旧稳",
+        "badge": "高速"
+      },
+      {
+        "icon": "badge-percent",
+        "title": "同价位流量更多",
+        "badge": "性价比"
+      },
+      {
+        "icon": "server",
+        "title": "BGP 多线接入",
+        "badge": "BPG"
       }
     ],
     "badges": [
@@ -202,16 +263,33 @@
     "url": "https://xn--cp3a08l.com/register?code=shgKW2Jh&cover=sfw",
     "billing": [
       {
-        "type": "月度订阅",
+        "type": "monthly",
         "label": "5.99/1T",
         "price": 5.99,
         "traffic": "1T"
       },
       {
-        "type": "按量计费",
+        "type": "traffic",
         "label": "18.9/1T",
         "price": 18.9,
         "traffic": "1T"
+      }
+    ],
+    "features": [
+      {
+        "icon": "gauge",
+        "title": "多线高速，晚高峰依旧稳",
+        "badge": "高速"
+      },
+      {
+        "icon": "badge-percent",
+        "title": "同价位流量更多",
+        "badge": "性价比"
+      },
+      {
+        "icon": "database",
+        "title": "大流量套餐，重度使用不心疼",
+        "badge": "大流量"
       }
     ],
     "badges": [
@@ -232,10 +310,22 @@
     "url": "https://mojie.kim/register?aff=r3JESYAG",
     "billing": [
       {
-        "type": "按量计费",
+        "type": "traffic",
         "label": "19.9/130G",
         "price": 19.9,
         "traffic": "130G"
+      }
+    ],
+    "features": [
+      {
+        "icon": "gauge",
+        "title": "多线高速，晚高峰依旧稳",
+        "badge": "高速"
+      },
+      {
+        "icon": "shield-check",
+        "title": "长期在线，故障恢复快",
+        "badge": "稳定"
       }
     ],
     "badges": [
@@ -261,53 +351,33 @@
     ]
   },
   {
-    "name": "丛雨云",
-    "displayName": "丛雨云",
-    "url": "https://congyu.moe/auth/register?invite=118b41f092",
-    "billing": [
-      {
-        "type": "长期订阅",
-        "label": "19.8/100G",
-        "price": 19.8,
-        "traffic": "100G"
-      }
-    ],
-    "badges": [
-      "高速",
-      "稳定",
-      "性价比",
-      "大流量"
-    ],
-    "regions": [
-      "hk",
-      "jp",
-      "sg",
-      "kr",
-      "us",
-      "gb",
-      "ca",
-      "it",
-      "ch",
-      "gr",
-      "tr"
-    ]
-  },
-  {
     "name": "XSUS",
     "displayName": "XSUS",
     "url": "https://xsus.cloud/register?code=9usLmdvb",
     "billing": [
       {
-        "type": "月度订阅",
+        "type": "monthly",
         "label": "12/168G",
         "price": 12,
         "traffic": "168G"
       },
       {
-        "type": "按量计费",
+        "type": "traffic",
         "label": "65/188G",
         "price": 65,
         "traffic": "188G"
+      }
+    ],
+    "features": [
+      {
+        "icon": "house",
+        "title": "家宽落地，流媒体更顺",
+        "badge": "家宽"
+      },
+      {
+        "icon": "network",
+        "title": "中转线路，跨境更稳",
+        "badge": "中转"
       }
     ],
     "badges": [

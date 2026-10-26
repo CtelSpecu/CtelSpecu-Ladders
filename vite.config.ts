@@ -1,60 +1,39 @@
+import { fileURLToPath, URL } from 'node:url'
 import { defineConfig } from 'vite'
-import vue from '@vitejs/plugin-vue'
+import react from '@vitejs/plugin-react'
+import tailwindcss from '@tailwindcss/vite'
+import { tanstackRouter } from '@tanstack/router-plugin/vite'
 
-// https://vite.dev/config/
 export default defineConfig({
-  plugins: [vue()],
-  build: {
-    rollupOptions: {
-      output: {
-        manualChunks: {
-          vendor: ['vue'],
-          fontawesome: ['@fortawesome/fontawesome-free'],
-        },
-        chunkFileNames: 'js/[name]-[hash].js',
-        entryFileNames: 'js/[name]-[hash].js',
-        assetFileNames: (assetInfo) => {
-          const name = assetInfo.name ?? ''
-          const ext = name.split('.').pop() ?? ''
-          if (/\.(css)$/.test(name)) {
-            return `css/[name]-[hash].${ext}`
-          }
-          if (/\.(png|jpe?g|gif|svg|ico|webp)$/.test(name)) {
-            return `img/[name]-[hash].${ext}`
-          }
-          return `assets/[name]-[hash].${ext}`
-        },
-      },
+  base: '/',
+  plugins: [
+    tanstackRouter({ target: 'react', autoCodeSplitting: true }),
+    react(),
+    tailwindcss(),
+  ],
+  resolve: {
+    alias: {
+      '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
-    minify: 'terser',
-    terserOptions: {
-      compress: {
-        drop_console: true,
-        drop_debugger: true,
-        pure_funcs: ['console.log', 'console.warn'],
-      },
-      format: {
-        comments: false,
-      },
-    },
-    chunkSizeWarningLimit: 1000,
-    sourcemap: false,
-    cssCodeSplit: true,
-    cssTarget: 'chrome80',
   },
-  optimizeDeps: {
-    include: ['vue', 'axios'],
-    exclude: [],
+  build: {
+    outDir: 'dist',
+    sourcemap: false,
+    // 首屏把第三方依赖拆开：react/tanstack/base-ui 各自独立缓存
+    rolldownOptions: {
+      output: {
+        advancedChunks: {
+          groups: [
+            { name: 'vendor-react', test: /node_modules[\\/](react|react-dom|scheduler)[\\/]/ },
+            { name: 'vendor-router', test: /node_modules[\\/]@tanstack[\\/]/ },
+            { name: 'vendor-ui', test: /node_modules[\\/](@base-ui[\\/]react|motion|lucide-react)[\\/]/ },
+          ],
+        },
+      },
+    },
   },
   server: {
-    fs: {
-      strict: false,
-    },
-    hmr: {
-      overlay: false,
-    },
-  },
-  css: {
-    devSourcemap: false,
+    host: '127.0.0.1',
+    port: 5180,
   },
 })
