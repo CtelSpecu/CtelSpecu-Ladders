@@ -43,7 +43,7 @@ export function OnboardingStepper() {
   } = useOnboarding()
   const navigate = useNavigate()
   const reduced = useReducedMotion()
-  const [mobileExpanded, setMobileExpanded] = useState(false)
+  const [mobileExpanded, setMobileExpanded] = useState(true)
   const os = useMemo(() => detectOs(), [])
   const recommended = useMemo(() => getRecommendedClients(os, 2), [os])
 
