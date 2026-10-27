@@ -19,14 +19,6 @@
         {
           "label": "GitHub",
           "url": "https://github.com/Clash-Verge-rev/clash-verge-rev/releases"
-        },
-        {
-          "label": "中文网",
-          "url": "https://clashcn.com/clash-verge-rev-official"
-        },
-        {
-          "label": "镜像",
-          "url": "https://getclashvergerev.org/download.html"
         }
       ],
       "tutorials": {
@@ -208,7 +200,12 @@
           "url": "https://github.com/chen08209/FlClash/releases"
         }
       ],
-      "logo": "flclash.webp"
+      "logo": "flclash.webp",
+      "tutorials": {
+        "windows": "https://help.boccc.co/zh/article/flclash-windows-1itr7x9/",
+        "macos": "https://help.boccc.co/zh/article/flclash-mac-6psa42/",
+        "android": "https://help.boccc.co/zh/article/ficlash-1cyqd7j/"
+      }
     },
     {
       "id": "clash-party",
@@ -326,7 +323,7 @@
         }
       ],
       "tutorials": {
-        "ios": "https://8mkhkm.mikasadocs.com/tutorials/ios/shadowrocket/"
+        "ios": "https://help.boccc.co/zh/article/shadowrocket-ios-k5vise/"
       },
       "logo": "shadowrocket.webp"
     },
@@ -730,8 +727,8 @@
   "recommendedByOs": {
     "windows": [
       "clash-verge-rev",
-      "v2rayn",
       "flclash",
+      "v2rayn",
       "clash-party",
       "sparkle"
     ],

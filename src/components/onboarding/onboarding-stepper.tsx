@@ -45,7 +45,7 @@ export function OnboardingStepper() {
   const reduced = useReducedMotion()
   const [mobileExpanded, setMobileExpanded] = useState(true)
   const os = useMemo(() => detectOs(), [])
-  const recommended = useMemo(() => getRecommendedClients(os, 2), [os])
+  const recommended = useMemo(() => getRecommendedClients(os, 3), [os])
 
   if (!stepperVisible) return null
 
@@ -171,7 +171,7 @@ export function OnboardingStepper() {
             {step === 1 ? (
               <div className="mt-3 space-y-2">
                 <p className="text-sm text-muted-foreground">
-                  检测到你的系统是 {osMeta[os].label}，优先用这两个：
+                  检测到你的系统是 {osMeta[os].label}，优先用这几个：
                 </p>
                 {recommended.map((client, index) => (
                   <div

@@ -65,6 +65,7 @@ export function ClientCard({ client, os, className }: { client: Client; os: Os; 
       <div className="mt-auto flex flex-col gap-2 pt-5">
         {client.downloads[0] ? (
           <Button
+            variant="outline"
             nativeButton={false}
             render={<a href={client.downloads[0].url} target="_blank" rel="noopener noreferrer" />}
             className="w-full"
@@ -77,14 +78,14 @@ export function ClientCard({ client, os, className }: { client: Client; os: Os; 
         <div className="flex gap-2">
           {tutorial ? (
             <Button
-              variant="outline"
               size="sm"
               nativeButton={false}
               className="flex-1"
+              title="首次安装建议走教程里的网盘下载"
               render={<a href={tutorial} target="_blank" rel="noopener noreferrer" />}
             >
               <BookOpen className="size-3.5" aria-hidden />
-              安装教程
+              安装教程(含网盘高速下载)
             </Button>
           ) : null}
           {client.downloads[1] ? (
