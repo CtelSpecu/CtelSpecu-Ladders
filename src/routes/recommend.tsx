@@ -12,6 +12,7 @@ import {
   Network,
   Server,
   ShieldCheck,
+  TicketPercent,
 } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 
@@ -59,6 +60,7 @@ const FEATURE_ICONS: Record<string, LucideIcon> = {
   database: Database,
   cable: Cable,
   server: Server,
+  ticket: TicketPercent,
 }
 
 const regionNames = (() => {
@@ -251,7 +253,7 @@ function ProviderCard({
             className="pointer-events-none invisible absolute inset-x-0 top-0 flex flex-wrap gap-1.5"
           >
             {provider.regions.map((iso) => (
-              <RegionChip key={`probe-${uid}-${iso}`} iso={iso} />
+              <RegionChip key={`probe-${uid}-${iso}`} iso={iso} ghost />
             ))}
           </div>
           <div className="flex flex-wrap gap-1.5">
@@ -288,7 +290,16 @@ function ProviderCard({
   )
 }
 
-function RegionChip({ iso, className }: { iso: string; className?: string }) {
+function RegionChip({
+  iso,
+  className,
+  ghost = false,
+}: {
+  iso: string
+  className?: string
+  /** 仅用于测量换行的副本：尺寸与真实 chip 一致，但不请求图片 */
+  ghost?: boolean
+}) {
   return (
     <span
       className={cn(
@@ -296,16 +307,20 @@ function RegionChip({ iso, className }: { iso: string; className?: string }) {
         className,
       )}
     >
-      <img
-        src={flagUrl(iso)}
-        srcSet={`${flagUrl(iso, 2)} 2x`}
-        alt=""
-        width={16}
-        height={12}
-        loading="lazy"
-        decoding="async"
-        className="h-3 w-4 rounded-[2px] object-cover"
-      />
+      {ghost ? (
+        <span className="h-3 w-4 shrink-0 rounded-[2px]" aria-hidden />
+      ) : (
+        <img
+          src={flagUrl(iso)}
+          srcSet={`${flagUrl(iso, 2)} 2x`}
+          alt=""
+          width={16}
+          height={12}
+          loading="lazy"
+          decoding="async"
+          className="h-3 w-4 shrink-0 rounded-[2px] object-cover"
+        />
+      )}
       {regionLabel(iso)}
     </span>
   )

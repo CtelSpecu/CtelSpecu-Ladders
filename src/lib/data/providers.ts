@@ -2,19 +2,21 @@ import { z } from 'zod'
 
 import rawProviders from '@/data/providers.json'
 
-export const BILLING = ['monthly', 'traffic', 'yearly'] as const
+export const BILLING = ['monthly', 'traffic', 'yearly', 'quarterly'] as const
 export type BillingType = (typeof BILLING)[number]
 
 export const billingLabel: Record<BillingType, string> = {
   monthly: '包月',
   traffic: '按流量',
   yearly: '年付',
+  quarterly: '季付',
 }
 
 export const billingDescription: Record<BillingType, string> = {
   monthly: '固定周期扣费，适合长期稳定使用',
   traffic: '按实际用量计费，适合用量不固定的场景',
   yearly: '一次性付一年，折合到月通常更便宜',
+  quarterly: '按季付款，折合到月低于包月',
 }
 
 const providerSchema = z.object({
@@ -45,11 +47,23 @@ export type ProviderBilling = Provider['billing'][number]
  */
 const EXCLUDED_REGIONS = new Set(['tw'])
 
+/**
+ * 地区展示顺序：常用地区优先，其余保持数据里的原始顺序（sort 稳定）。
+ */
+const REGION_PRIORITY = ['hk', 'jp', 'sg', 'us', 'gb', 'my']
+
+function priorityIndex(iso: string) {
+  const index = REGION_PRIORITY.indexOf(iso)
+  return index === -1 ? REGION_PRIORITY.length : index
+}
+
 export const providers: Provider[] = z.array(providerSchema)
   .parse(rawProviders)
   .map((provider) => ({
     ...provider,
-    regions: provider.regions.filter((iso) => !EXCLUDED_REGIONS.has(iso.toLowerCase())),
+    regions: provider.regions
+      .filter((iso) => !EXCLUDED_REGIONS.has(iso.toLowerCase()))
+      .sort((a, b) => priorityIndex(a) - priorityIndex(b)),
   }))
 
 export function lowestBilling(provider: Provider, type: BillingType): ProviderBilling | null {
