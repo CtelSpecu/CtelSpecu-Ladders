@@ -65,7 +65,11 @@ CHROMIUM_PATH=/usr/bin/chromium-browser bun run sync:tutorials
 | `src/data/freeVpns.json` | 免费 VPN 分组与评分 | 手工 |
 | `public/subscriptions.json` | 共享订阅清单（运行时 fetch） | 手工 |
 
-`providers.json` 的计费只剩两种：**包月** 与 **按流量**。长期订阅价格已按产品决定移除，不要再加回来。
+`providers.json` 的计费有四种：**包月 / 按流量 / 年付 / 季付**，Tab 顺序即此顺序。
+
+- `price` 是该周期的实付金额，`traffic` 是该套餐的流量。
+- 流量口径必须写清楚：周期套餐里**每月给多少**写成 `50G/月`；整周期总量就写 `1T`，
+  不要用同一个字段混着表示两种含义。
 
 ---
 
@@ -90,7 +94,7 @@ CHROMIUM_PATH=/usr/bin/chromium-browser bun run sync:tutorials
 | `/` | 主页 | Hero + Spotlight 3 + Bento 5 + 页脚 |
 | `/clients` | 客户端下载（按 OS 推荐） | OS 选择按钮 = ArcUI Button |
 | `/clients/categories` | 内核分类（Clash / V2Ray） | 顶部 OS 筛选 Tabs；不进主导航，由 `/clients` 内按钮进入 |
-| `/recommend` | 机场推荐 | 顶部「包月 / 按流量」Tab 作筛选 |
+| `/recommend` | 机场推荐 | 顶部「包月 / 按流量 / 年付 / 季付」Tab 作筛选 |
 | `/tutorials` | 技术教程 | sitemap 驱动，Card 7 结构 |
 | `/free/subscriptions` | 共享订阅 | |
 | `/free/nodes` | 免费订阅 | |
@@ -258,7 +262,8 @@ scripts/
 `JSON → zod（src/lib/data/*）→ 页面组件`。所有外部数据在模块顶层 `parse`，字段缺失直接抛错而不是静默降级；新增字段一律给默认值或标 `optional()`。
 
 - 客户端：`clients.json` 的 `platforms` 决定它出现在哪些系统下；`recommendedByOs` 决定排序。
-- 机场：`billing` 允许 `monthly | traffic | yearly`（对应包月 / 按流量 / 年付三个 Tab）；`regions` 是 ISO 3166-1 alpha-2，**解析层强制过滤 `tw`**。
+- 机场：`billing` 允许 `monthly | traffic | yearly | quarterly`（包月 / 按流量 / 年付 / 季付）；`regions` 是 ISO 3166-1 alpha-2，
+  **解析层强制过滤 `tw`**，并按 `hk, jp, sg, us, gb, my` 优先排序（其余保持数据顺序）。
 - 教程：sitemap 提供 URL 与 lastmod，`data/tutorials.json` 提供标题；`ignored` 数组里的 slug 不渲染。
 
 ---
@@ -284,9 +289,9 @@ scripts/
 | `SlidingTabs` | 路由型 / 状态型 Tab | 共用一个 `layoutId` 指示器，切换时平移；支持 `to`（导航）与 `value`（回调） |
 | `OsSwitcher` | 系统选择 | 复刻 ArcUI ExpandingButtonGroup：**只有点击（选中）才展开标签**，hover 不展开；8 个系统 |
 | `FirstVisitDialog` | 首访分流 | 顶部插画；两枚按钮写入 localStorage；关闭视为老手 |
-| `OnboardingStepper` | 5 步引导 | 桌面右下角悬浮、移动端顶部可折叠；线性前进、可回看、可最小化；跨路由保留；第 3 步选择计费方式后跳 `/recommend?billing=` |
+| `OnboardingStepper` | 5 步引导 | 桌面右下角悬浮、移动端顶部可折叠（**默认展开**）；线性前进、可回看、可最小化；跨路由保留；第 3 步选择计费方式后跳 `/recommend?billing=` |
 | `ClientCard` | 客户端卡（Card 5） | logo + 名称 + 平台大字位 + ✓ 清单 + 贴底按钮；无规格行 |
-| `ProviderCard` | 机场卡 | 顶部图标 + 名称；地区最多两行，其余进 Dialog（`+N` 按钮） |
+| `ProviderCard` | 机场卡 | 顶部图标 + 名称；地区最多两行，其余进 Dialog（`+N` 按钮）。宽度测量用隐藏 ghost chip（不请求旗帜图片），225 个地区也只加载可见的几张旗 |
 | `StarRating` | 星级 | `role="img"` + `aria-label` |
 
 ### 视觉约束（硬性）
