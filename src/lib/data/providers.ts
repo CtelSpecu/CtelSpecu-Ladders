@@ -36,6 +36,8 @@ const providerSchema = z.object({
   regions: z.array(z.string()),
   /** public/logos/providers 下的图标文件名；缺失时卡片用首字母占位 */
   logo: z.string().nullish(),
+  /** 卡片顶部的一句话介绍，可省略 */
+  summary: z.string().nullish(),
 })
 
 export type Provider = z.infer<typeof providerSchema>
@@ -76,10 +78,26 @@ export interface ProviderForBilling extends Provider {
   price: ProviderBilling
 }
 
+/**
+ * 各计费方式下的展示顺序（机场 name）。未列出的排在后面并保持 JSON 顺序。
+ */
+const BILLING_ORDER: Partial<Record<BillingType, string[]>> = {
+  traffic: ['CuteCloud', 'XSUS', '赔钱机场', '魔戒'],
+  yearly: ['Mikasa', 'SpeedCat', 'CokeCloud', 'TAG', '一元机场'],
+}
+
 /** 按计费方式筛选机场，并把该方式下的最低价一并带出。 */
 export function providersForBilling(type: BillingType): ProviderForBilling[] {
-  return providers.flatMap((provider) => {
+  const list = providers.flatMap((provider) => {
     const price = lowestBilling(provider, type)
     return price ? [{ ...provider, price }] : []
   })
+
+  const order = BILLING_ORDER[type]
+  if (!order) return list
+  const rank = (name: string) => {
+    const index = order.indexOf(name)
+    return index === -1 ? order.length : index
+  }
+  return list.sort((a, b) => rank(a.name) - rank(b.name))
 }

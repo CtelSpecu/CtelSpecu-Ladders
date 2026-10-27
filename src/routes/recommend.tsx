@@ -4,6 +4,7 @@ import {
   BadgePercent,
   Cable,
   ChevronDown,
+  Clapperboard,
   Database,
   ExternalLink,
   Fingerprint,
@@ -50,6 +51,15 @@ export const Route = createFileRoute('/recommend')({
   component: RecommendPage,
 })
 
+/** 需要重点突出的标签，其余保持灰色。 */
+const EMPHASIZED_TAGS = new Set([
+  '纯净IP',
+  '性价比高',
+  '性价比最高',
+  '家宽',
+  '大流量',
+])
+
 const FEATURE_ICONS: Record<string, LucideIcon> = {
   gauge: Gauge,
   'shield-check': ShieldCheck,
@@ -61,6 +71,7 @@ const FEATURE_ICONS: Record<string, LucideIcon> = {
   cable: Cable,
   server: Server,
   ticket: TicketPercent,
+  clapperboard: Clapperboard,
 }
 
 const regionNames = (() => {
@@ -147,7 +158,8 @@ function useTwoRowClamp(count: number) {
       const rowTops = [...new Set(items.map((item) => item.offsetTop))].sort((a, b) => a - b)
       const cut = rowTops[2] ?? Number.POSITIVE_INFINITY
       const fitting = items.filter((item) => item.offsetTop < cut).length
-      const next = Math.max(1, fitting - 1)
+      // 能放进两行就全部显示，超出则显示前两行能放下的部分
+      const next = Math.max(1, fitting)
       setVisible((prev) => (prev === next ? prev : next))
     }
 
@@ -209,7 +221,12 @@ function ProviderCard({
           {provider.badges.map((badge) => (
             <span
               key={badge}
-              className="rounded-full bg-muted px-2 py-0.5 text-[11px] font-medium text-muted-foreground"
+              className={cn(
+                'rounded-full border px-2 py-0.5 text-[11px] font-medium',
+                EMPHASIZED_TAGS.has(badge)
+                  ? 'border-tag-border bg-tag-bg text-tag-fg'
+                  : 'border-transparent bg-muted text-muted-foreground',
+              )}
             >
               {badge}
             </span>
@@ -229,6 +246,10 @@ function ProviderCard({
         })}
       </ul>
 
+      {provider.summary ? (
+        <p className="mt-3 text-xs leading-relaxed text-muted-foreground">{provider.summary}</p>
+      ) : null}
+
       <div className="mt-5 flex-1 border-t border-border pt-4">
         <div className="flex items-center justify-between gap-2">
           <p className="text-xs font-medium text-muted-foreground">
@@ -240,7 +261,7 @@ function ProviderCard({
               onClick={() => setRegionsOpen(true)}
               className="inline-flex items-center gap-1 rounded-full border border-border px-2 py-0.5 text-[11px] font-medium text-primary transition-colors hover:border-primary/45"
             >
-              +{hidden}
+              查看全部节点
               <ChevronDown className="size-3" aria-hidden />
             </button>
           ) : null}

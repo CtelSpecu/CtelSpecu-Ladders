@@ -53,6 +53,9 @@
   --color-warning-foreground: var(--warning-foreground);
   --color-info: var(--info);
   --color-info-foreground: var(--info-foreground);
+  --color-tag-fg: var(--tag-fg);
+  --color-tag-bg: var(--tag-bg);
+  --color-tag-border: var(--tag-border);
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
@@ -99,6 +102,10 @@
   --warning-foreground: oklch(0.21 0.006 285.885);
   --info: oklch(0.623 0.214 259.815);
   --info-foreground: oklch(0.985 0 0);
+  /* 强调标签：底色是 primary 的浅色调，文字加深一档保证 AA */
+  --tag-fg: oklch(0.47 0.22 292.7);
+  --tag-bg: oklch(0.541 0.247 293 / 10%);
+  --tag-border: oklch(0.541 0.247 293 / 22%);
 
   --border: oklch(0.92 0.004 286.32);
   --input: oklch(0.92 0.004 286.32);
@@ -136,6 +143,9 @@
   --warning-foreground: oklch(0.141 0.005 285.823);
   --info: oklch(0.707 0.165 254.624);
   --info-foreground: oklch(0.141 0.005 285.823);
+  --tag-fg: oklch(0.8 0.12 300);
+  --tag-bg: oklch(0.606 0.219 292.7 / 16%);
+  --tag-border: oklch(0.606 0.219 292.7 / 30%);
 
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 15%);

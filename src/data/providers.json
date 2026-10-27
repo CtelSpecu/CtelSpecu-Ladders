@@ -9,6 +9,12 @@
         "label": "11.25/100G",
         "price": 11.25,
         "traffic": "100G"
+      },
+      {
+        "type": "yearly",
+        "label": "58.8/年",
+        "price": 58.8,
+        "traffic": "100G/年"
       }
     ],
     "features": [
@@ -212,6 +218,7 @@
     "name": "TAG",
     "displayName": "TAG",
     "url": "https://user.tagss14.pro/#/auth/XINSboxW",
+    "summary": "支持家宽和蜂窝网络等节点，IP 纯净",
     "billing": [
       {
         "type": "monthly",
@@ -224,6 +231,12 @@
         "label": "185/季",
         "price": 185,
         "traffic": "250G/月"
+      },
+      {
+        "type": "yearly",
+        "label": "162/年",
+        "price": 162,
+        "traffic": "200G/年"
       }
     ],
     "features": [
@@ -244,9 +257,12 @@
       }
     ],
     "badges": [
-      "覆盖广",
+      "纯净IP",
       "高速",
-      "纯净IP"
+      "稳定",
+      "家宽",
+      "中转",
+      "蜂窝网络"
     ],
     "regions": [
       "hk",
@@ -487,6 +503,12 @@
         "label": "9.9/300G",
         "price": 9.9,
         "traffic": "300G"
+      },
+      {
+        "type": "yearly",
+        "label": "206.9/年",
+        "price": 206.9,
+        "traffic": "100G/月"
       }
     ],
     "features": [
@@ -508,8 +530,9 @@
     ],
     "badges": [
       "高速",
-      "性价比",
-      "BPG"
+      "性价比高",
+      "BPG",
+      "大流量"
     ],
     "regions": [
       "hk",
@@ -565,8 +588,8 @@
       }
     ],
     "badges": [
+      "性价比最高",
       "高速",
-      "性价比",
       "大流量"
     ],
     "regions": [
@@ -644,17 +667,25 @@
     ],
     "features": [
       {
-        "icon": "house",
-        "title": "家宽落地，流媒体更顺",
-        "badge": "家宽"
+        "icon": "cable",
+        "title": "IEPL 跨境专线，全平台 AI 解锁",
+        "badge": "跨境专线"
       },
       {
-        "icon": "network",
-        "title": "中转线路，跨境更稳",
-        "badge": "中转"
+        "icon": "clapperboard",
+        "title": "流媒体全解锁：Netflix、Disney+",
+        "badge": "流媒体"
+      },
+      {
+        "icon": "server",
+        "title": "自有房机柜，≤5 IP 多设备接入",
+        "badge": "自有房机柜"
       }
     ],
     "badges": [
+      "高速",
+      "稳定",
+      "星链网络",
       "家宽",
       "中转"
     ],
@@ -710,7 +741,7 @@
       }
     ],
     "badges": [
-      "性价比"
+      "性价比高"
     ],
     "regions": [
       "us",
@@ -763,7 +794,7 @@
       }
     ],
     "badges": [
-      "性价比",
+      "性价比高",
       "高速",
       "节日优惠"
     ],
