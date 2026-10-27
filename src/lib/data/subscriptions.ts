@@ -1,5 +1,7 @@
 import { z } from 'zod'
 
+import rawSubscriptions from '@/data/subscriptions.json'
+
 const rawSchema = z.object({
   subscriptions: z.array(
     z.object({
@@ -36,7 +38,6 @@ export interface SubscriptionView extends RawSubscription {
   expired: boolean
 }
 
-const DATA_URL = `${import.meta.env.BASE_URL}subscriptions.json`
 const PROXY = 'https://api.allorigins.win/get?url='
 const CACHE_TTL = 5 * 60 * 1000
 
@@ -131,11 +132,9 @@ export async function fetchRemaining(url: string, force = false): Promise<number
   return null
 }
 
-export async function loadSubscriptions(): Promise<SubscriptionView[]> {
-  const response = await fetch(DATA_URL)
-  if (!response.ok) throw new Error(`订阅清单加载失败：HTTP ${response.status}`)
-
-  const { subscriptions } = rawSchema.parse(await response.json())
+/** 清单随包发布，直接从 JSON 读，不再运行时请求。 */
+export function loadSubscriptions(): SubscriptionView[] {
+  const { subscriptions } = rawSchema.parse(rawSubscriptions)
   const now = new Date()
 
   return subscriptions.map((item) => ({

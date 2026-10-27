@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-import rawTutorials from '../../data/tutorials.json'
+import rawTutorials from '@/data/tutorials.json'
 
 const SITE_ORIGIN = 'https://ctelspecu.hxcn.top'
 const SITEMAP_URL = `${SITE_ORIGIN}/sitemap.xml`

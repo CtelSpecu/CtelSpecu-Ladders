@@ -18,14 +18,14 @@ import { fileURLToPath } from 'node:url'
 import { chromium } from '@playwright/test'
 
 const SITEMAP_URL = 'https://ctelspecu.hxcn.top/sitemap.xml'
-const DATA_PATH = fileURLToPath(new URL('../data/tutorials.json', import.meta.url))
+const DATA_PATH = fileURLToPath(new URL('../src/data/tutorials.json', import.meta.url))
 const SITE_ORIGIN = 'https://ctelspecu.hxcn.top'
 const REFRESH = process.argv.includes('--refresh')
 
 /**
  * 摘要暂时留空：文章页会同时渲染多篇文章的容器，首段无法可靠归属，
  * 宁可空着也不要把别的文章（或 Hexo 模板）的文案挂到这篇上。
- * 需要时在 data/tutorials.json 里手工补 summary。
+ * 需要时在 src/data/tutorials.json 里手工补 summary。
  */
 
 async function fetchSitemap() {
