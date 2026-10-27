@@ -58,18 +58,41 @@ CHROMIUM_PATH=/usr/bin/chromium-browser bun run sync:tutorials
 
 | 文件 | 内容 | 维护方式 |
 |---|---|---|
-| `data/tutorials.json` | 教程 slug → 标题 / 摘要 / 标签 / 日期 | 脚本生成 + 人工修正 |
+| `src/data/tutorials.json` | 教程 slug → 标题 / 摘要 / 标签 / 日期 | 脚本生成 + 人工修正 |
 | `src/data/clients.json` | 客户端（分类、平台、下载、教程链接、logo） | 手工；logo 来自 huarun.win，**下载链接只指向官方仓库/官网，不用聚合站跳转** |
 | `src/data/providers.json` | 机场（计费、特性、地区 ISO 码、logo） | 手工；logo 来自各机场官网 |
 | `src/data/freeNodes.json` | 免费订阅链接分组 | 手工 |
 | `src/data/freeVpns.json` | 免费 VPN 分组与评分 | 手工 |
-| `public/subscriptions.json` | 共享订阅清单（运行时 fetch） | 手工 |
+| `src/data/subscriptions.json` | 共享订阅清单（随包发布，直接 import，不再运行时 fetch） | 手工 |
+| `src/data/announcements.json` | 公告（标题、内容、频率、展示时长、起止时间） | 手工 |
+
+**所有数据文件都放在 `src/data/`**，不要新建根目录 `data/`，也不要把数据丢进 `public/` 再 fetch —— 会变成两套写法。
 
 `providers.json` 的计费有四种：**包月 / 按流量 / 年付 / 季付**，Tab 顺序即此顺序。
 
 - `price` 是该周期的实付金额，`traffic` 是该套餐的流量。
 - 流量口径必须写清楚：周期套餐里**每月给多少**写成 `50G/月`；整周期总量就写 `1T`，
   不要用同一个字段混着表示两种含义。
+
+### 2.1 公告（announcements）
+
+`src/data/announcements.json` → `src/lib/announcements.ts`（zod 校验 + 可见性判断）→ `AnnouncementHost` 用 sonner 逐条弹出。
+
+| 字段 | 说明 |
+|---|---|
+| `order` | 展示顺序，小的先弹；同时只会有一条在屏幕上 |
+| `title` / `content` | `content` 支持行内 Markdown：`**加粗**`、`*斜体*`、`~~删除线~~`、`==高亮==`、`` `代码` ``、换行 |
+| `publishedAt` | 发布时间，早于它的不弹 |
+| `expiresAt` | `null` 表示永久；过了时间自动不再弹 |
+| `frequency` | `always` 每次进站都弹（仍受免打扰约束）／`daily` 每天一次／`interval` 距上次 N 小时·天·周·月／`until` 显示到指定时间／`duration` 发布后 N 小时·天·周·月内 |
+| `duration` | 停留时长：`seconds` / `minutes` / `hours` / `sticky`（一直显示，只能手动关） |
+
+交互约束：
+
+- **首访弹窗没关之前不弹公告**（新手 / 老手都算）；`AnnouncementHost` 监听 `useOnboarding().dialogOpen`。
+- 关掉一条或它自然消失后，才弹下一条。
+- 底部是 Arc 风格的 SplitButton：主按钮「今天不提示」，下拉是「七天内不提示」「关闭此公告」。
+- 免打扰记录写在 `localStorage['ctelspecu:announcements']`（`hiddenUntil` / `closed` / `lastShownAt`），不做服务端同步。
 
 ---
 
@@ -78,6 +101,11 @@ CHROMIUM_PATH=/usr/bin/chromium-browser bun run sync:tutorials
 - 风格：**shadcn Luma + zinc 基色 + 紫 `#7c3aed` primary**。禁止恢复旧版的青色/洋红霓虹、极光径向背景、orb 紫玫瑰光斑、玻璃拟态。
 - 字体：只用 `--font-sans` / `--font-mono` 两个令牌（定义见 `src/index.css`）。不要引入 Inter / Oxanium。
 - **`src/components/ui/**` 是 shadcn 原语，不得魔改**。需要不同外观时，在 `src/components/motion/**` 组合出新组件，或通过 `className` 局部覆盖。
+- **参考组件（Arc / ReUI / 21st 等）只学功能、动画与排版，不学皮肤**：一律用 shadcn 原语 + 本站令牌重写，
+  不要复刻参考站的渐变底、发光、异形圆角与阴影，也不要直接粘贴第三方组件源码。已经踩过一次：公告的 SplitButton 只借鉴
+  Arc 的交互（主操作 + 下拉变体），样式仍用 `Button` / `DropdownMenu` 的组合。
+- 浮层层级：`DropdownMenuContent` 走 Portal，Positioner 默认 `z-50`；sonner 的 toaster 是 `z-index: 100`。
+  **从 toast 内部打开的菜单必须传 `positionerClassName="z-[200]"`**，否则会被 toast 卡片盖住。
 - 动效统一走 `src/lib/motion-tokens.ts`（ArcUI 令牌）：
   - 时长 `instant 0.12 / fast 0.16 / exit 0.18 / standard 0.24 / considered 0.48`
   - 缓动 `enter [0.16,1,0.3,1]`、`exit [0.7,0,0.84,0]`、`standard [0.22,1,0.36,1]`
@@ -96,7 +124,7 @@ CHROMIUM_PATH=/usr/bin/chromium-browser bun run sync:tutorials
 | `/clients/categories` | 内核分类（Clash / V2Ray） | 顶部 OS 筛选 Tabs；不进主导航，由 `/clients` 内按钮进入 |
 | `/recommend` | 机场推荐 | 顶部「包月 / 按流量 / 年付 / 季付」Tab 作筛选 |
 | `/tutorials` | 技术教程 | sitemap 驱动，Card 7 结构 |
-| `/free/subscriptions` | 共享订阅 | |
+| `/free/subscriptions` | 共享订阅 | 卡片按清单编号排序，每行最多 3 个 | |
 | `/free/nodes` | 免费订阅 | |
 | `/free/vpn` | 免费 VPN | |
 | `/onboarding` | 新手引导 | 可重入；Stepper 为全局悬浮层 |
@@ -163,15 +191,19 @@ bun run sync:tutorials # 见第 1 节，退出码必须为 0
 
 任一项失败不得推送。
 
+**推送前还要检查公告**：跑一下 `expiredAnnouncements()`（或直接看 `src/data/announcements.json` 的 `expiresAt`）。
+有已过期的条目时**先 ask 用户是否清理**；确认后删掉过期条目，并把剩余条目的 `order` 依次前移补齐（1、2、3…）。
+
 ---
 
 ## 7. 禁止事项
 
 - 不要新增 Vue 文件或改回 Vue —— 旧实现已归档到 `backup/vue3-legacy-2026-10-26`。
 - 不要把 `api.allorigins.win` 的流量查询换成没有降级方案的直连（订阅源无 CORS）。
-- 不要在 `data/tutorials.json` 里写 slug 生成的英文标题。
+- 不要在 `src/data/tutorials.json` 里写 slug 生成的英文标题。
 - 不要为「长期订阅」重新加回价格字段。
-- 不要把 `src/components/ui/**` 当业务组件改样式。
+- 不要把 `src/components/ui/**` 当业务组件改样式；参考站的设计稿只用来抄交互，不抄皮。
+- 不要往根目录 `data/` 或 `public/` 里新增数据文件，统一放 `src/data/`。
 
 
 ---
@@ -190,7 +222,7 @@ Environment variables 里显式设 `NODE_VERSION=22`。
 | 文件 | 作用 |
 |---|---|
 | `_redirects` | `/*  /index.html  200` —— SPA 深链刷新回退 |
-| `_headers` | 缓存与安全头：`/assets/*` 永久缓存（文件名带 hash），`/index.html` 不缓存，`/flags/*` 与 `/icon.svg` 7 天，`/subscriptions.json` 5 分钟；附 `nosniff` / `Referrer-Policy` / `Permissions-Policy` / `X-Frame-Options` |
+| `_headers` | 缓存与安全头：`/assets/*` 永久缓存（文件名带 hash），`/index.html` 不缓存，`/flags/*` 与 `/icon.svg` 7 天；附 `nosniff` / `Referrer-Policy` / `Permissions-Policy` / `X-Frame-Options` |
 
 `bun run deploy`（gh-pages）是旧 GitHub Pages 流程，**不是**现在的发布方式；除非明确要回退，不要用它覆盖线上。
 
@@ -244,13 +276,12 @@ src/
     nav.ts                      # 导航与 Tab 配置（单一来源）
     utils.ts                    # cn()
   index.css                     # Luma 令牌、字体、语义变量
-data/tutorials.json             # 教程标题库（脚本写入）
+  data/                         # 全部数据文件（clients / providers / tutorials / subscriptions / announcements …）
 public/
   flags/                        # 国家/地区旗帜（20×13，@2x）
   logos/clients/                # 客户端图标（webp / png）
   logos/providers/              # 机场图标（svg / png / ico）
   logos/vpn/                    # 免费 VPN 图标
-  subscriptions.json            # 共享订阅清单（运行时 fetch）
 scripts/
   sync-tutorials.mjs            # 教程索引同步（--refresh 全量）
   fetch-vpn-logos.mjs           # VPN 图标抓取
@@ -264,7 +295,8 @@ scripts/
 - 客户端：`clients.json` 的 `platforms` 决定它出现在哪些系统下；`recommendedByOs` 决定排序。
 - 机场：`billing` 允许 `monthly | traffic | yearly | quarterly`（包月 / 按流量 / 年付 / 季付）；`regions` 是 ISO 3166-1 alpha-2，
   **解析层强制过滤 `tw`**，并按 `hk, jp, sg, us, gb, my` 优先排序（其余保持数据顺序）。
-- 教程：sitemap 提供 URL 与 lastmod，`data/tutorials.json` 提供标题；`ignored` 数组里的 slug 不渲染。
+- 教程：sitemap 提供 URL 与 lastmod，`src/data/tutorials.json` 提供标题；`ignored` 数组里的 slug 不渲染。
+- 公告：见下节。
 
 ---
 
@@ -291,12 +323,21 @@ scripts/
 | `FirstVisitDialog` | 首访分流 | 顶部插画；两枚按钮写入 localStorage；关闭视为老手 |
 | `OnboardingStepper` | 5 步引导 | 桌面右下角悬浮、移动端顶部可折叠（**默认展开**）；线性前进、可回看、可最小化；跨路由保留；第 3 步选择计费方式后跳 `/recommend?billing=` |
 | `ClientCard` | 客户端卡（Card 5） | logo + 名称 + 平台大字位 + ✓ 清单 + 贴底按钮；无规格行 |
-| `ProviderCard` | 机场卡 | 顶部图标 + 名称；地区最多两行，其余进 Dialog（`+N` 按钮）。宽度测量用隐藏 ghost chip（不请求旗帜图片），225 个地区也只加载可见的几张旗 |
+| `ProviderCard` | 机场卡 | 顶部图标 + 名称；标签白名单见下；特性列表下方可有一行 `summary`；地区最多两行，超出时右上角「查看全部节点」打开 Dialog。宽度测量用隐藏 ghost chip（不请求旗帜图片），225 个地区也只加载可见的几张旗 |
 | `StarRating` | 星级 | `role="img"` + `aria-label` |
+| `SplitButton` | 主操作 + 下拉变体 | 两段式按钮，主按钮跑默认动作、chevron 开 `DropdownMenu`；从 toast 内使用时传 `positionerClassName="z-[200]"` |
+| `AnnouncementHost` | 公告队列 | 首访弹窗关闭后启动，按 `order` 逐条 `toast.custom`，关闭/超时才弹下一条；免打扰写 localStorage |
+| `Toaster`（`ui/sonner`） | 轻提示 | sonner v2 封装，挂在 `__root`；右上角、5s 自动关闭、带关闭按钮、最多同时 3 条堆叠、`offset=84` 避开悬浮导航；配色走 `--popover/--border` |
+| `RotatingText` | 轮播文字（hero 标题的目标人群） | 3s 一换；所有候选叠在同一网格单元，宽度取最宽项，切换只做淡入淡出，不引起排版跳动；非当前项 `aria-hidden`；`prefers-reduced-motion` 时取消位移 |
+| `EntryArt` | 首页「从这里开始」入口插画 | 弥散光斑 + 细点阵 + 虚线环 + 图标胶囊，6 个 variant 各一组主题色；纯装饰、`aria-hidden` |
 
 ### 视觉约束（硬性）
 
 - **卡片不做 hover 上浮、不加 `--shadow-lift` 大阴影**；只保留 `transition-colors` 与 `hover:border-primary/45`。
+- **机场标签只有白名单加强调色**：`纯净IP` `性价比高` `性价比最高` `家宽` `大流量`
+  用 `border-tag-border` + `bg-tag-bg` + `text-tag-fg`（浅色紫，深色浅紫），其余标签（`高速` `稳定` `中转` `直连`
+  `BPG` `蜂窝网络` `星链网络` `节日优惠`）保持 `bg-muted` 灰色。白名单在 `src/routes/recommend.tsx` 的
+  `EMPHASIZED_TAGS`，新增标签先决定是否进白名单。
 - 颜色只走语义令牌（`bg-card` / `text-muted-foreground` / `border-border` / `text-primary`）；新增色必须先改 `index.css` 的 `:root` 与 `.dark`。
 - 圆角从 `--radius` 派生；动效时长用 `--duration-*` 或 motion tokens。
 - 所有图标：系统图标用 `OsIcon`（Iconify 单路径），业务图标用 lucide，站点标识用 `SiteIcon`。
