@@ -1,8 +1,9 @@
+import { useEffect } from 'react'
 import { createFileRoute } from '@tanstack/react-router'
-import { ExternalLink, Globe, Link as LinkIcon, Server, Wifi } from 'lucide-react'
+import { ExternalLink, Globe, Link as LinkIcon, Server, TriangleAlert, Wifi } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 
-import { WarningNote } from '@/components/warning-note'
+import { toast } from 'sonner'
 import { nodeSections } from '@/lib/data/free'
 
 export const Route = createFileRoute('/free/nodes')({
@@ -17,6 +18,15 @@ const ICONS: Record<string, LucideIcon> = {
 }
 
 function FreeNodesPage() {
+  useEffect(() => {
+    toast.warning('免费节点只适合临时使用', {
+      id: 'free-nodes-note',
+      description:
+        '由第三方维护，稳定性与隐私都无法保证；需要长期稳定请走「机场推荐」里的付费服务。',
+      icon: <TriangleAlert className="size-4 text-warning" />,
+    })
+  }, [])
+
   return (
     <div className="mx-auto grid max-w-5xl items-start gap-5 md:grid-cols-2">
       {nodeSections.map((section) => {
@@ -54,10 +64,6 @@ function FreeNodesPage() {
         )
       })}
 
-      <WarningNote className="md:col-span-2">
-        免费节点由第三方维护，稳定性与隐私都无法保证，只适合临时使用。需要长期稳定请走
-        「机场推荐」里的付费服务。
-      </WarningNote>
     </div>
   )
 }

@@ -1,9 +1,9 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { createFileRoute } from '@tanstack/react-router'
-import { Copy, Download, RefreshCw } from 'lucide-react'
+import { Copy, Download, RefreshCw, TriangleAlert } from 'lucide-react'
 
 import { StarRating } from '@/components/cards/star-rating'
-import { WarningNote } from '@/components/warning-note'
+import { toast } from 'sonner'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import type { SubscriptionView } from '@/lib/data/subscriptions'
@@ -23,7 +23,17 @@ function usedPercent(item: SubscriptionView) {
 
 function SharedSubscriptionsPage() {
   const { items, status, error, refresh } = useSubscriptions()
-  const sorted = [...items].sort((a, b) => b.rating - a.rating)
+
+  useEffect(() => {
+    toast.warning('共享订阅随时可能失效', {
+      id: 'free-subscriptions-note',
+      description:
+        '流量来自订阅接口返回，可能无法正常显示，可点卡片右下角刷新重试。介意隐私与稳定请自行购买。',
+      icon: <TriangleAlert className="size-4 text-warning" />,
+    })
+  }, [])
+  // 按清单里的编号排序，便于对照
+  const sorted = [...items].sort((a, b) => a.id - b.id)
 
   if (status === 'error') {
     return (
@@ -35,7 +45,7 @@ function SharedSubscriptionsPage() {
 
   if (status === 'loading') {
     return (
-      <div className="grid gap-5 lg:grid-cols-2">
+      <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
         {Array.from({ length: 4 }, (_, index) => (
           <div key={index} className="h-64 animate-pulse rounded-2xl border border-border bg-muted/40" />
         ))}
@@ -44,14 +54,10 @@ function SharedSubscriptionsPage() {
   }
 
   return (
-    <div className="grid gap-5 lg:grid-cols-2">
+    <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
       {sorted.map((item) => (
         <SubscriptionPanel key={item.id} item={item} onRefresh={() => refresh(item)} />
       ))}
-      <WarningNote className="lg:col-span-2">
-        共享订阅由他人提供，随时可能失效或限速。流量来自订阅接口返回的 `subscription-userinfo`
-        响应头，对方不返回时无法显示，可点卡片右下角刷新重试。介意隐私与稳定请自行购买。
-      </WarningNote>
     </div>
   )
 }

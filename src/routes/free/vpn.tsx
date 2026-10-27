@@ -1,8 +1,9 @@
+import { useEffect } from 'react'
 import { createFileRoute } from '@tanstack/react-router'
-import { ShieldCheck } from 'lucide-react'
+import { ShieldCheck, TriangleAlert } from 'lucide-react'
 
 import { StarRating } from '@/components/cards/star-rating'
-import { WarningNote } from '@/components/warning-note'
+import { toast } from 'sonner'
 import { vpnSections } from '@/lib/data/free'
 
 export const Route = createFileRoute('/free/vpn')({
@@ -14,6 +15,15 @@ function logoUrl(file: string) {
 }
 
 function FreeVpnPage() {
+  useEffect(() => {
+    toast.warning('免费 VPN 有取舍', {
+      id: 'free-vpn-note',
+      description:
+        '通常以广告或限速换取免费额度，隐私政策请自行核对；涉及敏感场景请优先使用自建或付费方案。',
+      icon: <TriangleAlert className="size-4 text-warning" />,
+    })
+  }, [])
+
   return (
     <div className="mx-auto max-w-6xl space-y-8">
       {vpnSections.map((section) => (
@@ -66,9 +76,6 @@ function FreeVpnPage() {
         </section>
       ))}
 
-      <WarningNote>
-        免费 VPN 通常以广告或限速换取免费额度，隐私政策请自行核对；涉及敏感场景请优先使用自建或付费方案。
-      </WarningNote>
     </div>
   )
 }
